@@ -2,14 +2,20 @@
     font-family: 'Source Sans Pro', sans-serif;
   }
 
+body {
+      overflow-x: hidden;
+}
+
 
 .container-fluid {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: 100%; 
+    padding: 0; 
+    margin: 0; 
 }
 
-/* Estilos para el Encabezado */
 header {
     background-color: #000000;
     color: #fff;
@@ -67,7 +73,9 @@ header .col-4 a {
     height: 800px;
 }
 
-
+#banner .btn-pedir {
+    margin-left: 50px;
+}
 
 #banner .col-8 h1{
     font-size: 64px;
@@ -90,7 +98,7 @@ header .col-4 a {
 
 #contador p{
     font-weight: bold;
-    color:  #E61414
+    color:  #E61414;
 
 }
 
@@ -114,7 +122,95 @@ header .col-4 a {
     height: 50%;
 }
 
+
+
+.btn-oferta {
+    background-color: #E61414;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 229px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+.btn-oferta::before,
+.btn-oferta::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-color: inherit;
+}
+
+.btn-oferta::before {
+    left: -20px;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+.btn-oferta::after {
+    right: -20px;
+    clip-path: polygon(0 0, 100% 0%, 0 100%)
+}
+
+.btn-oferta:hover {
+    background-color: black;
+    color: white;
+}
+
+.btn-pedir {
+    background-color: #E61414;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+.btn-pedir::before,
+.btn-pedir::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-color: inherit;
+}
+
+.btn-pedir::before {
+    left: -19px;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+.btn-pedir::after {
+    right: -20px;
+    clip-path: polygon(0 0, 100% 0%, 0 100%);
+}
+
+.btn-pedir:hover {
+    background-color: black;
+    color: white;
+}
+
+.btn-oferta,
+.btn-pedir,
+.btn-menus {
+    height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Estilos para la seccion 1 */
+
 
 #seccion1 .col-12 h2 {
     font-weight: normal;
@@ -127,23 +223,239 @@ header .col-4 a {
     text-align: center;
     background-color: #F3F3F3;
     padding-top: 60px;
+    box-sizing: border-box; 
+    width: 100%; 
+    margin: 0; 
 }
 
 #seccion1 .img-fluid {
-    width: 100%; /* La imagen ocupará toda la anchura del contenedor */
-    height: 250px; /* Ajusta la altura que desees para el div */
-    overflow: hidden; /* Asegura que la imagen no se salga del div si es más grande que su altura */
-    display: flex; /* Usamos Flexbox para centrar la imagen */
-    justify-content: center; /* Centra la imagen horizontalmente */
-    align-items: center; /* Centra la imagen verticalmente */
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     position: relative;
-    object-fit: cover; /* Hace que la imagen cubra el contenedor manteniendo su proporción */
+    object-fit: cover; 
 }
 
 /* Estilos para los Menus */
 
 #menusGeneral {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    background-color: #F3F3F3;
+    padding-bottom: 40px;
+}
+
+#menusGeneral h2 {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#menus {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#menusGeneral .text-center {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#menus .card:hover {
+    background-color: black;
+    color: white;
+}
+
+#menus .card:hover .img-container {
+    background-color: transparent;
+}
+
+#menus .btn-add {
+    color: #E61414;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-menus {
+    background-color: #E61414;
+    color: white;
+    border: none;
+    padding: 0px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+.btn-menus::before,
+.btn-menus::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-color: inherit;
+}
+
+.btn-menus::before {
+    left: -19px;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+.btn-menus::after {
+    right: -20px;
+    clip-path: polygon(0 0, 100% 0%, 0 100%);
+}
+
+.btn-menus:hover {
+    background-color: black;
+    color: white;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.card-text {
+    font-size: 24px;
+    color: #999999;
+}
+
+.img-container {
+    background-color: red;
+    position: relative;
+}
+
+.img-container img {
+    width: 100%;
+    height: auto;
+}
+
+.img-container:hover {
+    background-color: transparent;
+}
+
+.flecha-roja {
+    width: 33px;
+    vertical-align: middle;
+}
+
+/*Seccion Formulario*/
+
+#form {
+    background-image: url('../img/local2.png');
+    background-size: cover;
+    background-position: center;
+    height: 637px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#form h2 {
+    color: white;
+    padding: 40px 0;
+}
+
+#form form {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px;
+    width: 860px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0px;
+}
+
+#form input {
+    padding: 10px;
+    width: 254px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+#form button {
+    background-color: #E61414;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 86px;
+    height: 46px;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+#form button:hover {
+    background-color: black;
+}
+
+#form .img-enviar {
+    width: 100%;
+    height: auto;
+}
+
+#form button {
+    background-color: #E61414;
+    
+}
+
+#form button:hover {
+    background-color: black;
+}
+
+/*Footer*/
+
+footer{
+    font-family: 'Source Sans Pro', sans-serif;
+}
+footer .col-5 {
+    background-color: #E61414;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+footer .footer-logo {
+    width: 50%; 
+    margin-right: -65px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+footer .col-7 {
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+}
+
+footer p {
+    font-weight: bold;
+}
+
+footer .text-center {
+    text-align: center;
 }
