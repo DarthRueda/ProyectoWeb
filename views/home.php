@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div id="header">
             <div class = "container-fluid">
@@ -137,7 +138,7 @@
 
     <!-- Footer -->
     <footer>
-        <div>
+        <div id="primer-footer" class="container-fluid">
             <div class="row">
                 <div class="col-5 d-flex justify-content-end align-items-center">
                     <img src="img/logofull.png" alt="logo" class="footer-logo">
@@ -151,26 +152,34 @@
         <hr>
         <div>
             <div class="row text-center">
-                <div class="col-12">
-                    <p><b>Terminos y condiciones</b></p>
-                    <p><b>Politica de privacidad</b></p>
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="footer-links">
+                        <p><b>Terminos y condiciones</b></p>
+                        <p><b>Politica de privacidad</b></p>
+                    </div>
                 </div>
             </div>
             <div class="row text-center">
-                <div class="col-12">
-                    <p><b>Trabaja con nosotros</b></p>
+                <div class="col-12 text-left">
+                    <p class="footer-left"><b>Trabaja con nosotros</b></p>
+                    <div class="col-12 d-flex justify-content-end footer-right">
+                        <img src="img/facebook.png" alt="facebook">
+                        <img src="img/twitter.png" alt="twitter">
+                        <img src="img/youtube.png" alt="youtube">
+                        <img src="img/instagram.png" alt="instagram">
+                        <img src="img/flikr.png" alt="flikr">
+                        <img src="img/linkedin.png" alt="linkedin">
+                        <img src="img/whatsapp.png" alt="whatsapp">
+                    </div>
                 </div>
             </div>
-            <div>
-                <div class="row text-center">
-                    <div class="col-6">
-                        <p><b>© 2021 Fast Formula</b></p>
-                    </div>
-                    <div class="col-6">
-                        <!--Logos redes sociales-->
-                    </div>
+            <div class="row align-items-center">
+
+                <div class="col-12 d-flex justify-content-center">
+                    <p class="footer-center"><b>© 2021 Fast Formula</b></p>
                 </div>
             </div>
+        </div>
     </footer>
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
