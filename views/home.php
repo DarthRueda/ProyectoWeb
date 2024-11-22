@@ -34,7 +34,7 @@
             <p>Nos dedicamos a la parilla desde 1983</p>
         </div>
         <div class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
-            <img class="img-fluid w-100" src=" views/img/parrilla.jpg" alt="parrilla">
+            <img class="img-fluid w-100" src="views/img/parrilla.jpg" alt="parrilla">
         </div>
     </div>
 </section>
@@ -46,39 +46,35 @@
             <div class="col-12">
                 <h2>MENÚS MAS VENDIDOS</h2>
                 <div id="menus" class="d-flex justify-content-around flex-wrap">
+                    <?php
+                    include_once 'models/productosDAO.php';
+                    $productos = productosDAO::getAll();
+                    $menus = array_filter($productos, function($producto) {
+                        return $producto['tipo'] == 'menus' && $producto['id'] >= 1 && $producto['id'] <= 3;
+                    });
+                    foreach ($menus as $menu) {
+                    ?>
                     <div class="card" style="width: 18rem;">
                         <div class="img-container">
-                            <img src="views/img/menu_alonso.png" class="card-img-top" alt="Menu Alonso">
+                            <img src="<?php echo $menu['imagen']; ?>" class="card-img-top" alt="<?php echo $menu['nombre']; ?>">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Menu Alonso</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn-add">Añadir</a>
-                            <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
+                            <h5 class="card-title"><?php echo $menu['nombre']; ?></h5>
+                            <p class="card-text"><?php echo $menu['descripcion']; ?></p>
+                            <div class="d-flex align-items-center">
+                                <form method="post" action="?controller=producto&action=añadirCarrito">
+                                    <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
+                                    <input type="hidden" name="nombre" value="<?php echo $menu['nombre']; ?>">
+                                    <input type="hidden" name="descripcion" value="<?php echo $menu['descripcion']; ?>">
+                                    <input type="hidden" name="precio" value="<?php echo $menu['precio']; ?>">
+                                    <input type="hidden" name="imagen" value="<?php echo $menu['imagen']; ?>">
+                                    <button type="submit" class="btn-add">Añadir</button>
+                                </form>
+                                <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
+                            </div>
                         </div>
                     </div>
-                    <div class="card" style="width: 18rem;">
-                        <div class="img-container">
-                            <img src="views/img/menu_sainz.png" class="card-img-top" alt="Menu Sainz">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Menu Sainz</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn-add">Añadir</a>
-                            <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
-                        </div>
-                    </div>
-                    <div class="card" style="width: 18rem;">
-                        <div class="img-container">
-                            <img src="views/img/menu_perez.png" class="card-img-top" alt="Menu Perez">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Menu Perez</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn-add">Añadir</a>
-                            <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

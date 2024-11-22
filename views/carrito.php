@@ -1,6 +1,6 @@
 <body>
-     <!-- Bloque 1 -->
-     <section id="intro-carrito">
+    <!-- Bloque 1 -->
+    <section id="intro-carrito">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 text-left">
@@ -18,59 +18,31 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 d-flex flex-column align-items-center">
-                    <div class="producto">
-                        <div class="img-container">
-                            <img src="views/img/menu_alonso.png" alt="Producto 1">
-                        </div>
-                        <div class="info">
-                            <h3>Producto 1</h3>
-                            <p>Descripción del producto 1</p>
-                        </div>
-                        <div class="price-bin">
-                            <span class="price">10,00€</span>
-                            <img src="views/img/papelera.png" alt="Eliminar">
-                        </div>
-                    </div>
-                    <div class="producto">
-                        <div class="img-container">
-                            <img src="views/img/menu_sainz.png" alt="Producto 2">
-                        </div>
-                        <div class="info">
-                            <h3>Producto 2</h3>
-                            <p>Descripción del producto 2</p>
-                        </div>
-                        <div class="price-bin">
-                            <span class="price">10,00€</span>
-                            <img src="views/img/papelera.png" alt="Eliminar">
-                        </div>
-                    </div>
-                    <div class="producto">
-                        <div class="img-container">
-                            <img src="views/img/menu_perez.png" alt="Producto 3">
-                        </div>
-                        <div class="info">
-                            <h3>Producto 3</h3>
-                            <p>Descripción del producto 3</p>
-                        </div>
-                        <div class="price-bin">
-                            <span class="price">10,00€</span>
-                            <img src="views/img/papelera.png" alt="Eliminar">
-                        </div>
-                    </div>
-                    <div class="producto">
-                        <div class="img-container">
-                            <img src="views/img/menu_alonso.png" alt="Producto 4">
-                        </div>
-                        <div class="info">
-                            <h3>Producto 4</h3>
-                            <p>Descripción del producto 4</p>
-                        </div>
-                        <div class="price-bin">
-                            <span class="price">10,00€</span>
-                            <img src="views/img/papelera.png" alt="Eliminar">
-                        </div>
-                    </div>
-                    <button class="btn-tramitar">Tramitar Pedido</button>
+                    <?php if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])): ?>
+                        <?php foreach ($_SESSION['cart'] as $producto): ?>
+                            <div class="producto">
+                                <div class="img-container">
+                                    <img src="<?= $producto['imagen'] ?>" alt="<?= $producto['nombre'] ?>">
+                                </div>
+                                <div class="info">
+                                    <h3><?= $producto['nombre'] ?></h3>
+                                    <p><?= $producto['descripcion'] ?></p>
+                                </div>
+                                <div class="price-bin">
+                                    <span class="price"><?= $producto['precio'] ?>€</span>
+                                    <form method="post" action="?controller=producto&action=eliminarCarrito">
+                                        <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                        <button type="submit"><img src="views/img/papelera.png" alt="Eliminar"></button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <form method="post" action="?controller=producto&action=tramitarPedido">
+                            <button type="submit" class="btn-tramitar">Tramitar Pedido</button>
+                        </form>
+                    <?php else: ?>
+                        <p>No hay productos en el carrito.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

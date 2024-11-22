@@ -6,11 +6,12 @@ abstract class Producto {
     protected $descripcion;
     protected $precio;
 
-    public function __construct($id, $nombre, $descripcion, $precio){
+    public function __construct($id, $nombre, $descripcion, $precio, $imagen){
         $this->id = $id;
         $this->nombre = $nombre;
         $this->descripcion = $descripcion;
         $this->precio = $precio;
+        $this->imagen = $imagen;
     }
 
 
@@ -91,6 +92,26 @@ abstract class Producto {
     public function setPrecio($precio)
     {
         $this->precio = $precio;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of imagen
+     */ 
+    public function getImagen()
+    {
+        return $this->imagen;
+    }
+
+    /**
+     * Set the value of imagen
+     *
+     * @return  self
+     */ 
+    public function setImagen($imagen)
+    {
+        $this->imagen = $imagen;
 
         return $this;
     }

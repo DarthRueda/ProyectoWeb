@@ -288,9 +288,13 @@ header .col-4 a {
 }
 
 .btn-add {
+    background-color: transparent;
+    border: none;
     color: #E61414;
     text-decoration: none;
     font-weight: bold;
+    display: inline-block;
+    margin-right: -10px;
 }
 
 .btn-menus {
@@ -358,6 +362,7 @@ header .col-4 a {
 .flecha-roja {
     width: 33px;
     vertical-align: middle;
+    margin-left: 5px; /* Adjust this value to move it closer */
 }
 
 /*Seccion Formulario*/
@@ -664,11 +669,15 @@ hr {
     align-items: center;
     gap: 10px;
     padding-right: 30px;
+    font-weight: bold;
+    background-color: transparent;
 }
 
-.producto .price-bin .price {
-    font-size: 18px;
-    font-weight: bold;
+.producto .price-bin button {
+    background: none; 
+    border: none;
+    padding: 0; 
+    cursor: pointer;
 }
 
 .producto .price-bin img {
@@ -709,4 +718,25 @@ hr {
         width: 150%; 
     }
 
+}
+
+
+/* Seccion Compra */
+#banner-compra .row {
+    background-image: url('../img/local1.png');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+}
+
+#banner-compra h1 {
+    font-weight: bold;
+    color: white;
+}
+
+#banner-compra .img-local {
+    width: 80%;
+    margin-left: 35px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

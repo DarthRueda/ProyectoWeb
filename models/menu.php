@@ -2,7 +2,7 @@
 
 include_once 'models/producto.php';
 
-class Hamburguesa extends Producto{
+class Menu extends Producto{
     
     public function __construct($id, $nombre, $descripcion, $precio, $imagen){
         parent::__construct($id, $nombre, $descripcion, $precio, $imagen);
