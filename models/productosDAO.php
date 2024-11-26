@@ -1,8 +1,5 @@
 <?php
 include_once 'config/dataBase.php';
-include_once 'models/hamburguesa.php';
-include_once 'models/bebida.php';
-include_once 'models/complemento.php';
 include_once 'models/menu.php';
 
 class productosDAO {
