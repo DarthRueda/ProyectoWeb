@@ -2,11 +2,11 @@
 include_once 'config/dataBase.php';
 
 class pedidosDAO {
-    public static function guardarPedido($productos) {
+    public static function guardarPedido($productos, $codigo_promocional = null) {
         $con = DataBase::connect();
         
         // Insertar valores en la base de datos
-        $query = "INSERT INTO pedidos (total, id_oferta) VALUES (0, ?)";
+        $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta) VALUES (0, 0, 0, ?)";
         $stmt = $con->prepare($query);
         $id_oferta = null; // No hay ofertas implementadas por defecto
         $stmt->bind_param('i', $id_oferta);
@@ -15,9 +15,9 @@ class pedidosDAO {
         $stmt->close();
 
         // Calcular el total del pedido
-        $total = 0;
+        $pedido = 0;
         foreach ($productos as $producto) {
-            $total += $producto['precio'];
+            $pedido += $producto['precio'];
             if (isset($producto['id_menu'])) {
                 $query = "INSERT INTO pedido_menu (id_pedido, id_menu) VALUES (?, ?)";
                 $stmt = $con->prepare($query);
@@ -41,13 +41,118 @@ class pedidosDAO {
             $stmt->close();
         }
 
-        // Actualizar el total del pedido
-        $query = "UPDATE pedidos SET total = ? WHERE id_pedido = ?";
+        // Calcular el IVA
+        $iva = round($pedido * 0.10, 2);
+        $total = $pedido + $iva;
+
+        // Aplicar descuento si hay un código promocional válido
+        $descuento = 0;
+        if ($codigo_promocional) {
+            $query = "SELECT id_oferta, descuento FROM ofertas WHERE nombre = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('s', $codigo_promocional);
+            $stmt->execute();
+            $stmt->bind_result($id_oferta, $descuento);
+            if ($stmt->fetch()) {
+                $stmt->close();
+                $query = "UPDATE pedidos SET id_oferta = ? WHERE id_pedido = ?";
+                $stmt = $con->prepare($query);
+                $stmt->bind_param('ii', $id_oferta, $id_pedido);
+                $stmt->execute();
+                $stmt->close();
+                $descuento = round($total * ($descuento / 100), 2); // Calculate discount as a percentage
+            } else {
+                $stmt->close();
+            }
+        }
+
+        // Calcular el total con descuento
+        $total = round($total - $descuento, 2);
+
+        // Actualizar el pedido, IVA y total del pedido
+        $query = "UPDATE pedidos SET pedido = ?, iva = ?, total = ? WHERE id_pedido = ?";
         $stmt = $con->prepare($query);
-        $stmt->bind_param('di', $total, $id_pedido);
+        $stmt->bind_param('dddi', $pedido, $iva, $total, $id_pedido);
         $stmt->execute();
         $stmt->close();
 
+        $con->close();
+        return $id_pedido; // Devolver el ID del pedido
+    }
+
+    public static function getTotalByPedidoId($id_pedido) {
+        $con = DataBase::connect();
+        $query = "SELECT total FROM pedidos WHERE id_pedido = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_pedido);
+        $stmt->execute();
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+        $con->close();
+        return $total;
+    }
+
+    public static function getIvaByPedidoId($id_pedido) {
+        $con = DataBase::connect();
+        $query = "SELECT iva FROM pedidos WHERE id_pedido = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_pedido);
+        $stmt->execute();
+        $stmt->bind_result($iva);
+        $stmt->fetch();
+        $stmt->close();
+        $con->close();
+        return $iva;
+    }
+
+    public static function getPedidoByPedidoId($id_pedido) {
+        $con = DataBase::connect();
+        $query = "SELECT pedido FROM pedidos WHERE id_pedido = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_pedido);
+        $stmt->execute();
+        $stmt->bind_result($pedido);
+        $stmt->fetch();
+        $stmt->close();
+        $con->close();
+        return $pedido;
+    }
+
+    public static function getDescuentoByPedidoId($id_pedido) {
+        $con = DataBase::connect();
+        $query = "SELECT id_oferta FROM pedidos WHERE id_pedido = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_pedido);
+        $stmt->execute();
+        $stmt->bind_result($id_oferta);
+        $stmt->fetch();
+        $stmt->close();
+
+        if ($id_oferta) {
+            $query = "SELECT descuento FROM ofertas WHERE id_oferta = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('i', $id_oferta);
+            $stmt->execute();
+            $stmt->bind_result($descuento);
+            $stmt->fetch();
+            $stmt->close();
+            $con->close();
+            return $descuento;
+        }
+
+        $con->close();
+        return 0;
+    }
+
+    //Con esto se marca el pedido como pagado en la base de datos
+    public static function marcarPedidoComoPagado($id_pedido) {
+        $con = DataBase::connect();
+        $query = "UPDATE pedidos SET pagado = 1 WHERE id_pedido = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_pedido);
+        $stmt->execute();
+        $stmt->close();
         $con->close();
     }
 }

@@ -19,6 +19,7 @@
             <div class="row">
                 <div class="col-12 d-flex flex-column align-items-center">
                     <?php if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])): ?>
+                        <?php $_SESSION['cart_data'] = $_SESSION['cart']; ?>
                         <?php foreach ($_SESSION['cart'] as $producto): ?>
                             <div class="producto">
                                 <div class="img-container">
@@ -38,8 +39,16 @@
                             </div>
                         <?php endforeach; ?>
                         <form method="post" action="?controller=producto&action=tramitarPedido">
+                            <input type="text" id="codigo_promocional" name="codigo_promocional" class="form-control" placeholder="Código Promocional">
                             <button type="submit" class="btn-tramitar">Tramitar Pedido</button>
                         </form>
+                        <?php
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                            $_SESSION['id_pedido'] = pedidosDAO::guardarPedido($_SESSION['cart']); // Guardamos el id del pedido en la sesion
+                            header("Location: compra.php"); // Redirigimos al usuario a la pagina de compra
+                            exit();
+                        }
+                        ?>
                     <?php else: ?>
                         <p>No hay productos en el carrito.</p>
                     <?php endif; ?>

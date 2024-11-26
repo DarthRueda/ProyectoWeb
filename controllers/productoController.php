@@ -21,6 +21,14 @@ class productoController{
         $view = "views/compra.php";
         include_once 'views/main.php';
     }
+
+    public function exito() {
+        if (isset($_POST['id_pedido'])) {
+            pedidosDAO::marcarPedidoComoPagado($_POST['id_pedido']);
+        }
+        $view = "views/exito.php";
+        include_once 'views/main.php';
+    }
     public function añadirCarrito(){
         session_start();
         $producto = [
@@ -34,7 +42,17 @@ class productoController{
             $_SESSION['cart'] = [];
         }
         $_SESSION['cart'][] = $producto;
-        header('Location: ?controller=producto&action=carrito');
+
+        // Devolver respuesta en JSON para mostrarr que el producto se ha añadido alcarrito
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'product' => [
+                'nombre' => $_POST['nombre'],
+                'imagen' => $_POST['imagen']
+            ]
+        ]);
+        exit;
     }
     public function eliminarCarrito(){
         session_start();
@@ -51,10 +69,12 @@ class productoController{
     public function tramitarPedido(){
         session_start();
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-            pedidosDAO::guardarPedido($_SESSION['cart']);
+            $codigo_promocional = isset($_POST['codigo_promocional']) ? $_POST['codigo_promocional'] : null;
+            $_SESSION['id_pedido'] = pedidosDAO::guardarPedido($_SESSION['cart'], $codigo_promocional);
             unset($_SESSION['cart']);
         }
         header('Location: ?controller=producto&action=compra');
     }
+
 }
 ?>

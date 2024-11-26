@@ -1,14 +1,10 @@
 <body>
-    <!-- Header -->
-
-
-    <!-- Banner -->
     <section id="banner">
     <div class="container-fluid">
         <div class="row">
             <div class="col-8">
                 <h1>FAST FORMULA, LA COMIDA MAS RÁPIDA</h1>
-                <button class="btn-pedir">¡Pide ya!</button>
+                <button class="btn-pedir" onclick="location.href='?controller=producto&action=carta'">¡Pide ya!</button>
             </div>
             <div class="col-4">
                 <div class="row flex-row h-100">
@@ -18,7 +14,7 @@
                     </div>
                     <div id="oferta" class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
                         <img src="views/img/promoRussell.png" alt="promoRussell" class="img-fluid">
-                        <button class="btn-oferta">¡Aprovecha la oferta!</button>    
+                        <button class="btn-oferta" onclick="location.href='?controller=producto&action=carta'">¡Aprovecha la oferta!</button>   
                     </div>
                 </div>
             </div>
@@ -79,7 +75,7 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <button class="btn-menus">Todos los menus</button>
+            <button class="btn-menus" onclick="location.href='?controller=producto&action=carta'">Todos los menus</button>
         </div>
     </section>
 

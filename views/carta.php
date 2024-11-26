@@ -34,13 +34,13 @@
                             <h5 class="card-title text-left"><?= $producto['nombre'] ?></h5>
                             <p class="card-text"><?= $producto['descripcion'] ?></p>
                             <div class="d-flex align-items-center">
-                                <form method="post" action="?controller=producto&action=añadirCarrito">
+                                <form method="post" action="?controller=producto&action=añadirCarrito" class="add-to-cart-form">
                                     <input type="hidden" name="id" value="<?= $producto['id'] ?>">
                                     <input type="hidden" name="nombre" value="<?= $producto['nombre'] ?>">
                                     <input type="hidden" name="descripcion" value="<?= $producto['descripcion'] ?>">
                                     <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
                                     <input type="hidden" name="imagen" value="<?= $producto['imagen'] ?>">
-                                    <button type="submit" class="btn-add">Añadir</button>
+                                    <button type="button" class="btn-add" onclick="addToCart(this.form)">Añadir</button>
                                 </form>
                                 <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
                             </div>
@@ -49,7 +49,6 @@
                 </div>
                 <?php $count++;
             endforeach;
-            // Fill remaining spaces with blank columns if necessary
             while ($count % 3 != 0): ?>
                 <div class="col-md-4 mb-4 d-flex justify-content-center"></div>
                 <?php $count++;
@@ -70,3 +69,34 @@
         </div>
     </div>
 </section>
+
+
+<!-- Script que sirve para generar la caja de informacion cuando el producto ha sido añadido -->
+<script>
+function addToCart(form) {
+    const formData = new FormData(form);
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showInfoBox(data.product);
+        }
+    });
+}
+
+function showInfoBox(product) {
+    const infoBox = document.createElement('div');
+    infoBox.className = 'info-box';
+    infoBox.innerHTML = `
+        <img src="${product.imagen}" alt="${product.nombre}">
+        <p>${product.nombre} añadido al carrito</p>
+    `;
+    document.body.appendChild(infoBox);
+    setTimeout(() => {
+        infoBox.remove();
+    }, 3000);
+}
+</script>

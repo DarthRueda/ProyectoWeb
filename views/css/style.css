@@ -740,3 +740,250 @@ hr {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/* Estilos para los métodos de pago */
+.metodos-pago {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.metodos-pago label {
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #000;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    justify-content: space-between;
+}
+
+.metodos-pago input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(2.2);
+}
+
+.metodos-pago img {
+    margin-left: auto;
+    width: 50px;
+    height: 50px;
+}
+
+/* Estilos para el resumen de compra */
+
+#resumen-compra .col-6#resumen {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 30%;
+    height: 50%;
+}
+
+#resumen-compra .col-6#resumen h3 {
+    font-size: 18px;
+    color: #999999;
+    font-weight: lighter;
+}
+
+#resumen-compra .col-6#resumen ul {
+    list-style: none;
+    padding: 0;
+}
+
+#resumen-compra .col-6#resumen ul li {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#resumen-compra .col-6#resumen p {
+    font-size: 16px;
+}
+
+#resumen-compra .col-6#resumen p.iva {
+    color: #999999;
+}
+
+#resumen-compra .col-6#resumen .divider {
+    border-top: 1px solid #D7D7D7;
+    margin: 10px 0;
+}
+
+#resumen-compra .col-6#resumen .total {
+    font-size: 25px;
+}
+
+#resumen-compra .col-6.datos {
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+#resumen-compra .col-6.datos .form-group {
+    margin-bottom: 5px;
+    margin-left: 30px;
+}
+
+#resumen-compra .col-6.datos .form-group input {
+    width: 40%;
+    height: 40px;
+    border: 1px solid #999999;
+}
+
+#resumen-compra .col-6.datos .form-group input#direccion {
+    width: 100%
+}
+
+#resumen-compra .col-6.datos .form-group input#codigo_promocional {
+    width: 180px;
+}
+
+#resumen-compra .col-6.datos .form-group input::placeholder {
+    font-weight: bold;
+    color: #999999;
+}
+
+.btn-pagar {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    display: block;
+    margin: 20px auto 0 auto;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.btn-pagar:hover {
+    background-color: #E61414;
+    color: white;
+}
+
+.btn-pagar2 {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 496px;
+    height: 78px;
+    display: block;
+    margin: 20px auto 0 auto;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.btn-pagar2:hover {
+    background-color: #E61414;
+    color: white;
+}
+
+#resumen-compra h1 {
+    font-size: 24px;
+    position: relative;
+    padding-left: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#resumen-compra h1::before {
+    content: url('../img/flecha_seccion.png');
+    position: absolute;
+    left: 0;
+    transform: translateY(3%);
+    
+}
+
+@media (max-width: 800px) {
+    #resumen-compra .col-6#resumen {
+        width: 80%;
+    }
+
+    #resumen-compra h1 {
+        font-size: 20px;
+    }
+
+    #resumen-compra h1::before {
+        content: url('../img/flecha_seccion.png');
+        position: absolute;
+        left: 0;
+        transform: translateY(3%);
+    }
+}
+
+.metodos-entrega {
+    margin-left: 30px;
+    display: flex;
+    gap: 30px;
+}
+
+.metodos-entrega img {
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.metodos-entrega img.selected {
+    border-color: red;
+    border-width: 4px;
+}
+
+.metodos-pago {
+    margin-left: 30px;
+}
+
+.detalles-pago {
+    display: none;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.detalles-pago input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.detalles-pago label {
+    display: block;
+    margin-top: 10px;
+}
+
+.pedido-img {
+    width: 30%;
+}
+
+.info-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-box img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+}
+
+.info-box p {
+    margin: 0;
+    font-weight: bold;
+}
