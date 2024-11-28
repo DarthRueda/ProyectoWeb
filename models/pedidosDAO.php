@@ -60,7 +60,7 @@ class pedidosDAO {
                 $stmt->bind_param('ii', $id_oferta, $id_pedido);
                 $stmt->execute();
                 $stmt->close();
-                $descuento = round($total * ($descuento / 100), 2); // Calculate discount as a percentage
+                $descuento = round($total * ($descuento / 100), 2);
             } else {
                 $stmt->close();
             }

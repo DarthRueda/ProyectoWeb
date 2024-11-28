@@ -30,7 +30,7 @@ session_start();
                 <!-- Botones Interactivos -->
                 <div class="col-4">
                     <a href="?controller=producto&action=carrito"><img src="views/img/carrito.png" class="img-fluid" alt="logo_carrito"></a>
-                    <img src="views/img/usuario.png" class="img-fluid" href="" alt="logo_usuario">
+                    <a href="?controller=usuario&action=login"><img src="views/img/usuario.png" class="img-fluid" alt="logo_usuario"></a>
                 </div>
             </div>
         </div>
