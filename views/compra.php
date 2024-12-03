@@ -1,3 +1,8 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <body>
     <section id="banner-compra">
         <div class="row">
@@ -15,18 +20,18 @@
                 <!-- Formulario -->
                 <h1>DATOS DE ENTREGA</h1>
                 <form id="form-datos-entrega" action="?controller=producto&action=exito" method="post">
-                    <input type="hidden" name="id_pedido" value="<?= $_SESSION['id_pedido'] ?>">
+                    <input type="hidden" name="id_pedido" value="<?= $_SESSION['id_pedido'] ?? '' ?>">
                     <div class="form-group">
-                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" value="<?= $_SESSION['nombre'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" id="correo" name="correo" class="form-control" placeholder="Correo" required>
+                        <input type="email" id="correo" name="correo" class="form-control" placeholder="Correo" value="<?= $_SESSION['email'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Teléfono" required>
+                        <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Teléfono" value="<?= $_SESSION['telefono'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección" required>
+                        <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección" value="<?= $_SESSION['direccion'] ?? '' ?>" required>
                     </div>
                 </form>
 

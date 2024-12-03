@@ -30,7 +30,13 @@ session_start();
                 <!-- Botones Interactivos -->
                 <div class="col-4">
                     <a href="?controller=producto&action=carrito"><img src="views/img/carrito.png" class="img-fluid" alt="logo_carrito"></a>
-                    <a href="?controller=usuario&action=login"><img src="views/img/usuario.png" class="img-fluid" alt="logo_usuario"></a>
+                    <!-- Si el usuario está logueado, mostrará el botón de usuario y cerrar sesión, si no, mostrará el botón de usuario -->
+                    <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
+                        <a href="?controller=usuario&action=menu_usuario"><img src="views/img/usuario.png" class="img-fluid" alt="logo_usuario"></a>
+                        <a href="?controller=usuario&action=cerrar_sesion"><img src="views/img/cerrar-sesion.png" class="img-fluid" alt="logo_cerrar_sesion"></a>
+                    <?php else: ?>
+                        <a href="?controller=usuario&action=login"><img src="views/img/usuario.png" class="img-fluid" alt="logo_usuario"></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

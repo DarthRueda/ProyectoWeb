@@ -1009,6 +1009,11 @@ hr {
     box-sizing: border-box;
 }
 
+.form-input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
 .form-button {
     background-color: #E61414;
     color: white;
@@ -1050,10 +1055,29 @@ hr {
     color: white;
     padding: 10px 20px;
     font-weight: bold;
+    margin: 10px 0; 
+    border-radius: 5px; 
 }
 
 .btn-enviar:hover {
     background-color: #E61414;
+}
+
+.confirmation-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid black;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px; 
+}
+
+.confirmation-box button {
+    margin: 10px; 
 }
 
 .img-enviar {

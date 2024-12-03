@@ -6,10 +6,11 @@ class pedidosDAO {
         $con = DataBase::connect();
         
         // Insertar valores en la base de datos
-        $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta) VALUES (0, 0, 0, ?)";
+        $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta, id_usuario) VALUES (0, 0, 0, ?, ?)";
         $stmt = $con->prepare($query);
         $id_oferta = null; // No hay ofertas implementadas por defecto
-        $stmt->bind_param('i', $id_oferta);
+        $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : null; // Obtener id_usuario si está logueado
+        $stmt->bind_param('ii', $id_oferta, $id_usuario);
         $stmt->execute();
         $id_pedido = $stmt->insert_id;
         $stmt->close();
@@ -154,6 +155,48 @@ class pedidosDAO {
         $stmt->execute();
         $stmt->close();
         $con->close();
+    }
+
+    //Con esto se obtienen los pedidos de un usuario (FASE DE PRUEBAS)
+    public static function getPedidosByUsuarioId($id_usuario) {
+        $con = DataBase::connect();
+        $query = "SELECT id_pedido, total FROM pedidos WHERE id_usuario = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pedidos = $result->fetch_all(MYSQLI_ASSOC); //Obtener todos los resultados
+        $stmt->close();
+        $con->close();
+        return $pedidos;
+    }
+
+    //Con esto se obtienen los productos de un pedido (FASE DE PRUEBAS)
+    // NOTA: ESTA FUNCIÓN PODRIA SER SOLO EXCLUSIVA DE LOS USUARIOS CON RANGO DE ADMINISTRADOR
+    public static function getProductosByPedidoId($id_pedido) {
+        $con = DataBase::connect();
+        $productos = [];
+
+        $queries = [
+            "SELECT m.nombre, m.precio FROM pedido_menu pm JOIN menus m ON pm.id_menu = m.id_menu WHERE pm.id_pedido = ?",
+            "SELECT h.nombre, h.precio FROM pedido_hamburguesa ph JOIN hamburguesas h ON ph.id_hamburguesa = h.id_hamburguesa WHERE ph.id_pedido = ?",
+            "SELECT b.nombre, b.precio FROM pedido_bebida pb JOIN bebidas b ON pb.id_bebida = b.id_bebida WHERE pb.id_pedido = ?",
+            "SELECT c.nombre, c.precio FROM pedido_complemento pc JOIN complementos c ON pc.id_complemento = c.id_complemento WHERE pc.id_pedido = ?"
+        ];
+
+        foreach ($queries as $query) {
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('i', $id_pedido);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $productos[] = $row;
+            }
+            $stmt->close();
+        }
+
+        $con->close();
+        return $productos;
     }
 }
 ?>

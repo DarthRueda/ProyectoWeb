@@ -1,15 +1,32 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include_once ("config/dataBase.php");
     $con = DataBase::connect();
-    $nombre = $_POST['nombre'];
+    $usuario = $_POST['usuario'];
     $password = $_POST['password'];
 
-    $sql = "SELECT id_usuario FROM usuarios WHERE nombre='$nombre' AND contrasena='$password'";
+    $sql = "SELECT id_usuario, nombre, apellido, email, telefono, direccion, contrasena FROM usuarios WHERE usuario='$usuario'";
     $result = $con->query($sql);
 
+    //Comprueba si el usuario existe
     if ($result->num_rows > 0) {
-        echo "Inicio de sesión exitoso";
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['contrasena'])) { //Compara la contraseña introducida con la contraseña encriptada de la base de datos
+            $_SESSION['loggedin'] = true;
+            $_SESSION['id_usuario'] = $row['id_usuario'];
+            $_SESSION['nombre'] = $row['nombre'];
+            $_SESSION['apellido'] = $row['apellido'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['telefono'] = $row['telefono'];
+            $_SESSION['direccion'] = $row['direccion'];
+            header("Location: index.php?controller=usuario&action=menu_usuario");
+            exit;
+        } else {
+            echo "Nombre o contraseña incorrectos. Por favor, inténtelo de nuevo o regístrese si no tiene una cuenta.";
+        }
     } else {
         echo "Nombre o contraseña incorrectos. Por favor, inténtelo de nuevo o regístrese si no tiene una cuenta.";
     }
@@ -18,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <form method="POST" action="" class="form-style">
-    <label for="nombre" class="form-label">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" class="form-input" required><br>
+    <label for="usuario" class="form-label">Usuario:</label>
+    <input type="text" id="usuario" name="usuario" class="form-input" required><br>
     <label for="password" class="form-label">Contraseña:</label>
     <input type="password" id="password" name="password" class="form-input" required><br>
     <button type="submit" class="btn-enviar">Iniciar Sesión</button>

@@ -3,16 +3,18 @@ include_once ("models/usuario.php");
 include_once ("config/dataBase.php");
 
 class UsuariosDAO {
+    // Esta funcion permite insertar un usuario en la base de datos
     public static function insert(Usuario $usuario) {
         $con = DataBase::connect();
-        $sql = "INSERT INTO usuarios (nombre, apellido, email, contrasena, telefono, direccion) VALUES ('$usuario->nombre', '$usuario->apellido', '$usuario->email', '$usuario->contrasena', '$usuario->telefono', '$usuario->direccion')";
+        $sql = "INSERT INTO usuarios (usuario, nombre, apellido, email, contrasena, telefono, direccion) VALUES ('$usuario->usuario', '$usuario->nombre', '$usuario->apellido', '$usuario->email', '$usuario->contrasena', '$usuario->telefono', '$usuario->direccion')";
         $con->query($sql);
         $con->close();
     }
 
-    public static function validateLogin($nombre, $password) {
+    // Esta funcion permite validar el login de un usuario
+    public static function validateLogin($usuario, $password) {
         $con = DataBase::connect();
-        $sql = "SELECT id_usuario FROM usuarios WHERE nombre='$nombre' AND contrasena='$password'";
+        $sql = "SELECT id_usuario FROM usuarios WHERE usuario='$usuario' AND contrasena='$password'"; // Selecciona el id del usuario que tenga el usuario y contraseña que se le pasa
         $result = $con->query($sql);
         $con->close();
         return $result->num_rows > 0;
