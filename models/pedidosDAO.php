@@ -18,28 +18,30 @@ class pedidosDAO {
         // Calcular el total del pedido
         $pedido = 0;
         foreach ($productos as $producto) {
-            $pedido += $producto['precio'];
-            if (isset($producto['id_menu'])) {
-                $query = "INSERT INTO pedido_menu (id_pedido, id_menu) VALUES (?, ?)";
-                $stmt = $con->prepare($query);
-                $stmt->bind_param('ii', $id_pedido, $producto['id_menu']);
-            } elseif (isset($producto['id_hamburguesa'])) {
-                $query = "INSERT INTO pedido_hamburguesa (id_pedido, id_hamburguesa) VALUES (?, ?)";
-                $stmt = $con->prepare($query);
-                $stmt->bind_param('ii', $id_pedido, $producto['id_hamburguesa']);
-            } elseif (isset($producto['id_bebida'])) {
-                $query = "INSERT INTO pedido_bebida (id_pedido, id_bebida) VALUES (?, ?)";
-                $stmt = $con->prepare($query);
-                $stmt->bind_param('ii', $id_pedido, $producto['id_bebida']);
-            } elseif (isset($producto['id_complemento'])) {
-                $query = "INSERT INTO pedido_complemento (id_pedido, id_complemento) VALUES (?, ?)";
-                $stmt = $con->prepare($query);
-                $stmt->bind_param('ii', $id_pedido, $producto['id_complemento']);
-            } else {
-                continue;
+            $pedido += $producto['precio'] * $producto['cantidad'];
+            for ($i = 0; $i < $producto['cantidad']; $i++) {
+                if (isset($producto['id_menu'])) {
+                    $query = "INSERT INTO pedido_menu (id_pedido, id_menu) VALUES (?, ?)";
+                    $stmt = $con->prepare($query);
+                    $stmt->bind_param('ii', $id_pedido, $producto['id_menu']);
+                } elseif (isset($producto['id_hamburguesa'])) {
+                    $query = "INSERT INTO pedido_hamburguesa (id_pedido, id_hamburguesa) VALUES (?, ?)";
+                    $stmt = $con->prepare($query);
+                    $stmt->bind_param('ii', $id_pedido, $producto['id_hamburguesa']);
+                } elseif (isset($producto['id_bebida'])) {
+                    $query = "INSERT INTO pedido_bebida (id_pedido, id_bebida) VALUES (?, ?)";
+                    $stmt = $con->prepare($query);
+                    $stmt->bind_param('ii', $id_pedido, $producto['id_bebida']);
+                } elseif (isset($producto['id_complemento'])) {
+                    $query = "INSERT INTO pedido_complemento (id_pedido, id_complemento) VALUES (?, ?)";
+                    $stmt = $con->prepare($query);
+                    $stmt->bind_param('ii', $id_pedido, $producto['id_complemento']);
+                } else {
+                    continue;
+                }
+                $stmt->execute();
+                $stmt->close();
             }
-            $stmt->execute();
-            $stmt->close();
         }
 
         // Calcular el IVA

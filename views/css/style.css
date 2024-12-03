@@ -217,7 +217,21 @@ header .col-4 a {
     justify-content: center;
 }
 
+.btn-filter {
+    background-color: #E61414;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+    border-radius: 5px;
+}
 
+.btn-filter:hover {
+    background-color: black;
+    color: white;
+}
 
 /* Estilos para la seccion 1 */
 
@@ -720,6 +734,25 @@ hr {
 
 }
 
+.quantity-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-container input {
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.quantity-container img {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
 
 /* Seccion Compra */
 #banner-compra .row {
@@ -919,6 +952,51 @@ hr {
     }
 }
 
+@media (max-width: 800px) {
+    .bebida-box, .complemento-box {
+        width: 100px;
+        height: 100px;
+    }
+
+    .container-fluid {
+        flex-direction: column;
+    }
+
+    .col-6 {
+        width: 100%;
+    }
+
+    .img-fluid {
+        width: 100%;
+    }
+}
+
+@media (max-width: 800px) {
+    .bebida-box, .complemento-box {
+        width: 100px;
+        height: 100px;
+    }
+
+    .container-fluid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-6 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .img-fluid {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .bebidas, .complementos {
+        justify-content: center;
+    }
+}
+
 .metodos-entrega {
     margin-left: 30px;
     display: flex;
@@ -1083,4 +1161,45 @@ hr {
 .img-enviar {
     width: 100%;
     height: auto;
+}
+
+.bebidas, .complementos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bebida-box, .complemento-box {
+    border: 2px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+}
+
+.bebida-box img, .complemento-box img {
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.bebida-box.selected, .complemento-box.selected {
+    border-color: #E61414;
+    background-color: #f8f8f8;
+}
+
+.bebida-box, .complemento-box {
+    border: 2px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+.bebida-box.selected, .complemento-box.selected {
+    border-color: #E61414;
+    background-color: #f8f8f8;
 }

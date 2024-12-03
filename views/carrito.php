@@ -31,8 +31,25 @@
                                 </div>
                                 <div class="price-bin">
                                     <span class="price"><?= $producto['precio'] ?>€</span>
+                                    <!-- Formularios para aumentar y disminuir la cantidad de productos -->
+                                    <div class="quantity-container">
+                                        <form method="post" action="?controller=producto&action=actualizarCantidad">
+                                            <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                            <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
+                                            <input type="hidden" name="action" value="decrease">
+                                            <button type="submit"><img src="views/img/menos.png" alt="Menos"></button>
+                                        </form>
+                                        <input type="text" value="<?= $producto['cantidad'] ?>" readonly>
+                                        <form method="post" action="?controller=producto&action=actualizarCantidad">
+                                            <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                            <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
+                                            <input type="hidden" name="action" value="increase">
+                                            <button type="submit"><img src="views/img/mas.png" alt="Más"></button>
+                                        </form>
+                                    </div>
                                     <form method="post" action="?controller=producto&action=eliminarCarrito">
                                         <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                        <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
                                         <button type="submit"><img src="views/img/papelera.png" alt="Eliminar"></button>
                                     </form>
                                 </div>

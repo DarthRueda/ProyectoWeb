@@ -72,7 +72,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 <?php if (isset($_SESSION['cart_data']) && !empty($_SESSION['cart_data'])): ?>
                     <ul>
                         <?php foreach ($_SESSION['cart_data'] as $producto): ?>
-                            <li><?= $producto['nombre'] ?> - <?= $producto['precio'] ?>€</li>
+                            <li><?= $producto['nombre'] ?> - <?= $producto['precio'] ?>€ x <?= $producto['cantidad'] ?></li>
                         <?php endforeach; ?>
                     </ul>
                     <?php
