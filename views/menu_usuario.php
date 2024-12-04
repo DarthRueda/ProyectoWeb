@@ -9,6 +9,12 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // Compro
 
 $editing = isset($_GET['edit']) && $_GET['edit'] == 'true'; // Comprobar si el usuario está editando su información
 ?>
+<nav aria-label="breadcrumb" class="breadcrumb-container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Menú Usuario</li>
+    </ol>
+</nav>
 <!--  Este formulario muestra la información del usuario y permite editarla si el usuario está en modo edición -->
 <div class="user-info" style="max-width: 600px; margin: 0 auto;">
     <h2>Información del Usuario</h2>

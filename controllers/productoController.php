@@ -32,19 +32,16 @@ class productoController{
     public function añadirCarrito(){
         session_start();
         $producto = [
-            'id' => $_POST['id'],
+            'id' => $_POST['menuId'] ?? $_POST['id'],
             'nombre' => $_POST['nombre'],
             'descripcion' => $_POST['descripcion'],
             'precio' => $_POST['precio'],
             'imagen' => $_POST['imagen'],
-            'tipo' => $_POST['tipo'],
-            'cantidad' => 1
+            'tipo' => $_POST['tipo'] ?? 'menus',
+            'cantidad' => 1,
+            'bebida' => $_POST['bebidaId'] ?? null,
+            'complemento' => $_POST['complementoId'] ?? null
         ];
-
-        if ($producto['tipo'] == 'menus') {
-            $producto['bebida'] = $_POST['bebidaId'];
-            $producto['complemento'] = $_POST['complementoId'];
-        }
 
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
@@ -126,6 +123,40 @@ class productoController{
     public function modificar() {
         $view = "views/modificar.php";
         include_once 'views/main.php';
+    }
+
+    // Funcion para modificar el producto
+    public function getCountdownScript() {
+        $endTime = 1734307200; // Este numero esta en UNIX timestamp, sirven para represntar el 16 de diciembre de 2024
+        $now = time();
+        $distance = $endTime - $now;
+
+        if ($distance < 0) {
+            return "<div class='counter-timer'>SE ACABO LA OFERTA</div>";
+        }
+
+        // Calculamos los dias, horas y minutos restantes
+        $days = floor($distance / (60 * 60 * 24));
+        $hours = floor(($distance % (60 * 60 * 24)) / (60 * 60));
+        $minutes = floor(($distance % (60 * 60)) / 60);
+
+        // Devolvemos el HTML con el contador
+        return "
+        <div class='counter-timer'>
+            <div class='contador contador-days'>
+                <span class='days'>{$days}</span>
+                <div class='smalltext'>DÍAS</div>
+            </div>
+            <div class='contador'>
+                <span class='hours'>{$hours}</span>
+                <div class='smalltext'>HORAS</div>
+            </div>
+            <div class='contador'>
+                <span class='minutes'>{$minutes}</span>
+                <div class='smalltext'>MINUTOS</div>
+            </div>
+        </div>
+        ";
     }
 
 }

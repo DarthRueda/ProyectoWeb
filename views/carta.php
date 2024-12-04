@@ -1,3 +1,10 @@
+<!-- Migas de pan -->
+<nav aria-label="breadcrumb" class="breadcrumb-container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Carta</li>
+    </ol>
+</nav>
 <!-- Bloque 1 -->
 <section id="intro-carta">
     <div class="container-fluid">
@@ -56,6 +63,17 @@
             $inicio = ($paginaActual - 1) * $productosPorPagina; // Índice del primer producto de la página
             $productosPagina = array_slice($productos, $inicio, $productosPorPagina); // Productos de la página actual
 
+            //Variable para guardar el menu Russell y mostrarlo en la primera posición, ya que es el producto de oferta
+            $menuRussell = null;
+            foreach ($productosPagina as $key => $producto) { // Recorremos los productos de la página actual
+                if ($producto['nombre'] == 'Menu Russell') { 
+                    $menuRussell = $producto;
+                    unset($productosPagina[$key]);
+                    array_unshift($productosPagina, $menuRussell);
+                    break;
+                }
+            }
+
             $count = 0;
             foreach ($productosPagina as $producto):
                 if ($count % 3 == 0 && $count != 0): ?>
@@ -63,7 +81,7 @@
                 <?php endif; ?>
                 <div class="col-md-4 mb-4 d-flex justify-content-center">
                     <div class="card" style="width: 18rem;">
-                        <div class="img-container">
+                        <div class="img-container" style="<?= $producto['nombre'] == 'Menu Russell' ? 'background-color: #00A19C;' : '' ?>">
                             <img src="<?= $producto['imagen'] ?>" class="card-img-top" alt="<?= ucfirst($producto['tipo']) ?> <?= $producto['id'] ?>">
                         </div>
                         <div class="card-body">

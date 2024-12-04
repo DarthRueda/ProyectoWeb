@@ -101,6 +101,16 @@ class usuarioController{
         }
     }
 
+    //Redirigir a la página de registro
+    public function rediriguirRegistro() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $nombre = $_POST['nombre'];
+            $apellido = $_POST['apellido'];
+            $email = $_POST['email'];
+            header("Location: index.php?controller=usuario&action=registro&nombre=$nombre&apellido=$apellido&email=$email");
+            exit;
+        }
+    }
 
 }
 ?>

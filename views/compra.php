@@ -3,6 +3,13 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+<nav aria-label="breadcrumb" class="breadcrumb-container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+        <li class="breadcrumb-item"><a href="carrito.php">Carrito</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Compra</li>
+    </ol>
+</nav>
 <body>
     <section id="banner-compra">
         <div class="row">
@@ -64,6 +71,17 @@ if (session_status() == PHP_SESSION_NONE) {
                         <input type="text" id="card-expiry" name="card_expiry" placeholder="Fecha de caducidad" required>
                         <input type="text" id="card-cvc" name="card_cvc" placeholder="CVC" required>
                     </div>
+                    <label>
+                        <input type="radio" name="metodo_pago" value="paypal" required onclick="mostrarDetallesPago('paypal')">
+                        PayPal
+                        <img src="views/img/paypal.png" alt="PayPal">
+                    </label>
+                    <div id="paypal-detalles" class="detalles-pago">
+                        <input type="text" id="paypal-country" name="paypal_country" placeholder="País" required>
+                        <input type="text" id="paypal-name" name="paypal_name" placeholder="Nombre" required>
+                        <input type="text" id="paypal-apellido" name="paypal_apellido" placeholder="Apellido" required>
+                        <input type="text" id="paypal-amount" name="paypal_amount" placeholder="Cantidad a pagar" value="<?= number_format(pedidosDAO::getTotalByPedidoId($_SESSION['id_pedido'] ?? 0), 2) ?>" readonly required>
+                    </div>
                 </div>
                 
             </div>
@@ -113,6 +131,7 @@ if (session_status() == PHP_SESSION_NONE) {
         function mostrarDetallesPago(method) {
             document.getElementById('bizum-detalles').style.display = method === 'bizum' ? 'block' : 'none';
             document.getElementById('tarjeta-detalles').style.display = method === 'tarjeta_credito' ? 'block' : 'none';
+            document.getElementById('paypal-detalles').style.display = method === 'paypal' ? 'block' : 'none';
         }
 
         function validarFormulario() {
@@ -122,6 +141,9 @@ if (session_status() == PHP_SESSION_NONE) {
             const cardNumber = document.getElementById('card-number');
             const cardExpiry = document.getElementById('card-expiry');
             const cardCvc = document.getElementById('card-cvc');
+            const paypalCountry = document.getElementById('paypal-country');
+            const paypalName = document.getElementById('paypal-name');
+            const paypalApellido = document.getElementById('paypal-apellido');
             
             if (!selectedPaymentMethod) {
                 alert('Por favor, seleccione un método de pago.');
@@ -137,6 +159,10 @@ if (session_status() == PHP_SESSION_NONE) {
             }
             if (selectedPaymentMethod.value === 'tarjeta_credito' && (!cardNumber.value || !cardExpiry.value || !cardCvc.value)) {
                 alert('Por favor, complete todos los campos de la tarjeta de crédito.');
+                return false;
+            }
+            if (selectedPaymentMethod.value === 'paypal' && (!paypalCountry.value || !paypalName.value || !paypalApellido.value)) {
+                alert('Por favor, complete todos los campos de PayPal.');
                 return false;
             }
             formDatosEntrega.submit();

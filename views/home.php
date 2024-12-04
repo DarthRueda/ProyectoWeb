@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://fonts.cdnfonts.com/css/ds-digital" rel="stylesheet"> <!-- Añadimos la fuente DS-Digital -->
+</head>
 <body>
     <section id="banner">
     <div class="container-fluid">
@@ -11,6 +16,7 @@
                     <div id="contador" class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
                         <h2>OFERTA LIMITADA GEORGE RUSSELL</h2>
                         <p>¡Disfruta de un menú diseñado por el mismísimo George Russell!</p>
+                        <?php echo (new productoController())->getCountdownScript(); ?>
                     </div>
                     <div id="oferta" class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
                         <img src="views/img/promoRussell.png" alt="promoRussell" class="img-fluid">
@@ -58,7 +64,7 @@
                             <h5 class="card-title"><?php echo $menu['nombre']; ?></h5>
                             <p class="card-text"><?php echo $menu['descripcion']; ?></p>
                             <div class="d-flex align-items-center">
-                                <form method="post" action="?controller=producto&action=añadirCarrito">
+                                <form method="post" action="?controller=producto&action=modificar&id=<?php echo $menu['id']; ?>">
                                     <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
                                     <input type="hidden" name="nombre" value="<?php echo $menu['nombre']; ?>">
                                     <input type="hidden" name="descripcion" value="<?php echo $menu['descripcion']; ?>">
@@ -83,10 +89,10 @@
     <section id="form">
         <div class="form-container text-center">
             <h2>UNETE A NOSOTROS Y DISFRUTA DE TODAS NUESTRAS VENTAJAS</h2>
-            <form class="container-fluid d-flex align-items-center">
-                <input type="text" placeholder="Nombre">
-                <input type="text" placeholder="Apellido">
-                <input type="email" placeholder="Correo">
+            <form class="container-fluid d-flex align-items-center" method="POST" action="?controller=usuario&action=rediriguirRegistro">
+                <input type="text" name="nombre" placeholder="Nombre">
+                <input type="text" name="apellido" placeholder="Apellido">
+                <input type="email" name="email" placeholder="Correo">
                 <button class="btn-enviar">
                     <img src="views/img/flecha_blanca.png" alt="Enviar" class="img-enviar">
                 </button>
@@ -95,6 +101,5 @@
     </section>
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
 </body>
 </html>

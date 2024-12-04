@@ -6,11 +6,11 @@ $bebidas = productosDAO::getBebidas();
 $complementos = productosDAO::getComplementos();
 ?>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-6">
+    <div class="row justify-content-center">
+        <div class="col-6 text-center modificar-image">
             <img src="<?= $menu['imagen'] ?>" alt="<?= $menu['nombre'] ?>" class="img-fluid">
         </div>
-        <div class="col-6">
+        <div class="col-6 text-center modificar-info">
             <h2>Selecciona tu bebida</h2>
             <div class="bebidas">
                 <?php foreach ($bebidas as $bebida): ?>
@@ -55,6 +55,10 @@ function addToCart(menuId) {
         formData.append('menuId', menuId);
         formData.append('bebidaId', selectedBebida);
         formData.append('complementoId', selectedComplemento);
+        formData.append('nombre', '<?= $menu['nombre'] ?>');
+        formData.append('descripcion', '<?= $menu['descripcion'] ?>');
+        formData.append('precio', '<?= $menu['precio'] ?>');
+        formData.append('imagen', '<?= $menu['imagen'] ?>');
         fetch('?controller=producto&action=añadirCarrito', {
             method: 'POST',
             body: formData
