@@ -1,5 +1,5 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() == PHP_SESSION_NONE) { //Comprueba si la sesión está iniciada, si no lo está, la inicia
     session_start();
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

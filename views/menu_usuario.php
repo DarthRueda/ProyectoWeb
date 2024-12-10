@@ -39,7 +39,7 @@ $editing = isset($_GET['edit']) && $_GET['edit'] == 'true'; // Comprobar si el u
             <button type="submit" class="btn-enviar">Guardar Datos</button>
         <?php else: ?>
             <a href="?controller=usuario&action=menu_usuario&edit=true" class="btn-enviar">Editar Datos</a>
-            <a href="?controller=usuario&action=pedidos_info" class="btn-enviar">Ver Pedidos</a>
+            <a href="?controller=usuario&action=pedir_pedido_anterior" class="btn-enviar">Pedir Pedido Anterior</a>
             <button type="button" class="btn-enviar" onclick="confirmDelete()">Eliminar Usuario</button>
         <?php endif; ?>
     </form>

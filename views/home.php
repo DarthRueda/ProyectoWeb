@@ -52,24 +52,24 @@
                     include_once 'models/productosDAO.php';
                     $productos = productosDAO::getAll();
                     $menus = array_filter($productos, function($producto) {
-                        return $producto['tipo'] == 'menus' && $producto['id'] >= 1 && $producto['id'] <= 3;
+                        return $producto->getTipo() == 'menus' && $producto->getId() >= 1 && $producto->getId() <= 3;
                     });
                     foreach ($menus as $menu) {
                     ?>
                     <div class="card" style="width: 18rem;">
                         <div class="img-container">
-                            <img src="<?php echo $menu['imagen']; ?>" class="card-img-top" alt="<?php echo $menu['nombre']; ?>">
+                            <img src="<?php echo $menu->getImagen(); ?>" class="card-img-top" alt="<?php echo $menu->getNombre(); ?>">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $menu['nombre']; ?></h5>
-                            <p class="card-text"><?php echo $menu['descripcion']; ?></p>
+                            <h5 class="card-title"><?php echo $menu->getNombre(); ?></h5>
+                            <p class="card-text"><?php echo $menu->getDescripcion(); ?></p>
                             <div class="d-flex align-items-center">
-                                <form method="post" action="?controller=producto&action=modificar&id=<?php echo $menu['id']; ?>">
-                                    <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
-                                    <input type="hidden" name="nombre" value="<?php echo $menu['nombre']; ?>">
-                                    <input type="hidden" name="descripcion" value="<?php echo $menu['descripcion']; ?>">
-                                    <input type="hidden" name="precio" value="<?php echo $menu['precio']; ?>">
-                                    <input type="hidden" name="imagen" value="<?php echo $menu['imagen']; ?>">
+                                <form method="post" action="?controller=producto&action=modificar&id=<?php echo $menu->getId(); ?>">
+                                    <input type="hidden" name="id" value="<?php echo $menu->getId(); ?>">
+                                    <input type="hidden" name="nombre" value="<?php echo $menu->getNombre(); ?>">
+                                    <input type="hidden" name="descripcion" value="<?php echo $menu->getDescripcion(); ?>">
+                                    <input type="hidden" name="precio" value="<?php echo $menu->getPrecio(); ?>">
+                                    <input type="hidden" name="imagen" value="<?php echo $menu->getImagen(); ?>">
                                     <button type="submit" class="btn-add">Añadir</button>
                                 </form>
                                 <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">

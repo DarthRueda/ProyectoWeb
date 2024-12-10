@@ -26,38 +26,52 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 d-flex flex-column align-items-center">
-                    <?php if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])): ?>
-                        <?php $_SESSION['cart_data'] = $_SESSION['cart']; ?>
-                        <?php foreach ($_SESSION['cart'] as $producto): ?>
+                    <?php
+                    include_once 'models/productosDAO.php';
+                    include_once 'models/menu.php';
+
+                    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])):
+                        $_SESSION['cart_data'] = $_SESSION['cart'];
+                        foreach ($_SESSION['cart'] as $productoData):
+                            $producto = new Menu(
+                                $productoData['id'],
+                                $productoData['nombre'],
+                                $productoData['descripcion'],
+                                $productoData['precio'],
+                                $productoData['imagen']
+                            );
+                            $producto->setTipo($productoData['tipo']);
+                            $producto->setCantidad($productoData['cantidad']);
+                            ?>
                             <div class="producto">
                                 <div class="img-container">
-                                    <img src="<?= $producto['imagen'] ?>" alt="<?= $producto['nombre'] ?>">
+                                    <img src="<?= $producto->getImagen() ?>" alt="<?= $producto->getNombre() ?>">
                                 </div>
                                 <div class="info">
-                                    <h3><?= $producto['nombre'] ?></h3>
-                                    <p><?= $producto['descripcion'] ?></p>
+                                    <h3><?= $producto->getNombre() ?></h3>
+                                    <p><?= $producto->getDescripcion() ?></p>
                                 </div>
                                 <div class="price-bin">
-                                    <span class="price"><?= $producto['precio'] ?>€</span>
+                                    <span class="price"><?= $producto->getPrecio() ?>€</span>
                                     <!-- Formularios para aumentar y disminuir la cantidad de productos -->
                                     <div class="quantity-container">
                                         <form method="post" action="?controller=producto&action=actualizarCantidad">
-                                            <input type="hidden" name="id" value="<?= $producto['id'] ?>">
-                                            <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
+                                            <input type="hidden" name="id" value="<?= $producto->getId() ?>">
+                                            <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
                                             <input type="hidden" name="action" value="decrease">
                                             <button type="submit"><img src="views/img/menos.png" alt="Menos"></button>
                                         </form>
-                                        <input type="text" value="<?= $producto['cantidad'] ?>" readonly>
+                                        <input type="text" value="<?= $producto->getCantidad() ?>" readonly>
                                         <form method="post" action="?controller=producto&action=actualizarCantidad">
-                                            <input type="hidden" name="id" value="<?= $producto['id'] ?>">
-                                            <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
+                                            <input type="hidden" name="id" value="<?= $producto->getId() ?>">
+                                            <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
                                             <input type="hidden" name="action" value="increase">
                                             <button type="submit"><img src="views/img/mas.png" alt="Más"></button>
                                         </form>
                                     </div>
                                     <form method="post" action="?controller=producto&action=eliminarCarrito">
-                                        <input type="hidden" name="id" value="<?= $producto['id'] ?>">
-                                        <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
+                                        <input type="hidden" name="id" value="<?= $producto->getId() ?>">
+                                        <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
                                         <button type="submit"><img src="views/img/papelera.png" alt="Eliminar"></button>
                                     </form>
                                 </div>

@@ -3,6 +3,7 @@ include_once("models/usuario.php");
 include_once("models/usuariosDAO.php");
 
 class usuarioController{
+    //Funciones para controlar las vistas de los usuarios
     public function login(){
         $view = "views/login.php";
         include_once 'views/main.php';
@@ -109,6 +110,26 @@ class usuarioController{
             $email = $_POST['email'];
             header("Location: index.php?controller=usuario&action=registro&nombre=$nombre&apellido=$apellido&email=$email");
             exit;
+        }
+    }
+
+    //Funcion que sirve para pedir el ultimo pedido del usuario
+    public function pedir_pedido_anterior() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (isset($_SESSION['id_usuario'])) {
+            $id_usuario = $_SESSION['id_usuario'];
+            $pedido = pedidosDAO::getLatestPedidoByUsuarioId($id_usuario);
+            if ($pedido) {
+                $_SESSION['cart'] = pedidosDAO::getProductosByPedidoId($pedido['id_pedido']);
+                header("Location: index.php?controller=producto&action=compra");
+                exit;
+            } else {
+                echo "No se encontró ningún pedido anterior.";
+            }
+        } else {
+            echo "Usuario no autenticado.";
         }
     }
 

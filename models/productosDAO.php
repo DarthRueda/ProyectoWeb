@@ -22,14 +22,8 @@ class productosDAO {
 
         // Bucle para recorrer los resultados
         while ($row = $result->fetch_assoc()) {
-            $producto = [
-                'id' => $row['id'],
-                'nombre' => $row['nombre'],
-                'descripcion' => $row['descripcion'],
-                'precio' => $row['precio'],
-                'imagen' => $row['imagen'],
-                'tipo' => $row['tipo']
-            ];
+            $producto = new Menu($row['id'], $row['nombre'], $row['descripcion'], $row['precio'], $row['imagen']);
+            $producto->setTipo($row['tipo']);
             array_push($productos, $producto);
         }
 
@@ -70,14 +64,8 @@ class productosDAO {
         $result = $con->query($query);
         $productos = [];
         while ($row = $result->fetch_assoc()) {
-            $producto = [
-                'id' => $row['id'],
-                'nombre' => $row['nombre'],
-                'descripcion' => $row['descripcion'],
-                'precio' => $row['precio'],
-                'imagen' => $row['imagen'],
-                'tipo' => $row['tipo']
-            ];
+            $producto = new Menu($row['id'], $row['nombre'], $row['descripcion'], $row['precio'], $row['imagen']);
+            $producto->setTipo($row['tipo']);
             array_push($productos, $producto);
         }
 

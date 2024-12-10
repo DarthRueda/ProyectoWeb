@@ -6,6 +6,8 @@ abstract class Producto {
     protected $descripcion;
     protected $precio;
     protected $imagen;
+    protected $tipo;
+    protected $cantidad;
 
 
 
@@ -105,6 +107,46 @@ abstract class Producto {
     public function setImagen($imagen)
     {
         $this->imagen = $imagen;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tipo
+     */ 
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set the value of tipo
+     *
+     * @return  self
+     */ 
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of cantidad
+     */ 
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set the value of cantidad
+     *
+     * @return  self
+     */ 
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
 
         return $this;
     }

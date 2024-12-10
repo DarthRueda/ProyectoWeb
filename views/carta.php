@@ -66,7 +66,7 @@
             //Variable para guardar el menu Russell y mostrarlo en la primera posición, ya que es el producto de oferta
             $menuRussell = null;
             foreach ($productosPagina as $key => $producto) { // Recorremos los productos de la página actual
-                if ($producto['nombre'] == 'Menu Russell') { 
+                if ($producto->getNombre() == 'Menu Russell') { 
                     $menuRussell = $producto;
                     unset($productosPagina[$key]);
                     array_unshift($productosPagina, $menuRussell);
@@ -76,27 +76,27 @@
 
             $count = 0;
             foreach ($productosPagina as $producto):
-                if ($count % 3 == 0 && $count != 0): ?>
+                if ($count % 3 == 0 && $count != 0): ?> <!-- Si el contador es múltiplo de 3 y no es 0, cerramos la fila actual y creamos una nueva -->
                     </div><div class="row justify-content-center">
                 <?php endif; ?>
                 <div class="col-md-4 mb-4 d-flex justify-content-center">
                     <div class="card" style="width: 18rem;">
-                        <div class="img-container" style="<?= $producto['nombre'] == 'Menu Russell' ? 'background-color: #00A19C;' : '' ?>">
-                            <img src="<?= $producto['imagen'] ?>" class="card-img-top" alt="<?= ucfirst($producto['tipo']) ?> <?= $producto['id'] ?>">
+                        <div class="img-container" style="<?= $producto->getNombre() == 'Menu Russell' ? 'background-color: #00A19C;' : '' ?>">
+                            <img src="<?= $producto->getImagen() ?>" class="card-img-top" alt="<?= ucfirst($producto->getTipo()) ?> <?= $producto->getId() ?>">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title text-left"><?= $producto['nombre'] ?></h5>
-                            <p class="card-text"><?= $producto['descripcion'] ?></p>
+                            <h5 class="card-title text-left"><?= $producto->getNombre() ?></h5>
+                            <p class="card-text"><?= $producto->getDescripcion() ?></p>
                             <div class="d-flex align-items-center">
                                 <form method="post" action="?controller=producto&action=añadirCarrito" class="add-to-cart-form">
-                                    <input type="hidden" name="id" value="<?= $producto['id'] ?>">
-                                    <input type="hidden" name="nombre" value="<?= $producto['nombre'] ?>">
-                                    <input type="hidden" name="descripcion" value="<?= $producto['descripcion'] ?>">
-                                    <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
-                                    <input type="hidden" name="imagen" value="<?= $producto['imagen'] ?>">
-                                    <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
-                                    <?php if ($producto['tipo'] == 'menus'): ?>
-                                        <button type="button" class="btn-add" onclick="window.location.href='?controller=producto&action=modificar&id=<?= $producto['id'] ?>'">Añadir</button>
+                                    <input type="hidden" name="id" value="<?= $producto->getId() ?>">
+                                    <input type="hidden" name="nombre" value="<?= $producto->getNombre() ?>">
+                                    <input type="hidden" name="descripcion" value="<?= $producto->getDescripcion() ?>">
+                                    <input type="hidden" name="precio" value="<?= $producto->getPrecio() ?>">
+                                    <input type="hidden" name="imagen" value="<?= $producto->getImagen() ?>">
+                                    <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
+                                    <?php if ($producto->getTipo() == 'menus'): ?>
+                                        <button type="button" class="btn-add" onclick="window.location.href='?controller=producto&action=modificar&id=<?= $producto->getId() ?>'">Añadir</button>
                                     <?php else: ?>
                                         <button type="button" class="btn-add" onclick="addToCart(this.form)">Añadir</button>
                                     <?php endif; ?>

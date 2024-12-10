@@ -16,7 +16,7 @@ session_start();
         <div class = "container-fluid">
             <div class="row">
                 <div class="col-4">
-                    <img src="views/img/logofull.png" alt="logo"> 
+                    <img src="views/img/logodef.png" alt="logo" style="background-color: #E61414">
                 </div>
                 <div class="col-4">
                     <nav>

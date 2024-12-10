@@ -121,19 +121,20 @@ if (session_status() == PHP_SESSION_NONE) {
         <button class="btn-pagar2" onclick="validarFormulario()">PAGAR</button>
     </div>
     <script>
-        // TODAS ESTAS FUNCIONES ESTAN SUJETAS A CAMBIOS PARA LA POSSIBILIDAD DE HACERLAS EN PHP
+        //Funcion para añadir seleccionar un método de entrega
         function seleccionarMetodoEntrega(element) {
             const methods = document.querySelectorAll('.metodos-entrega img');
             methods.forEach(method => method.classList.remove('selected'));
             element.classList.add('selected');
         }
-
+        //Funcion para mostrar los detalles de pago
         function mostrarDetallesPago(method) {
             document.getElementById('bizum-detalles').style.display = method === 'bizum' ? 'block' : 'none';
             document.getElementById('tarjeta-detalles').style.display = method === 'tarjeta_credito' ? 'block' : 'none';
             document.getElementById('paypal-detalles').style.display = method === 'paypal' ? 'block' : 'none';
         }
 
+        //Funcion para validar el formulario
         function validarFormulario() {
             const selectedPaymentMethod = document.querySelector('input[name="metodo_pago"]:checked');
             const selectedDeliveryMethod = document.querySelector('.metodos-entrega img.selected');

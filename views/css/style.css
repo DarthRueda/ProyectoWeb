@@ -1164,6 +1164,7 @@ hr {
     height: auto;
 }
 
+/* Style modificar menus */
 .bebidas, .complementos {
     display: flex;
     flex-wrap: wrap;

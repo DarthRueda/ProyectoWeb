@@ -29,6 +29,13 @@ class productoController{
         $view = "views/exito.php";
         include_once 'views/main.php';
     }
+
+    public function modificar() {
+        $view = "views/modificar.php";
+        include_once 'views/main.php';
+    }
+    
+    // Funcion para añadir un producto al carrito
     public function añadirCarrito(){
         session_start();
         $producto = [
@@ -43,7 +50,7 @@ class productoController{
             'complemento' => $_POST['complementoId'] ?? null
         ];
 
-        if (!isset($_SESSION['cart'])) {
+        if (!isset($_SESSION['cart'])) { // Comprobamos si existe la variable de sesión cart para añadir el producto, si no existe la creamos
             $_SESSION['cart'] = [];
         }
 
@@ -72,6 +79,7 @@ class productoController{
         ]);
         exit;
     }
+    // Funcion para eliminar un producto del carrito
     public function eliminarCarrito(){
         session_start();
         $id = $_POST['id'];
@@ -82,19 +90,21 @@ class productoController{
                 break;
             }
         }
-        $_SESSION['cart'] = array_values($_SESSION['cart']);
+        $_SESSION['cart'] = array_values($_SESSION['cart']); // Reindexamos el array de productos en el carrito para evitar errores en la vista
         header('Location: ?controller=producto&action=carrito');
     }
+    // Funcion para tramitar el pedido
     public function tramitarPedido(){
         session_start();
-        if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-            $codigo_promocional = isset($_POST['codigo_promocional']) ? $_POST['codigo_promocional'] : null;
-            $_SESSION['id_pedido'] = pedidosDAO::guardarPedido($_SESSION['cart'], $codigo_promocional);
+        if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) { // Comprobamos si existe el carrito y si no está vacío
+            $codigo_promocional = isset($_POST['codigo_promocional']) ? $_POST['codigo_promocional'] : null; // Comprobamos si se ha introducido un código promocional
+            $_SESSION['id_pedido'] = pedidosDAO::guardarPedido($_SESSION['cart'], $codigo_promocional); // Guardamos el pedido en la base de datos y obtenemos el id del pedido
             unset($_SESSION['cart']);
         }
         header('Location: ?controller=producto&action=compra');
     }
 
+    // Funcion para actualizar la cantidad de productos en el carrito
     public function actualizarCantidad() { //Funcion para actualizar la cantidad de productos en el carrito
         session_start();
         $id = $_POST['id'];
@@ -118,11 +128,6 @@ class productoController{
 
         header('Location: ?controller=producto&action=carrito');
         exit;
-    }
-
-    public function modificar() {
-        $view = "views/modificar.php";
-        include_once 'views/main.php';
     }
 
     // Funcion para modificar el producto

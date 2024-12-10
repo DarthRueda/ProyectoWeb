@@ -14,18 +14,18 @@ $complementos = productosDAO::getComplementos();
             <h2>Selecciona tu bebida</h2>
             <div class="bebidas">
                 <?php foreach ($bebidas as $bebida): ?>
-                    <div class="bebida-box" onclick="selectBebida(<?= $bebida['id'] ?>)">
-                        <img src="<?= $bebida['imagen'] ?>" alt="<?= $bebida['nombre'] ?>">
-                        <p><?= $bebida['nombre'] ?></p>
+                    <div class="bebida-box" onclick="selectBebida(<?= $bebida->getId() ?>)">
+                        <img src="<?= $bebida->getImagen() ?>" alt="<?= $bebida->getNombre() ?>">
+                        <p><?= $bebida->getNombre() ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
             <h2>Selecciona tu complemento</h2>
             <div class="complementos">
                 <?php foreach ($complementos as $complemento): ?>
-                    <div class="complemento-box" onclick="selectComplemento(<?= $complemento['id'] ?>)">
-                        <img src="<?= $complemento['imagen'] ?>" alt="<?= $complemento['nombre'] ?>">
-                        <p><?= $complemento['nombre'] ?></p>
+                    <div class="complemento-box" onclick="selectComplemento(<?= $complemento->getId() ?>)">
+                        <img src="<?= $complemento->getImagen() ?>" alt="<?= $complemento->getNombre() ?>">
+                        <p><?= $complemento->getNombre() ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>

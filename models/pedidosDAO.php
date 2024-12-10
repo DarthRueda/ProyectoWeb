@@ -4,13 +4,14 @@ include_once 'config/dataBase.php';
 class pedidosDAO {
     public static function guardarPedido($productos, $codigo_promocional = null) {
         $con = DataBase::connect();
+        $fecha = date('Y-m-d H:i:s'); // Add the current date and time
         
         // Insertar valores en la base de datos
-        $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta, id_usuario) VALUES (0, 0, 0, ?, ?)";
+        $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta, id_usuario, fecha) VALUES (0, 0, 0, ?, ?, ?)";
         $stmt = $con->prepare($query);
         $id_oferta = null; // No hay ofertas implementadas por defecto
         $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : null; // Obtener id_usuario si está logueado
-        $stmt->bind_param('ii', $id_oferta, $id_usuario);
+        $stmt->bind_param('iis', $id_oferta, $id_usuario, $fecha);
         $stmt->execute();
         $id_pedido = $stmt->insert_id;
         $stmt->close();
@@ -48,22 +49,28 @@ class pedidosDAO {
         $iva = round($pedido * 0.10, 2);
         $total = $pedido + $iva;
 
-        // Aplicar descuento si hay un código promocional válido
+        // Aplicar descuento si hay un código promocional válido en la fecha actual
         $descuento = 0;
         if ($codigo_promocional) {
-            $query = "SELECT id_oferta, descuento FROM ofertas WHERE nombre = ?";
+            $query = "SELECT id_oferta, descuento, fecha_inicio, fecha_fin FROM ofertas WHERE nombre = ?";
             $stmt = $con->prepare($query);
             $stmt->bind_param('s', $codigo_promocional);
             $stmt->execute();
-            $stmt->bind_result($id_oferta, $descuento);
+            $stmt->bind_result($id_oferta, $descuento, $fecha_inicio, $fecha_fin);
             if ($stmt->fetch()) {
-                $stmt->close();
-                $query = "UPDATE pedidos SET id_oferta = ? WHERE id_pedido = ?";
-                $stmt = $con->prepare($query);
-                $stmt->bind_param('ii', $id_oferta, $id_pedido);
-                $stmt->execute();
-                $stmt->close();
-                $descuento = round($total * ($descuento / 100), 2);
+                $fecha_actual = date('Y-m-d');
+                if ($fecha_actual >= $fecha_inicio && $fecha_actual <= $fecha_fin) {
+                    $stmt->close();
+                    $query = "UPDATE pedidos SET id_oferta = ? WHERE id_pedido = ?";
+                    $stmt = $con->prepare($query);
+                    $stmt->bind_param('ii', $id_oferta, $id_pedido);
+                    $stmt->execute();
+                    $stmt->close();
+                    $descuento = round($total * ($descuento / 100), 2);
+                } else {
+                    $descuento = 0; // No aplicar descuento si la fecha no es válida
+                    $stmt->close();
+                }
             } else {
                 $stmt->close();
             }
@@ -199,6 +206,19 @@ class pedidosDAO {
 
         $con->close();
         return $productos;
+    }
+
+    public static function getLatestPedidoByUsuarioId($id_usuario) { //Obtener el último pedido de un usuario basandonos en su id
+        $con = DataBase::connect();
+        $query = "SELECT * FROM pedidos WHERE id_usuario = ? ORDER BY fecha DESC LIMIT 1";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $id_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pedido = $result->fetch_assoc();
+        $stmt->close();
+        $con->close();
+        return $pedido;
     }
 }
 ?>
