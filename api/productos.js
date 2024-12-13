@@ -37,7 +37,7 @@ async function deletePedido(id_pedido) {
     const datos = await respuesta.json();
     if (datos.estado === 'Exito') {
         alert('Pedido eliminado con éxito');
-        getPedidos(); // Refresh the table
+        getPedidos(); // Refrescar tabla
     } else {
         alert('Error al eliminar el pedido');
     }

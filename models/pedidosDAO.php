@@ -4,7 +4,7 @@ include_once 'config/dataBase.php';
 class pedidosDAO {
     public static function guardarPedido($productos, $codigo_promocional = null) {
         $con = DataBase::connect();
-        $fecha = date('Y-m-d H:i:s'); // Add the current date and time
+        $fecha = date('Y-m-d H:i:s'); // Fecha actual
         
         // Insertar valores en la base de datos
         $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta, id_usuario, fecha) VALUES (0, 0, 0, ?, ?, ?)";
