@@ -210,7 +210,7 @@ class pedidosDAO {
 
     public static function getLatestPedidoByUsuarioId($id_usuario) { //Obtener el último pedido de un usuario basandonos en su id
         $con = DataBase::connect();
-        $query = "SELECT * FROM pedidos WHERE id_usuario = ? ORDER BY fecha DESC LIMIT 1";
+        $query = "SELECT * FROM pedidos WHERE id_usuario = ? ORDER BY fecha DESC LIMIT 1"; //Ordenar por fecha descendente y limitar a 1
         $stmt = $con->prepare($query);
         $stmt->bind_param('i', $id_usuario);
         $stmt->execute();

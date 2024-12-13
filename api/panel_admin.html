@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="api/admin.css">
+</head>
+<body>
+    <div class="button-container">
+        <button id="obtenerPedidos">Obtener Pedidos</button>
+        <button id="ordenarPorUsuario">Ordenar por Usuario</button>
+        <button id="ordenarPorFecha">Ordenar por Fecha</button>
+        <button id="ordenarPorPrecio">Ordenar por Precio</button>
+        <button id="crearPedido">Crear Pedido</button>
+        <button id="modificarPedido">Modificar Pedido</button>
+        <button id="eliminarPedido">Eliminar Pedido</button>
+    </div>
+    <div id="formContainer"></div>
+    <div class="table-container">
+        <table id="pedidosTable" border="1">
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+    <script src="api/usuarios.js"></script>
+    <script src="api/productos.js"></script>
+</body>
+</html>
