@@ -132,7 +132,7 @@ class productoController{
 
     // Funcion para modificar el producto
     public function getCountdownScript() {
-        $endTime = 1734307200; // Este numero esta en UNIX timestamp, sirven para represntar el 16 de diciembre de 2024
+        $endTime = 1708095467; // Este numero esta en UNIX timestamp, sirven para represntar el 16 de diciembre de 2024 1734307200
         $now = time();
         $distance = $endTime - $now;
 

@@ -18,21 +18,38 @@ switch($metodo){
             if ($orderBy) {
                 $orderClause = "ORDER BY " . $con->real_escape_string($orderBy);
             }
-            $query = "SELECT p.id_pedido, p.id_usuario, p.fecha, p.total, u.usuario 
-                      FROM pedidos p 
-                      LEFT JOIN usuarios u ON p.id_usuario = u.id_usuario $orderClause";
-            $result = $con->query($query);
+            if (isset($_GET['id_pedido'])) {
+                $id_pedido = $con->real_escape_string($_GET['id_pedido']);
+                $query = "SELECT * FROM pedidos WHERE id_pedido = '$id_pedido'";
+                $result = $con->query($query);
+                if ($result->num_rows > 0) {
+                    $pedido = $result->fetch_assoc();
+                    echo json_encode([
+                        "estado" => "Exito",
+                        "data" => $pedido
+                    ]);
+                } else {
+                    echo json_encode([
+                        "estado" => "Error",
+                        "data" => "Pedido no encontrado"
+                    ]);
+                }
+            } else {
+                $query = "SELECT p.id_pedido, p.id_usuario, p.fecha, p.total, u.usuario 
+                          FROM pedidos p 
+                          LEFT JOIN usuarios u ON p.id_usuario = u.id_usuario $orderClause";
+                $result = $con->query($query);
 
-            $pedidos = [];
-            while ($row = $result->fetch_assoc()) {
-                $pedidos[] = $row;
+                $pedidos = [];
+                while ($row = $result->fetch_assoc()) {
+                    $pedidos[] = $row;
+                }
+
+                echo json_encode([
+                    "estado" => "Exito",
+                    "data" => $pedidos
+                ]);
             }
-
-            echo json_encode([
-                "estado" => "Exito",
-                "data" => $pedidos
-            ]);
-
             $con->close();
         } else {
             if (isset($_GET["id"])){
@@ -163,3 +180,5 @@ switch($metodo){
         }
     break;
 }
+
+?>

@@ -57,7 +57,7 @@ $con->close();
             <a href="?controller=usuario&action=pedir_pedido_anterior" class="btn-enviar">Pedir Pedido Anterior</a>
             <button type="button" class="btn-enviar" onclick="confirmDelete()">Eliminar Usuario</button>
             <?php if ($isAdmin): ?>
-                <a href="?controller=usuario&action=panel_admin" class="btn-enviar">Acceder al panel de administrador</a>
+                <a href="?controller=api&action=admin" class="btn-enviar">Acceder al panel de administrador</a>
             <?php endif; ?>
         <?php endif; ?>
     </form>

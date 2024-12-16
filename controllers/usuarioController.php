@@ -133,10 +133,6 @@ class usuarioController{
         }
     }
 
-    // Function to redirect to the admin panel
-    public function panel_admin() {
-        include_once 'api/panel_admin.html';
-    }
 
 }
 ?>
