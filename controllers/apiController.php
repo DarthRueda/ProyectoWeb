@@ -45,7 +45,6 @@ class ApiController {
     }
 }
 
-// Check if action parameter is set and call the appropriate function
 if (isset($_GET['action'])) {
     $controller = new ApiController();
     switch ($_GET['action']) {
