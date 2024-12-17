@@ -13,9 +13,11 @@
         <button id="ordenarPorFecha">Ordenar por Fecha</button>
         <button id="ordenarPorPrecio">Ordenar por Precio</button>
         <button id="crearPedido">Crear Pedido</button>
+        <button id="obtenerUsuarios">Obtener Usuarios</button>
+        <button id="obtenerProductos">Obtener Productos</button>
     </div>
-    <div id="formContainer"></div>
-    <div class="table-container">
+    <div id="formContainer" style="display: none;"></div>
+    <div id="pedidosTableContainer" class="table-container" style="display: none;">
         <table id="pedidosTable" border="1">
             <thead>
                 <tr>
@@ -28,6 +30,36 @@
             </thead>
             <tbody>
 
+            </tbody>
+        </table>
+    </div>
+    <div id="usuariosTableContainer" class="table-container" style="display: none;">
+        <table id="usuariosTable" border="1">
+            <thead>
+                <tr>
+                    <th>ID Usuario</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div id="productosTableContainer" class="table-container" style="display: none;">
+        <table id="productosTable" border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
             </tbody>
         </table>
     </div>

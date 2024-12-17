@@ -1,6 +1,6 @@
 <?php
-include_once ("models/usuario.php");
-include_once ("config/dataBase.php");
+include_once __DIR__ . '/../models/usuario.php';
+include_once __DIR__ . '/../config/dataBase.php';
 
 class UsuariosDAO {
     // Esta funcion permite insertar un usuario en la base de datos
@@ -18,6 +18,18 @@ class UsuariosDAO {
         $result = $con->query($sql);
         $con->close();
         return $result->num_rows > 0;
+    }
+
+    public static function getAll() {
+        $con = DataBase::connect();
+        $sql = "SELECT * FROM usuarios";
+        $result = $con->query($sql);
+        $usuarios = [];
+        while ($row = $result->fetch_assoc()) {
+            $usuarios[] = $row;
+        }
+        $con->close();
+        return $usuarios;
     }
 }
 ?>

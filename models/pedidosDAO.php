@@ -1,5 +1,5 @@
 <?php
-include_once 'config/dataBase.php';
+include_once __DIR__ . '/../config/dataBase.php';
 
 class pedidosDAO {
     public static function guardarPedido($productos, $codigo_promocional = null) {

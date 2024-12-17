@@ -1,6 +1,6 @@
 <?php
-include_once 'config/dataBase.php';
-include_once 'models/menu.php';
+include_once __DIR__ . '/../config/dataBase.php';
+include_once __DIR__ . '/../models/menu.php';
 
 class productosDAO {
     public static function getAll() {
