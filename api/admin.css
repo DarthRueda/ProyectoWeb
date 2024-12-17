@@ -36,7 +36,7 @@ button {
 
 table {
     width: 100%; 
-    height: 500px; /* Set a fixed height for the table */
+    height: 500px;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -69,7 +69,7 @@ th {
 
 tbody {
     display: block;
-    max-height: calc(100vh - 200px); /* Adjust based on your layout */
+    max-height: calc(100vh - 200px);
     overflow-y: auto;
 }
 
