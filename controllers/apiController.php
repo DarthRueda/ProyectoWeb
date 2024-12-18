@@ -115,10 +115,214 @@ class ApiController {
     }
 
     function obtenerProductos() {
-        include_once __DIR__ . '/../models/productosDAO.php';
-        $productos = productosDAO::getAll();
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $productos = [];
+        $queries = [
+            "SELECT id_menu AS id, nombre, descripcion, precio, imagen, 'menu' AS tipo FROM menus",
+            "SELECT id_hamburguesa AS id, nombre, descripcion, precio, imagen, 'hamburguesa' AS tipo FROM hamburguesas",
+            "SELECT id_bebida AS id, nombre, descripcion, precio, imagen, 'bebida' AS tipo FROM bebidas",
+            "SELECT id_complemento AS id, nombre, descripcion, precio, imagen, 'complemento' AS tipo FROM complementos"
+        ];
+
+        foreach ($queries as $query) {
+            $result = $conn->query($query);
+            while ($row = $result->fetch_assoc()) {
+                $productos[] = $row;
+            }
+        }
+
+        if (isset($_GET['tipo'])) {
+            $tipo = $_GET['tipo'];
+            $productos = array_filter($productos, function($producto) use ($tipo) {
+                return $producto['tipo'] === $tipo;
+            });
+        }
+
+        $conn->close();
+
         header('Content-Type: application/json');
-        echo json_encode($productos);
+        echo json_encode(array_values($productos));
+    }
+
+    function crearUsuario() {
+        include_once __DIR__ . '/../models/usuariosDAO.php';
+        include_once __DIR__ . '/../models/usuario.php';
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $input['contrasena'], $input['telefono'])) {
+            $telefono = filter_var($input['telefono'], FILTER_SANITIZE_NUMBER_INT);
+            if (!is_numeric($telefono)) {
+                $response = array('status' => 'error', 'message' => 'El teléfono debe ser un número.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+            }
+
+            $usuario = new Usuario(
+                $input['usuario'],
+                $input['nombre'],
+                $input['apellido'],
+                password_hash($input['contrasena'], PASSWORD_BCRYPT),
+                $input['email'],
+                $telefono
+            );
+
+            $result = UsuariosDAO::insert($usuario);
+
+            if ($result) {
+                $response = array('status' => 'success', 'message' => 'Usuario creado correctamente.');
+            } else {
+                $response = array('status' => 'error', 'message' => 'No se pudo crear el usuario.');
+            }
+        } else {
+            $response = array('status' => 'error', 'message' => 'Datos incompletos.');
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    function eliminarUsuario($id_usuario) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_usuario);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            $response = array('status' => 'success', 'message' => 'Usuario eliminado correctamente.');
+        } else {
+            $response = array('status' => 'error', 'message' => 'No se pudo eliminar el usuario.');
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    function crearProducto() {
+        include_once __DIR__ . '/../config/database.php';
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input['nombre'], $input['descripcion'], $input['precio'], $input['imagen'], $input['tipo'])) {
+            $nombre = $input['nombre'];
+            $descripcion = $input['descripcion'];
+            $precio = filter_var($input['precio'], FILTER_VALIDATE_FLOAT);
+            $imagen = $input['imagen'];
+            $tipo = $input['tipo'];
+
+            if ($precio === false) {
+                $response = array('status' => 'error', 'message' => 'El precio debe ser un número decimal.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+            }
+
+            $con = DataBase::connect();
+            if ($con->connect_error) {
+                die("Connection failed: " . $con->connect_error);
+            }
+
+            $table = '';
+            switch ($tipo) {
+                case 'menu':
+                    $table = 'menus';
+                    break;
+                case 'hamburguesa':
+                    $table = 'hamburguesas';
+                    break;
+                case 'bebida':
+                    $table = 'bebidas';
+                    break;
+                case 'complemento':
+                    $table = 'complementos';
+                    break;
+                default:
+                    $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+                    return;
+            }
+
+            $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssds", $nombre, $descripcion, $precio, $imagen);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $response = array('status' => 'success', 'message' => 'Producto creado correctamente.');
+            } else {
+                $response = array('status' => 'error', 'message' => 'No se pudo crear el producto.');
+            }
+
+            $stmt->close();
+            $con->close();
+        } else {
+            $response = array('status' => 'error', 'message' => 'Datos incompletos.');
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    function eliminarProducto($id_producto, $tipo) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $table = '';
+        switch ($tipo) {
+            case 'menu':
+                $table = 'menus';
+                break;
+            case 'hamburguesa':
+                $table = 'hamburguesas';
+                break;
+            case 'bebida':
+                $table = 'bebidas';
+                break;
+            case 'complemento':
+                $table = 'complementos';
+                break;
+            default:
+                $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+        }
+
+        $sql = "DELETE FROM $table WHERE id_$tipo = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_producto);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            $response = array('status' => 'success', 'message' => 'Producto eliminado correctamente.');
+        } else {
+            $response = array('status' => 'error', 'message' => 'No se pudo eliminar el producto.');
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
     }
 }
 
@@ -158,6 +362,22 @@ if (isset($_GET['action'])) {
             break;
         case 'obtenerProductos':
             $controller->obtenerProductos();
+            break;
+        case 'crearUsuario':
+            $controller->crearUsuario();
+            break;
+        case 'eliminarUsuario':
+            if (isset($_GET['id_usuario'])) {
+                $controller->eliminarUsuario($_GET['id_usuario']);
+            }
+            break;
+        case 'crearProducto':
+            $controller->crearProducto();
+            break;
+        case 'eliminarProducto':
+            if (isset($_GET['id_producto'], $_GET['tipo'])) {
+                $controller->eliminarProducto($_GET['id_producto'], $_GET['tipo']);
+            }
             break;
     }
 }

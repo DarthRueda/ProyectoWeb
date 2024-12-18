@@ -1,4 +1,4 @@
-function fetchPedidos(action) {
+function fetchPedidos(action) { // Funcion para obtener pedidos
     fetch(`controllers/apicontroller.php?action=${action}`)
         .then(response => response.json())
         .then(data => {
@@ -25,6 +25,7 @@ function fetchPedidos(action) {
         .catch(error => console.error('Error:', error));
 }
 
+// Funcion para eliminar pedido
 function eliminarPedido(id_pedido) {
     fetch(`controllers/apicontroller.php?action=eliminarPedido&id_pedido=${id_pedido}`)
         .then(response => response.json())
@@ -38,30 +39,7 @@ function eliminarPedido(id_pedido) {
         .catch(error => console.error('Error:', error));
 }
 
-function fetchProductos() {
-    fetch('controllers/apicontroller.php?action=obtenerProductos')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.querySelector('#productosTable tbody');
-            tableBody.innerHTML = '';
-
-            data.forEach(producto => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${producto.id}</td>
-                    <td>${producto.nombre}</td>
-                    <td>${producto.descripcion}</td>
-                    <td>${producto.precio}</td>
-                    <td>${producto.tipo}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            showTable('productosTable');
-        })
-        .catch(error => console.error('Error:', error));
-}
-
+// Funcion para crear pedido
 function crearPedido() {
     fetch('controllers/apicontroller.php?action=crearPedido')
         .then(response => response.json())
@@ -94,6 +72,7 @@ function crearPedido() {
         .catch(error => console.error('Error:', error));
 }
 
+//Funcion para generar pedido
 function generarPedido() {
     const productos = [];
     document.querySelectorAll('.producto:checked').forEach(checkbox => {
@@ -121,66 +100,47 @@ function generarPedido() {
     .catch(error => console.error('Error:', error));
 }
 
+//Funcion para mostrar tabla
 function showTable(tableId) {
     document.querySelectorAll('.table-container').forEach(container => {
         container.style.display = 'none';
     });
     document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('filterButtons').style.display = 'none';
+
     document.getElementById(tableId).parentElement.style.display = 'block';
+
+    if (tableId === 'productosTable') {
+        document.getElementById('filterButtons').style.display = 'block';
+    }
 }
 
-function fetchUsuarios() {
-    fetch('controllers/apicontroller.php?action=obtenerUsuarios')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.querySelector('#usuariosTable tbody');
-            tableBody.innerHTML = '';
-
-            data.forEach(usuario => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${usuario.id_usuario}</td>
-                    <td>${usuario.usuario}</td>
-                    <td>${usuario.nombre}</td>
-                    <td>${usuario.apellido}</td>
-                    <td>${usuario.email}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            showTable('usuariosTable');
-        })
-        .catch(error => console.error('Error:', error));
-}
-
+// Obtenemos los pedidos
 document.getElementById('obtenerPedidos').addEventListener('click', function() {
     fetchPedidos('obtenerPedidos');
 });
 
+// Ordenamos los pedidos por usuarios
 document.getElementById('ordenarPorUsuario').addEventListener('click', function() {
     fetchPedidos('ordenarPorUsuario');
 });
 
+// Ordenamos los pedidos por fecha
 document.getElementById('ordenarPorFecha').addEventListener('click', function() {
     fetchPedidos('ordenarPorFecha');
 });
 
+// Ordenamos los pedidos por precio
 document.getElementById('ordenarPorPrecio').addEventListener('click', function() {
     fetchPedidos('ordenarPorPrecio');
 });
 
+// Ordenamos los pedidos por total
 document.getElementById('crearPedido').addEventListener('click', function() {
     crearPedido();
 });
 
-document.getElementById('obtenerUsuarios').addEventListener('click', function() {
-    fetchUsuarios();
-});
-
-document.getElementById('obtenerProductos').addEventListener('click', function() {
-    fetchProductos();
-});
-
+// Eliminamos un pedido
 document.querySelector('#pedidosTable tbody').addEventListener('click', function(event) {
     if (event.target.classList.contains('delete')) {
         const id_pedido = event.target.closest('tr').querySelector('td').innerText;

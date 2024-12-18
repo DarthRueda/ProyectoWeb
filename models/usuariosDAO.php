@@ -6,15 +6,19 @@ class UsuariosDAO {
     // Esta funcion permite insertar un usuario en la base de datos
     public static function insert(Usuario $usuario) {
         $con = DataBase::connect();
-        $sql = "INSERT INTO usuarios (usuario, nombre, apellido, email, contrasena, telefono, direccion) VALUES ('$usuario->usuario', '$usuario->nombre', '$usuario->apellido', '$usuario->email', '$usuario->contrasena', '$usuario->telefono', '$usuario->direccion')";
-        $con->query($sql);
+        $query = "INSERT INTO usuarios (usuario, nombre, apellido, email, contrasena, telefono) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("ssssss", $usuario->usuario, $usuario->nombre, $usuario->apellido, $usuario->email, $usuario->contrasena, $usuario->telefono);
+        $result = $stmt->execute();
+        $stmt->close();
         $con->close();
+        return $result;
     }
 
     // Esta funcion permite validar el login de un usuario
     public static function validateLogin($usuario, $password) {
         $con = DataBase::connect();
-        $sql = "SELECT id_usuario FROM usuarios WHERE usuario='$usuario' AND contrasena='$password'"; // Selecciona el id del usuario que tenga el usuario y contraseña que se le pasa
+        $sql = "SELECT id_usuario FROM usuarios WHERE usuario='$usuario' AND contrasena='$password'";
         $result = $con->query($sql);
         $con->close();
         return $result->num_rows > 0;

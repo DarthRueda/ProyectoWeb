@@ -8,15 +8,45 @@
 </head>
 <body>
     <div class="button-container">
-        <button id="obtenerPedidos">Obtener Pedidos</button>
-        <button id="ordenarPorUsuario">Ordenar por Usuario</button>
-        <button id="ordenarPorFecha">Ordenar por Fecha</button>
-        <button id="ordenarPorPrecio">Ordenar por Precio</button>
-        <button id="crearPedido">Crear Pedido</button>
-        <button id="obtenerUsuarios">Obtener Usuarios</button>
-        <button id="obtenerProductos">Obtener Productos</button>
+        <!-- Botones de pedidos -->
+        <div class="button-group">
+            <h3>Pedidos</h3>
+            <button id="obtenerPedidos">Obtener Pedidos</button>
+            <button id="ordenarPorUsuario">Ordenar por Usuario</button>
+            <button id="ordenarPorFecha">Ordenar por Fecha</button>
+            <button id="ordenarPorPrecio">Ordenar por Precio</button>
+            <button id="crearPedido">Crear Pedido</button>
+        </div>
+        <!-- Botones de productos -->
+        <div class="button-group">
+            <h3>Productos</h3>
+            <button id="obtenerProductos">Obtener Productos</button>
+            <button id="crearProducto">Crear Producto</button>
+            <div id="filterButtons" style="display: none;">
+                <button id="filtrarHamburguesas">Filtrar Hamburguesas</button>
+                <button id="filtrarMenus">Filtrar Menús</button>
+                <button id="filtrarBebidas">Filtrar Bebidas</button>
+                <button id="filtrarComplementos">Filtrar Complementos</button>
+            </div>
+        </div>
+        <!-- Botones de usuarios -->
+        <div class="button-group">
+            <h3>Usuarios</h3>
+            <button id="obtenerUsuarios">Obtener Usuarios</button>
+            <button id="crearUsuario">Crear Usuario</button>
+        </div>
     </div>
-    <div id="formContainer" style="display: none;"></div>
+    <!-- Formulario de creación de pedidos -->
+    <div id="formContainer" style="display: none;">
+        <input type="text" id="usuario" placeholder="Usuario">
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="apellido" placeholder="Apellido">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="contrasena" placeholder="Contraseña">
+        <input type="text" id="telefono" placeholder="Teléfono">
+        <button id="submitCrearUsuario">Crear Usuario</button>
+    </div>
+    <!-- Tablas de pedidos -->
     <div id="pedidosTableContainer" class="table-container" style="display: none;">
         <table id="pedidosTable" border="1">
             <thead>
@@ -33,6 +63,7 @@
             </tbody>
         </table>
     </div>
+    <!-- Tabla de usuarios -->
     <div id="usuariosTableContainer" class="table-container" style="display: none;">
         <table id="usuariosTable" border="1">
             <thead>
@@ -42,12 +73,14 @@
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Email</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
+    <!-- Tabla de productos -->
     <div id="productosTableContainer" class="table-container" style="display: none;">
         <table id="productosTable" border="1">
             <thead>
@@ -57,6 +90,8 @@
                     <th>Descripción</th>
                     <th>Precio</th>
                     <th>Tipo</th>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,5 +99,7 @@
         </table>
     </div>
     <script src="api/pedidos.js"></script>
+    <script src="api/usuarios.js"></script>
+    <script src="api/productos.js"></script>
 </body>
 </html>
