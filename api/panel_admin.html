@@ -46,6 +46,9 @@
         <input type="text" id="telefono" placeholder="Teléfono">
         <button id="submitCrearUsuario">Crear Usuario</button>
     </div>
+    <!-- Formulario de edición de productos -->
+    <div id="formContainer" style="display: none;">
+    </div>
     <!-- Tablas de pedidos -->
     <div id="pedidosTableContainer" class="table-container" style="display: none;">
         <table id="pedidosTable" border="1">
@@ -77,6 +80,16 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>usuario1</td>
+                    <td>Nombre1</td>
+                    <td>Apellido1</td>
+                    <td>email1@example.com</td>
+                    <td>
+                        <button class="editUser">Editar</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -95,6 +108,18 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Producto1</td>
+                    <td>Descripción1</td>
+                    <td>10.00</td>
+                    <td>Tipo1</td>
+                    <td>Imagen1</td>
+                    <td>
+                        <button class="edit">Editar</button>
+                        <button class="delete">Eliminar</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -188,6 +188,54 @@ class ApiController {
         echo json_encode($response);
     }
 
+    // Función para editar un usuario
+    function editarUsuario($id_usuario) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $input['telefono'])) {
+            $telefono = filter_var($input['telefono'], FILTER_SANITIZE_NUMBER_INT);
+            if (!is_numeric($telefono)) {
+                $response = array('status' => 'error', 'message' => 'El teléfono debe ser un número.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+            }
+
+            $contrasena = $input['contrasena'] ? password_hash($input['contrasena'], PASSWORD_BCRYPT) : null;
+
+            $sql = "UPDATE usuarios SET usuario = ?, nombre = ?, apellido = ?, email = ?, telefono = ?";
+            if ($contrasena) {
+                $sql .= ", contrasena = ?";
+            }
+            $sql .= " WHERE id_usuario = ?";
+
+            $stmt = $conn->prepare($sql);
+            if ($contrasena) {
+                $stmt->bind_param("ssssssi", $input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $telefono, $contrasena, $id_usuario);
+            } else {
+                $stmt->bind_param("sssssi", $input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $telefono, $id_usuario);
+            }
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $response = array('status' => 'success', 'message' => 'Usuario editado correctamente.');
+            } else {
+                $response = array('status' => 'error', 'message' => 'No se pudo editar el usuario.');
+            }
+
+            $stmt->close();
+        } else {
+            $response = array('status' => 'error', 'message' => 'Datos incompletos.');
+        }
+
+        $conn->close();
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    // Función para eliminar un usuario
     function eliminarUsuario($id_usuario) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
@@ -214,6 +262,7 @@ class ApiController {
         echo json_encode($response);
     }
 
+    // Función para crear un producto
     function crearProducto() {
         include_once __DIR__ . '/../config/database.php';
         $input = json_decode(file_get_contents('php://input'), true);
@@ -278,6 +327,68 @@ class ApiController {
         echo json_encode($response);
     }
 
+    // Función para editar un producto
+    function editarProducto($id_producto, $tipo) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($input['nombre'], $input['descripcion'], $input['precio'], $input['imagen'])) {
+            $nombre = $input['nombre'];
+            $descripcion = $input['descripcion'];
+            $precio = filter_var($input['precio'], FILTER_VALIDATE_FLOAT);
+            $imagen = $input['imagen'];
+
+            if ($precio === false) {
+                $response = array('status' => 'error', 'message' => 'El precio debe ser un número decimal.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+            }
+
+            $table = '';
+            switch ($tipo) {
+                case 'menu':
+                    $table = 'menus';
+                    break;
+                case 'hamburguesa':
+                    $table = 'hamburguesas';
+                    break;
+                case 'bebida':
+                    $table = 'bebidas';
+                    break;
+                case 'complemento':
+                    $table = 'complementos';
+                    break;
+                default:
+                    $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+                    return;
+            }
+
+            $sql = "UPDATE $table SET nombre = ?, descripcion = ?, precio = ?, imagen = ? WHERE id_$tipo = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssdsi", $nombre, $descripcion, $precio, $imagen, $id_producto);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $response = array('status' => 'success', 'message' => 'Producto editado correctamente.');
+            } else {
+                $response = array('status' => 'error', 'message' => 'No se pudo editar el producto.');
+            }
+
+            $stmt->close();
+        } else {
+            $response = array('status' => 'error', 'message' => 'Datos incompletos.');
+        }
+
+        $conn->close();
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    // Función para eliminar un producto
     function eliminarProducto($id_producto, $tipo) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
@@ -324,8 +435,60 @@ class ApiController {
         header('Content-Type: application/json');
         echo json_encode($response);
     }
+
+    // Función para obtener un producto
+    function obtenerProducto($id_producto, $tipo) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $table = '';
+        switch ($tipo) {
+            case 'menu':
+                $table = 'menus';
+                break;
+            case 'hamburguesa':
+                $table = 'hamburguesas';
+                break;
+            case 'bebida':
+                $table = 'bebidas';
+                break;
+            case 'complemento':
+                $table = 'complementos';
+                break;
+            default:
+                $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+        }
+
+        $sql = "SELECT nombre, descripcion, precio, imagen FROM $table WHERE id_$tipo = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_producto);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $producto = $result->fetch_assoc();
+            $response = array('status' => 'success', 'producto' => $producto);
+        } else {
+            $response = array('status' => 'error', 'message' => 'Producto no encontrado.');
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
 }
 
+
+//Switch para las acciones de la API
 if (isset($_GET['action'])) {
     $controller = new ApiController();
     switch ($_GET['action']) {
@@ -366,6 +529,11 @@ if (isset($_GET['action'])) {
         case 'crearUsuario':
             $controller->crearUsuario();
             break;
+        case 'editarUsuario':
+            if (isset($_GET['id_usuario'])) {
+                $controller->editarUsuario($_GET['id_usuario']);
+            }
+            break;
         case 'eliminarUsuario':
             if (isset($_GET['id_usuario'])) {
                 $controller->eliminarUsuario($_GET['id_usuario']);
@@ -374,9 +542,19 @@ if (isset($_GET['action'])) {
         case 'crearProducto':
             $controller->crearProducto();
             break;
+        case 'editarProducto':
+            if (isset($_GET['id_producto'], $_GET['tipo'])) {
+                $controller->editarProducto($_GET['id_producto'], $_GET['tipo']);
+            }
+            break;
         case 'eliminarProducto':
             if (isset($_GET['id_producto'], $_GET['tipo'])) {
                 $controller->eliminarProducto($_GET['id_producto'], $_GET['tipo']);
+            }
+            break;
+        case 'obtenerProducto':
+            if (isset($_GET['id_producto'], $_GET['tipo'])) {
+                $controller->obtenerProducto($_GET['id_producto'], $_GET['tipo']);
             }
             break;
     }
