@@ -19,7 +19,7 @@
                         <?php echo (new productoController())->getCountdownScript(); ?>
                     </div>
                     <div id="oferta" class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
-                        <img src="views/img/promoRussell.png" alt="promoRussell" class="img-fluid">
+                        <img src="views/img/promoRussell.svg" alt="promoRussell" class="img-fluid">
                         <button class="btn-oferta" onclick="location.href='?controller=producto&action=carta'">¡Aprovecha la oferta!</button>   
                     </div>
                 </div>
@@ -36,7 +36,7 @@
             <p>Nos dedicamos a la parilla desde 1983</p>
         </div>
         <div class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
-            <img class="img-fluid w-100" src="views/img/parrilla.jpg" alt="parrilla">
+            <img class="img-fluid w-100" src="views/img/parrilla.webp" alt="parrilla">
         </div>
     </div>
 </section>
@@ -72,7 +72,7 @@
                                     <input type="hidden" name="imagen" value="<?php echo $menu->getImagen(); ?>">
                                     <button type="submit" class="btn-add">Añadir</button>
                                 </form>
-                                <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
+                                <img src="views/img/flecha_roja.svg" class="flecha-roja" alt="flecha_roja">
                             </div>
                         </div>
                     </div>
@@ -88,13 +88,13 @@
     <!-- Form -->
     <section id="form">
         <div class="form-container text-center">
-            <h2>UNETE A NOSOTROS Y DISFRUTA DE TODAS NUESTRAS VENTAJAS</h2>
+            <h2><b>UNETE A NOSOTROS Y DISFRUTA DE TODAS NUESTRAS VENTAJAS</b></h2>
             <form class="container-fluid d-flex align-items-center" method="POST" action="?controller=usuario&action=rediriguirRegistro">
                 <input type="text" name="nombre" placeholder="Nombre">
                 <input type="text" name="apellido" placeholder="Apellido">
                 <input type="email" name="email" placeholder="Correo">
                 <button class="btn-enviar">
-                    <img src="views/img/flecha_blanca.png" alt="Enviar" class="img-enviar">
+                    <img src="views/img/flecha_blanca.svg" alt="Enviar" class="img-enviar">
                 </button>
             </form>
         </div>

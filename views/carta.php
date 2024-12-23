@@ -101,7 +101,7 @@
                                         <button type="button" class="btn-add" onclick="addToCart(this.form)">Añadir</button>
                                     <?php endif; ?>
                                 </form>
-                                <img src="views/img/flecha_roja.png" class="flecha-roja" alt="flecha_roja">
+                                <img src="views/img/flecha_roja.svg" class="flecha-roja" alt="flecha_roja">
                             </div>
                         </div>
                     </div>

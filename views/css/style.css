@@ -1,6 +1,6 @@
 * {
     font-family: 'Source Sans Pro', sans-serif;
-  }
+}
 
 body {
       overflow-x: hidden;
@@ -73,7 +73,7 @@ header .col-4 a {
 /* Estilos para el Banner */
 
 #banner .col-8 {
-    background-image: url(../img/local1.png);
+    background-image: url("../img/local1.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -116,12 +116,11 @@ header .col-4 a {
 }
 
 #oferta .img-fluid {
-    max-width: 80%; 
+    width: 65%; 
     display: block;
     margin-left: auto;
     margin-right: auto;
     height: auto;     
-    width: auto;      
 }
 
 
@@ -161,7 +160,7 @@ header .col-4 a {
 }
 
 .btn-oferta::after {
-    right: -20px;
+    right: -19px;
     clip-path: polygon(0 0, 100% 0%, 0 100%)
 }
 
@@ -383,7 +382,7 @@ header .col-4 a {
 /*Seccion Formulario*/
 
 #form {
-    background-image: url('../img/local2.png');
+    background-image: url('../img/local2.webp');
     background-size: cover;
     background-position: center;
     height: 637px;
@@ -757,7 +756,7 @@ hr {
 
 /* Seccion Compra */
 #banner-compra .row {
-    background-image: url('../img/local1.png');
+    background-image: url('../img/local1.webp');
     background-size: cover;
     background-position: center;
     height: 100%;
@@ -995,6 +994,190 @@ hr {
 
     .bebidas, .complementos {
         justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    #banner .col-8 {
+        height: auto;
+        padding: 20px;
+    }
+
+    #banner .col-8 h1 {
+        font-size: 32px;
+        margin-top: 100px;
+        margin-left: 20px;
+    }
+
+    #banner .btn-pedir {
+        margin-left: 20px;
+        width: 150px;
+    }
+
+    #banner .col-4 {
+        margin-top: 20px;
+    }
+
+    #contador, #oferta {
+        padding: 20px;
+    }
+
+    #contador h2, #oferta h2 {
+        font-size: 24px;
+    }
+
+    #contador p, #oferta p {
+        font-size: 16px;
+    }
+
+    #oferta .img-fluid {
+        max-width: 100%;
+    }
+
+    #seccion1 .col-12 h2 {
+        font-size: 24px;
+    }
+
+    #seccion1 .col-12 p {
+        font-size: 16px;
+    }
+
+    #seccion1 .img-fluid {
+        height: auto;
+    }
+
+    #menusGeneral h2 {
+        font-size: 24px;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .card-text {
+        font-size: 16px;
+    }
+
+    .btn-menus {
+        width: 150px;
+    }
+
+    #form h2 {
+        font-size: 24px;
+    }
+
+    #form form {
+        width: 100%;
+        padding: 10px;
+    }
+
+    #form input {
+        width: calc(100% / 3 - 10px);
+    }
+
+    #form button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    #intro-carrito .col-12 {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    #intro-carrito p {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: #999999;
+    }
+
+    #intro-carrito h1 {
+        margin-left: 10px;
+        font-weight: bold;
+        padding-top: 30px;
+        color: #000000;
+    }
+
+    .producto {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .producto .img-container {
+        margin-bottom: 10px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .producto .info {
+        margin-left: 0;
+    }
+
+    .producto .price-bin {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding-right: 0;
+    }
+
+    .producto .price-bin .quantity-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .producto .price-bin .quantity-container input {
+        width: 50px;
+    }
+
+    .btn-tramitar {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    #intro-carrito .col-12 {
+        text-align: center;
+    }
+
+    .producto {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .producto .img-container {
+        margin-bottom: 10px;
+    }
+
+    .producto .info {
+        margin-left: 0;
+    }
+
+    .producto .price-bin {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding-right: 0;
+    }
+
+    .producto .price-bin .quantity-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .producto .price-bin .quantity-container input {
+        width: 50px;
+    }
+
+    .btn-tramitar {
+        width: 100%;
+        padding: 10px;
     }
 }
 
@@ -1309,4 +1492,241 @@ hr {
     max-width: 500px;
     margin: 0 auto;
     margin-top: 20px;
+}
+
+footer .footer-red {
+    background-color: #E61414;
+    padding: 0;
+    margin: 0;
+}
+
+footer .footer-black {
+    background-color: #000000;
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    #banner .col-8 {
+        height: auto;
+        padding: 20px;
+    }
+
+    #banner .col-8 h1 {
+        font-size: 32px;
+        margin-top: 100px;
+        margin-left: 20px;
+    }
+
+    #banner .btn-pedir {
+        margin-left: 20px;
+        width: 150px;
+    }
+
+    #banner .col-4 {
+        margin-top: 20px;
+    }
+
+    #contador, #oferta {
+        padding: 20px;
+    }
+
+    #contador h2, #oferta h2 {
+        font-size: 24px;
+    }
+
+    #contador p, #oferta p {
+        font-size: 16px;
+    }
+
+    #oferta .img-fluid {
+        max-width: 100%;
+    }
+
+    #seccion1 .col-12 h2 {
+        font-size: 24px;
+    }
+
+    #seccion1 .col-12 p {
+        font-size: 16px;
+    }
+
+    #seccion1 .img-fluid {
+        height: auto;
+    }
+
+    #menusGeneral h2 {
+        font-size: 24px;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .card-text {
+        font-size: 16px;
+    }
+
+    .btn-menus {
+        width: 150px;
+    }
+
+    #form h2 {
+        font-size: 24px;
+    }
+
+    #form form {
+        width: 100%;
+        padding: 10px;
+    }
+
+    #form input {
+        width: calc(100% / 3 - 10px);
+    }
+
+    #form button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    #intro-carrito .col-12 {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    #intro-carrito p {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: #999999;
+    }
+
+    #intro-carrito h1 {
+        margin-left: 10px;
+        font-weight: bold;
+        padding-top: 30px;
+        color: #000000;
+    }
+
+    .producto {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .producto .img-container {
+        margin-bottom: 10px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .producto .info {
+        margin-left: 0;
+    }
+
+    .producto .price-bin {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding-right: 0;
+    }
+
+    .producto .price-bin .quantity-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .producto .price-bin .quantity-container input {
+        width: 50px;
+    }
+
+    .btn-tramitar {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    #intro-carrito .col-12 {
+        text-align: center;
+    }
+
+    .producto {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .producto .img-container {
+        margin-bottom: 10px;
+    }
+
+    .producto .info {
+        margin-left: 0;
+    }
+
+    .producto .price-bin {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding-right: 0;
+    }
+
+    .producto .price-bin .quantity-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .producto .price-bin .quantity-container input {
+        width: 50px;
+    }
+
+    .btn-tramitar {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    #banner-compra .row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #banner-compra .col-6 {
+        width: 100%;
+    }
+
+    #banner-compra .img-local {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #resumen-compra .col-6.datos {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    #resumen-compra .col-6#resumen {
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .metodos-entrega {
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .metodos-pago {
+        margin-left: 0;
+    }
+
+    .btn-pagar2 {
+        width: 100%;
+    }
 }

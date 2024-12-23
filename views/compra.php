@@ -14,7 +14,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <section id="banner-compra">
         <div class="row">
             <div class="col-6">
-                <img src="views/img/local3.jpg" alt="Logo" class="img-local">
+                <img src="views/img/local3.webp" alt="Logo" class="img-local">
             </div>
             <div class="col-6">
                 <h1>TU PEDIDO ESTA CASI LISTO</h1>
@@ -45,9 +45,9 @@ if (session_status() == PHP_SESSION_NONE) {
                 <!-- Metodos de entrega -->
                 <h1>MÉTODO DE ENTREGA</h1>
                 <div class="metodos-entrega">
-                    <img src="views/img/uber.jpg" alt="Imagen Uber" width="142" height="122" onclick="seleccionarMetodoEntrega(this)">
-                    <img src="views/img/glovo.jpg" alt="Imagen Glovo" width="142" height="122" onclick="seleccionarMetodoEntrega(this)">
-                    <img src="views/img/justeat.jpg" alt="Imagen Just Eat" width="142" height="122" onclick="seleccionarMetodoEntrega(this)">
+                    <img src="views/img/uber.webp" alt="Imagen Uber" width="142" height="122" onclick="seleccionarMetodoEntrega(this)">
+                    <img src="views/img/glovo.webp" alt="Imagen Glovo" width="142" height="122" onclick="seleccionarMetodoEntrega(this)">
+                    <img src="views/img/justeat.webp" alt="Imagen Just Eat" width="142" height="122" onclick="seleccionarMetodoEntrega(this)">
                 </div>
 
                 <!-- Metodos de pago -->
@@ -56,7 +56,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <label>
                         <input type="radio" name="metodo_pago" value="bizum" required onclick="mostrarDetallesPago('bizum')">
                         Bizum
-                        <img src="views/img/logobizum.png" alt="Bizum">
+                        <img src="views/img/logobizum.svg" alt="Bizum">
                     </label>
                     <div id="bizum-detalles" class="detalles-pago">
                         Número Bizum: 6552
@@ -64,7 +64,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <label>
                         <input type="radio" name="metodo_pago" value="tarjeta_credito" required onclick="mostrarDetallesPago('tarjeta_credito')">
                         Tarjeta de Crédito
-                        <img src="views/img/logotarjeta.png" alt="Tarjeta de Crédito">
+                        <img src="views/img/logotarjeta.svg" alt="Tarjeta de Crédito">
                     </label>
                     <div id="tarjeta-detalles" class="detalles-pago">
                         <input type="text" id="card-number" name="card_number" placeholder="Número de la tarjeta" required>
@@ -74,7 +74,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <label>
                         <input type="radio" name="metodo_pago" value="paypal" required onclick="mostrarDetallesPago('paypal')">
                         PayPal
-                        <img src="views/img/paypal.png" alt="PayPal">
+                        <img src="views/img/paypal.svg" alt="PayPal">
                     </label>
                     <div id="paypal-detalles" class="detalles-pago">
                         <input type="text" id="paypal-country" name="paypal_country" placeholder="País" required>

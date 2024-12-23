@@ -59,20 +59,20 @@
                                             <input type="hidden" name="id" value="<?= $producto->getId() ?>">
                                             <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
                                             <input type="hidden" name="action" value="decrease">
-                                            <button type="submit"><img src="views/img/menos.png" alt="Menos"></button>
+                                            <button type="submit"><img src="views/img/menos.svg" alt="Menos"></button>
                                         </form>
                                         <input type="text" value="<?= $producto->getCantidad() ?>" readonly>
                                         <form method="post" action="?controller=producto&action=actualizarCantidad">
                                             <input type="hidden" name="id" value="<?= $producto->getId() ?>">
                                             <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
                                             <input type="hidden" name="action" value="increase">
-                                            <button type="submit"><img src="views/img/mas.png" alt="Más"></button>
+                                            <button type="submit"><img src="views/img/mas.svg" alt="Más"></button>
                                         </form>
                                     </div>
                                     <form method="post" action="?controller=producto&action=eliminarCarrito">
                                         <input type="hidden" name="id" value="<?= $producto->getId() ?>">
                                         <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
-                                        <button type="submit"><img src="views/img/papelera.png" alt="Eliminar"></button>
+                                        <button type="submit"><img src="views/img/papelera.svg" alt="Eliminar"></button>
                                     </form>
                                 </div>
                             </div>
