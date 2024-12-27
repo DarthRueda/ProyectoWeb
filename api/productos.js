@@ -24,7 +24,7 @@ function fetchProductos(tipo = null) { // Fetch de productos
                     <td>${producto.precio}</td>
                     <td>${producto.tipo}</td>
                     <td><img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: 50px;"></td>
-                    <td><button class="delete">Eliminar</button> <button class="edit">Editar</button></td>
+                    <td><button class="edit">Editar</button><button class="delete">Eliminar</button></td>
                 `;
                 tableBody.appendChild(row);
             });

@@ -59,6 +59,7 @@ function addToCart(menuId) {
         formData.append('descripcion', '<?= $menu['descripcion'] ?>');
         formData.append('precio', '<?= $menu['precio'] ?>');
         formData.append('imagen', '<?= $menu['imagen'] ?>');
+        formData.append('tipo', 'menu');
         fetch('?controller=producto&action=añadirCarrito', {
             method: 'POST',
             body: formData

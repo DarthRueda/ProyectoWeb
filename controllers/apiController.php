@@ -52,6 +52,17 @@ class ApiController {
             die("Connection failed: " . $conn->connect_error);
         }
 
+        // Borrar productos del pedido en las tablas de relación
+        $tables = ['pedido_bebida', 'pedido_complemento', 'pedido_hamburguesa', 'pedido_menu'];
+        foreach ($tables as $table) {
+            $sql = "DELETE FROM $table WHERE id_pedido = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $id_pedido);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // Delete from pedidos table
         $sql = "DELETE FROM pedidos WHERE id_pedido = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id_pedido);
@@ -81,10 +92,10 @@ class ApiController {
 
         $productos = [];
         $queries = [
-            "SELECT id_menu AS id, nombre, precio FROM menus",
-            "SELECT id_hamburguesa AS id, nombre, precio FROM hamburguesas",
-            "SELECT id_bebida AS id, nombre, precio FROM bebidas",
-            "SELECT id_complemento AS id, nombre, precio FROM complementos"
+            "SELECT id_menu AS id, nombre, precio, 'menu' AS tipo FROM menus",
+            "SELECT id_hamburguesa AS id, nombre, precio, 'hamburguesa' AS tipo FROM hamburguesas",
+            "SELECT id_bebida AS id, nombre, precio, 'bebida' AS tipo FROM bebidas",
+            "SELECT id_complemento AS id, nombre, precio, 'complemento' AS tipo FROM complementos"
         ];
 
         foreach ($queries as $query) {
@@ -103,6 +114,7 @@ class ApiController {
     function generarPedido($productos, $codigo_promocional = null) {
         include_once __DIR__ . '/../models/pedidosDAO.php';
         $id_pedido = pedidosDAO::guardarPedido($productos, $codigo_promocional);
+
         header('Content-Type: application/json');
         echo json_encode(['id_pedido' => $id_pedido]);
     }

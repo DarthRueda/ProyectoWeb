@@ -139,7 +139,7 @@ class productoController{
         if ($distance < 0) {
             return "<div class='counter-timer'>SE ACABO LA OFERTA</div>";
         }
-
+        
         // Calculamos los dias, horas y minutos restantes
         $days = floor($distance / (60 * 60 * 24));
         $hours = floor(($distance % (60 * 60 * 24)) / (60 * 60));

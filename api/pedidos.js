@@ -56,7 +56,7 @@ function crearPedido() {
                 const div = document.createElement('div');
                 div.innerHTML = `
                     <label>
-                        <input type="checkbox" class="producto" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${producto.precio}">
+                        <input type="checkbox" class="producto" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-tipo="${producto.tipo}">
                         ${producto.nombre} - ${producto.precio}
                     </label>
                     <input type="number" class="cantidad" min="1" value="1">
@@ -81,7 +81,8 @@ function generarPedido() {
             id: checkbox.dataset.id,
             nombre: checkbox.dataset.nombre,
             precio: checkbox.dataset.precio,
-            cantidad: cantidad
+            cantidad: cantidad,
+            tipo: checkbox.dataset.tipo
         });
     });
 
@@ -97,7 +98,7 @@ function generarPedido() {
         alert('Pedido generado: ' + JSON.stringify(data));
         fetchPedidos('obtenerPedidos');
     })
-    .catch(error => console.error('Error:', error));
+    //.catch(error => console.error('Error:', error));
 }
 
 //Funcion para mostrar tabla

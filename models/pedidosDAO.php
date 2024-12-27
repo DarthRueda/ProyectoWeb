@@ -21,27 +21,33 @@ class pedidosDAO {
         foreach ($productos as $producto) {
             $pedido += $producto['precio'] * $producto['cantidad'];
             for ($i = 0; $i < $producto['cantidad']; $i++) {
-                if (isset($producto['id_menu'])) {
+                if ($producto['tipo'] == 'menu') {
                     $query = "INSERT INTO pedido_menu (id_pedido, id_menu) VALUES (?, ?)";
                     $stmt = $con->prepare($query);
-                    $stmt->bind_param('ii', $id_pedido, $producto['id_menu']);
-                } elseif (isset($producto['id_hamburguesa'])) {
+                    $stmt->bind_param('ii', $id_pedido, $producto['id']);
+                    $stmt->execute();
+                    $stmt->close();
+                } elseif ($producto['tipo'] == 'hamburguesa') {
                     $query = "INSERT INTO pedido_hamburguesa (id_pedido, id_hamburguesa) VALUES (?, ?)";
                     $stmt = $con->prepare($query);
-                    $stmt->bind_param('ii', $id_pedido, $producto['id_hamburguesa']);
-                } elseif (isset($producto['id_bebida'])) {
+                    $stmt->bind_param('ii', $id_pedido, $producto['id']);
+                    $stmt->execute();
+                    $stmt->close();
+                } elseif ($producto['tipo'] == 'bebida') {
                     $query = "INSERT INTO pedido_bebida (id_pedido, id_bebida) VALUES (?, ?)";
                     $stmt = $con->prepare($query);
-                    $stmt->bind_param('ii', $id_pedido, $producto['id_bebida']);
-                } elseif (isset($producto['id_complemento'])) {
+                    $stmt->bind_param('ii', $id_pedido, $producto['id']);
+                    $stmt->execute();
+                    $stmt->close();
+                } elseif ($producto['tipo'] == 'complemento') {
                     $query = "INSERT INTO pedido_complemento (id_pedido, id_complemento) VALUES (?, ?)";
                     $stmt = $con->prepare($query);
-                    $stmt->bind_param('ii', $id_pedido, $producto['id_complemento']);
+                    $stmt->bind_param('ii', $id_pedido, $producto['id']);
+                    $stmt->execute();
+                    $stmt->close();
                 } else {
                     continue;
                 }
-                $stmt->execute();
-                $stmt->close();
             }
         }
 
