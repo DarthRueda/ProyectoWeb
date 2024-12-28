@@ -497,6 +497,246 @@ class ApiController {
         header('Content-Type: application/json');
         echo json_encode($response);
     }
+
+    function editarPedido($id_pedido) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $productos = [];
+        $tables = [
+            'pedido_hamburguesa' => 'hamburguesas',
+            'pedido_bebida' => 'bebidas',
+            'pedido_complemento' => 'complementos',
+            'pedido_menu' => 'menus'
+        ];
+
+        foreach ($tables as $pedido_table => $producto_table) {
+            $id_column = str_replace('pedido_', 'id_', $pedido_table);
+            $sql = "SELECT $producto_table.$id_column AS id, $producto_table.nombre, $producto_table.precio, '$producto_table' AS tipo, COUNT($pedido_table.$id_column) AS cantidad
+                    FROM $pedido_table
+                    JOIN $producto_table ON $pedido_table.$id_column = $producto_table.$id_column
+                    WHERE $pedido_table.id_pedido = ?
+                    GROUP BY $producto_table.$id_column";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $id_pedido);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                // Convert plural tipo to singular
+                $row['tipo'] = rtrim($row['tipo'], 's');
+                $productos[] = $row;
+            }
+
+            $stmt->close();
+        }
+
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode(['id_pedido' => $id_pedido, 'productos' => $productos]);
+    }
+
+    function actualizarPedido($id_pedido, $productos) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $tables = [
+            'hamburguesa' => 'pedido_hamburguesa',
+            'bebida' => 'pedido_bebida',
+            'complemento' => 'pedido_complemento',
+            'menu' => 'pedido_menu'
+        ];
+
+        // Delete existing products from the pedido
+        foreach ($tables as $producto_table => $pedido_table) {
+            $sql = "DELETE FROM $pedido_table WHERE id_pedido = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $id_pedido);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // Calculate the new total price
+        $totalPedido = 0;
+        foreach ($productos as $producto) {
+            if (!isset($tables[$producto['tipo']])) {
+                error_log("Unknown product type: " . $producto['tipo']);
+                continue;
+            }
+            $totalPedido += $producto['precio'] * $producto['cantidad'];
+        }
+
+        if (count($productos) === 0) {
+            // Delete the pedido if there are no products
+            $sql = "DELETE FROM pedidos WHERE id_pedido = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $id_pedido);
+            $stmt->execute();
+            $stmt->close();
+            $conn->close();
+
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => 'Pedido eliminado porque no tiene productos.']);
+            return;
+        }
+
+        // Calculate IVA and total
+        $iva = round($totalPedido * 0.10, 2); // Assuming IVA is 10%
+        $total = round($totalPedido + $iva, 2);
+
+        // Update the pedidos table
+        $sql = "UPDATE pedidos SET pedido = ?, iva = ?, total = ? WHERE id_pedido = ?";
+        error_log("Updating pedidos table with SQL: $sql and values: $totalPedido, $iva, $total, $id_pedido");
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("dddi", $totalPedido, $iva, $total, $id_pedido);
+        $stmt->execute();
+        $stmt->close();
+
+        // Insert new products into the pedido
+        foreach ($productos as $producto) {
+            if (!isset($tables[$producto['tipo']])) {
+                error_log("Unknown product type: " . $producto['tipo']);
+                continue;
+            }
+            $pedido_table = $tables[$producto['tipo']];
+            $id_column = 'id_' . $producto['tipo'];
+            $sql = "INSERT INTO $pedido_table (id_pedido, $id_column) VALUES (?, ?)";
+            error_log("Executing SQL: $sql with id_pedido: $id_pedido and id: " . $producto['id']);
+            $stmt = $conn->prepare($sql);
+            for ($i = 0; $i < $producto['cantidad']; $i++) {
+                $stmt->bind_param("ii", $id_pedido, $producto['id']);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
+
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Pedido actualizado correctamente.']);
+    }
+
+    function agregarProductos($id_pedido, $productos) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $tables = [
+            'hamburguesa' => 'pedido_hamburguesa',
+            'bebida' => 'pedido_bebida',
+            'complemento' => 'pedido_complemento',
+            'menu' => 'pedido_menu'
+        ];
+
+        // Insert new products into the pedido
+        foreach ($productos as $producto) {
+            if (!isset($tables[$producto['tipo']])) {
+                error_log("Unknown product type: " . $producto['tipo']);
+                continue;
+            }
+            $pedido_table = $tables[$producto['tipo']];
+            $id_column = 'id_' . $producto['tipo'];
+            $sql = "INSERT INTO $pedido_table (id_pedido, $id_column) VALUES (?, ?)";
+            error_log("Executing SQL: $sql with id_pedido: $id_pedido and id: " . $producto['id']);
+            $stmt = $conn->prepare($sql);
+            for ($i = 0; $i < $producto['cantidad']; $i++) {
+                $stmt->bind_param("ii", $id_pedido, $producto['id']);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
+
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Productos agregados correctamente.']);
+    }
+
+    function eliminarProductoDePedido($id_pedido, $id_producto, $tipo) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        error_log("eliminarProductoDePedido called with tipo: $tipo");
+
+        $table = '';
+        switch ($tipo) {
+            case 'hamburguesa':
+                $table = 'pedido_hamburguesa';
+                break;
+            case 'bebida':
+                $table = 'pedido_bebida';
+                break;
+            case 'complemento':
+                $table = 'pedido_complemento';
+                break;
+            case 'menu':
+                $table = 'pedido_menu';
+                break;
+            default:
+                $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                return;
+        }
+
+        $sql = "DELETE FROM $table WHERE id_pedido = ? AND id_$tipo = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $id_pedido, $id_producto);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            // Check if there are any products left in the pedido
+            $sql = "SELECT COUNT(*) as count FROM (
+                        SELECT id_pedido FROM pedido_hamburguesa WHERE id_pedido = ?
+                        UNION ALL
+                        SELECT id_pedido FROM pedido_bebida WHERE id_pedido = ?
+                        UNION ALL
+                        SELECT id_pedido FROM pedido_complemento WHERE id_pedido = ?
+                        UNION ALL
+                        SELECT id_pedido FROM pedido_menu WHERE id_pedido = ?
+                    ) as productos";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iiii", $id_pedido, $id_pedido, $id_pedido, $id_pedido);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if ($row['count'] == 0) {
+                // Delete the pedido if there are no products left
+                $sql = "DELETE FROM pedidos WHERE id_pedido = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $id_pedido);
+                $stmt->execute();
+                $response = array('status' => 'success', 'message' => 'Pedido eliminado porque no tiene productos.');
+            } else {
+                $response = array('status' => 'success', 'message' => 'Producto eliminado correctamente.');
+            }
+        } else {
+            $response = array('status' => 'error', 'message' => 'No se pudo eliminar el producto.');
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
 }
 
 
@@ -567,6 +807,28 @@ if (isset($_GET['action'])) {
         case 'obtenerProducto':
             if (isset($_GET['id_producto'], $_GET['tipo'])) {
                 $controller->obtenerProducto($_GET['id_producto'], $_GET['tipo']);
+            }
+            break;
+        case 'editarPedido':
+            if (isset($_GET['id_pedido'])) {
+                $controller->editarPedido($_GET['id_pedido']);
+            }
+            break;
+        case 'actualizarPedido':
+            $input = json_decode(file_get_contents('php://input'), true);
+            if (isset($input['id_pedido'], $input['productos'])) {
+                $controller->actualizarPedido($input['id_pedido'], $input['productos']);
+            }
+            break;
+        case 'agregarProductos':
+            $input = json_decode(file_get_contents('php://input'), true);
+            if (isset($input['id_pedido'], $input['productos'])) {
+                $controller->agregarProductos($input['id_pedido'], $input['productos']);
+            }
+            break;
+        case 'eliminarProductoDePedido':
+            if (isset($_GET['id_pedido'], $_GET['id_producto'], $_GET['tipo'])) {
+                $controller->eliminarProductoDePedido($_GET['id_pedido'], $_GET['id_producto'], $_GET['tipo']);
             }
             break;
     }

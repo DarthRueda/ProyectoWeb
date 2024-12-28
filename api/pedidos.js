@@ -101,6 +101,159 @@ function generarPedido() {
     //.catch(error => console.error('Error:', error));
 }
 
+//Funcion para editar pedido
+function editarPedido(id_pedido) {
+    fetch(`controllers/apicontroller.php?action=editarPedido&id_pedido=${id_pedido}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelectorAll('.table-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.getElementById('filterButtons').style.display = 'none';
+
+            const formContainer = document.getElementById('formContainer');
+            formContainer.style.display = 'block';
+            formContainer.innerHTML = '';
+
+            data.productos.forEach(producto => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label>
+                        ${producto.nombre} - ${producto.precio}
+                        <input type="number" class="cantidad" min="1" value="${producto.cantidad}" data-id="${producto.id}" data-tipo="${producto.tipo}">
+                    </label>
+                    <button class="delete-producto">Eliminar</button>
+                `;
+                formContainer.appendChild(div);
+            });
+
+            const actualizarButton = document.createElement('button');
+            actualizarButton.innerText = 'Actualizar Pedido';
+            actualizarButton.classList.add('actualizar-pedido');
+            actualizarButton.dataset.idPedido = id_pedido;
+            actualizarButton.addEventListener('click', () => actualizarPedido(data.id_pedido));
+            formContainer.appendChild(actualizarButton);
+
+            const agregarProductoButton = document.createElement('button');
+            agregarProductoButton.innerText = 'Agregar Producto';
+            agregarProductoButton.addEventListener('click', () => mostrarProductosParaAgregar(data.id_pedido));
+            formContainer.appendChild(agregarProductoButton);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Funcion para mostrar productos para agregar
+function mostrarProductosParaAgregar(id_pedido) {
+    fetch(`controllers/apicontroller.php?action=editarPedido&id_pedido=${id_pedido}`)
+        .then(response => response.json())
+        .then(data => {
+            const existingProductos = data.productos.map(producto => producto.id);
+
+            fetch('controllers/apicontroller.php?action=crearPedido')
+                .then(response => response.json())
+                .then(data => {
+                    const formContainer = document.getElementById('formContainer');
+                    formContainer.innerHTML = '';
+
+                    data.forEach(producto => {
+                        if (!existingProductos.includes(producto.id)) {
+                            const div = document.createElement('div');
+                            div.innerHTML = `
+                                <label>
+                                    <input type="checkbox" class="producto" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-tipo="${producto.tipo}">
+                                    ${producto.nombre} - ${producto.precio}
+                                </label>
+                                <input type="number" class="cantidad" min="1" value="1">
+                            `;
+                            formContainer.appendChild(div);
+                        }
+                    });
+
+                    const agregarButton = document.createElement('button');
+                    agregarButton.innerText = 'Agregar al Pedido';
+                    agregarButton.addEventListener('click', () => agregarProductosAlPedido(id_pedido));
+                    formContainer.appendChild(agregarButton);
+                })
+                .catch(error => console.error('Error:', error));
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Funcion para agregar productos al pedido
+function agregarProductosAlPedido(id_pedido) {
+    const productos = [];
+    document.querySelectorAll('.producto:checked').forEach(checkbox => {
+        const cantidad = checkbox.parentElement.nextElementSibling.value;
+        productos.push({
+            id: checkbox.dataset.id,
+            nombre: checkbox.dataset.nombre,
+            precio: checkbox.dataset.precio,
+            cantidad: cantidad,
+            tipo: checkbox.dataset.tipo
+        });
+    });
+
+    if (productos.length > 0) {
+        fetch('controllers/apicontroller.php?action=agregarProductos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_pedido: id_pedido, productos: productos })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            editarPedido(id_pedido); // Redirigir a la pagina de edicion de pedido
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('No new products to add.');
+    }
+}
+
+// Funcion para actualizar pedido
+function actualizarPedido(id_pedido) {
+    const productos = [];
+    document.querySelectorAll('.cantidad').forEach(input => {
+        const precio = parseFloat(input.closest('label').innerText.split('-')[1].trim());
+        productos.push({
+            id: input.dataset.id,
+            tipo: input.dataset.tipo,
+            cantidad: parseInt(input.value, 10), // Asegurarse de que la cantidad sea un numero integer
+            precio: precio
+        });
+    });
+
+    fetch('controllers/apicontroller.php?action=actualizarPedido', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id_pedido: id_pedido, productos: productos })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        fetchPedidos('obtenerPedidos');
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+//Funcion para eliminar producto de pedido
+function eliminarProductoDePedido(id_pedido, id_producto, tipo) {
+    fetch(`controllers/apicontroller.php?action=eliminarProductoDePedido&id_pedido=${id_pedido}&id_producto=${id_producto}&tipo=${tipo}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                editarPedido(id_pedido); // Redirigir a la pagina de edicion de pedido
+            } else {
+                console.error('Error:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
 //Funcion para mostrar tabla
 function showTable(tableId) {
     document.querySelectorAll('.table-container').forEach(container => {
@@ -146,5 +299,23 @@ document.querySelector('#pedidosTable tbody').addEventListener('click', function
     if (event.target.classList.contains('delete')) {
         const id_pedido = event.target.closest('tr').querySelector('td').innerText;
         eliminarPedido(id_pedido);
+    }
+});
+
+// Editar un pedido
+document.querySelector('#pedidosTable tbody').addEventListener('click', function(event) {
+    if (event.target.classList.contains('edit')) {
+        const id_pedido = event.target.closest('tr').querySelector('td').innerText;
+        editarPedido(id_pedido);
+    }
+});
+
+// Lista de eventos para agregar productos al pedido
+document.getElementById('formContainer').addEventListener('click', function(event) {
+    if (event.target.classList.contains('delete-producto')) {
+        const id_pedido = document.querySelector('#formContainer button.actualizar-pedido').dataset.idPedido;
+        const id_producto = event.target.previousElementSibling.querySelector('.cantidad').dataset.id;
+        const tipo = event.target.previousElementSibling.querySelector('.cantidad').dataset.tipo;
+        eliminarProductoDePedido(id_pedido, id_producto, tipo);
     }
 });
