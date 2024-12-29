@@ -34,46 +34,9 @@
         </div>
         <div class="row justify-content-center">
             <?php
-            include_once 'models/productosDAO.php';
-            $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
-            switch ($filter) {
-                case 'menus':
-                    $productos = productosDAO::getMenus();
-                    break;
-                case 'hamburguesa':
-                    $productos = productosDAO::getHamburguesas();
-                    break;
-                case 'bebida':
-                    $productos = productosDAO::getBebidas();
-                    break;
-                case 'complemento':
-                    $productos = productosDAO::getComplementos();
-                    break;
-                default:
-                    $productos = productosDAO::getAll();
-                    break;
-            }
-            // Paginación de productos
-            $productosPorPagina = 9; // Número de productos por página
-            $totalProductos = count($productos);
-            $totalPaginas = ceil($totalProductos / $productosPorPagina); // Número total de páginas
-
-            //Comprobamos si se ha pasado un número de página
-            $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-            $inicio = ($paginaActual - 1) * $productosPorPagina; // Índice del primer producto de la página
-            $productosPagina = array_slice($productos, $inicio, $productosPorPagina); // Productos de la página actual
-
-            //Variable para guardar el menu Russell y mostrarlo en la primera posición, ya que es el producto de oferta
-            $menuRussell = null;
-            foreach ($productosPagina as $key => $producto) { // Recorremos los productos de la página actual
-                if ($producto->getNombre() == 'Menu Russell') { 
-                    $menuRussell = $producto;
-                    unset($productosPagina[$key]);
-                    array_unshift($productosPagina, $menuRussell);
-                    break;
-                }
-            }
-
+            $productos = $data['productos'];
+            $productosPagina = $data['productosPagina'];
+            $menuRussell = $data['menuRussell'];
             $count = 0;
             foreach ($productosPagina as $producto):
                 if ($count % 3 == 0 && $count != 0): ?> <!-- Si el contador es múltiplo de 3 y no es 0, cerramos la fila actual y creamos una nueva -->
@@ -119,8 +82,8 @@
             <div class="col-auto">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                        <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-                            <li class="page-item <?= $i == $paginaActual ? 'active' : '' ?>">
+                        <?php for ($i = 1; $i <= $data['totalPaginas']; $i++): ?>
+                            <li class="page-item <?= $i == $data['paginaActual'] ? 'active' : '' ?>">
                                 <a class="page-link" href="?controller=producto&action=carta&pagina=<?= $i ?>"><?= $i ?></a>
                             </li>
                         <?php endfor; ?>

@@ -27,51 +27,40 @@
             <div class="row">
                 <div class="col-12 d-flex flex-column align-items-center">
                     <?php
-                    include_once 'models/productosDAO.php';
-                    include_once 'models/menu.php';
-
-                    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])):
-                        $_SESSION['cart_data'] = $_SESSION['cart'];
-                        foreach ($_SESSION['cart'] as $productoData):
-                            $producto = new Menu(
-                                $productoData['id'],
-                                $productoData['nombre'],
-                                $productoData['descripcion'],
-                                $productoData['precio'],
-                                $productoData['imagen']
-                            );
-                            $producto->setTipo($productoData['tipo']);
-                            $producto->setCantidad($productoData['cantidad']);
+                    $cart = $data['cart'];
+                    if (!empty($cart)):
+                        $_SESSION['cart_data'] = $cart;
+                        foreach ($cart as $producto):
                             ?>
                             <div class="producto">
                                 <div class="img-container">
-                                    <img src="<?= $producto->getImagen() ?>" alt="<?= $producto->getNombre() ?>">
+                                    <img src="<?= $producto['imagen'] ?>" alt="<?= $producto['nombre'] ?>">
                                 </div>
                                 <div class="info">
-                                    <h3><?= $producto->getNombre() ?></h3>
-                                    <p><?= $producto->getDescripcion() ?></p>
+                                    <h3><?= $producto['nombre'] ?></h3>
+                                    <p><?= $producto['descripcion'] ?></p>
                                 </div>
                                 <div class="price-bin">
-                                    <span class="price"><?= $producto->getPrecio() ?>€</span>
+                                    <span class="price"><?= $producto['precio'] ?>€</span>
                                     <!-- Formularios para aumentar y disminuir la cantidad de productos -->
                                     <div class="quantity-container">
                                         <form method="post" action="?controller=producto&action=actualizarCantidad">
-                                            <input type="hidden" name="id" value="<?= $producto->getId() ?>">
-                                            <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
+                                            <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                            <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
                                             <input type="hidden" name="action" value="decrease">
                                             <button type="submit"><img src="views/img/menos.svg" alt="Menos"></button>
                                         </form>
-                                        <input type="text" value="<?= $producto->getCantidad() ?>" readonly>
+                                        <input type="text" value="<?= $producto['cantidad'] ?>" readonly>
                                         <form method="post" action="?controller=producto&action=actualizarCantidad">
-                                            <input type="hidden" name="id" value="<?= $producto->getId() ?>">
-                                            <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
+                                            <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                            <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
                                             <input type="hidden" name="action" value="increase">
                                             <button type="submit"><img src="views/img/mas.svg" alt="Más"></button>
                                         </form>
                                     </div>
                                     <form method="post" action="?controller=producto&action=eliminarCarrito">
-                                        <input type="hidden" name="id" value="<?= $producto->getId() ?>">
-                                        <input type="hidden" name="tipo" value="<?= $producto->getTipo() ?>">
+                                        <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+                                        <input type="hidden" name="tipo" value="<?= $producto['tipo'] ?>">
                                         <button type="submit"><img src="views/img/papelera.svg" alt="Eliminar"></button>
                                     </form>
                                 </div>
@@ -81,13 +70,6 @@
                             <input type="text" id="codigo_promocional" name="codigo_promocional" class="form-control" placeholder="Código Promocional">
                             <button type="submit" class="btn-tramitar">Tramitar Pedido</button>
                         </form>
-                        <?php
-                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                            $_SESSION['id_pedido'] = pedidosDAO::guardarPedido($_SESSION['cart']); // Guardamos el id del pedido en la sesion
-                            header("Location: compra.php"); // Redirigimos al usuario a la pagina de compra
-                            exit();
-                        }
-                        ?>
                     <?php else: ?>
                         <p>No hay productos en el carrito.</p>
                     <?php endif; ?>

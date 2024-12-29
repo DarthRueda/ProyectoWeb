@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -44,6 +46,7 @@ session_start();
 </header>
 <body>
     <?php 
+    // Ensure that the $data array is available in the view
     include_once $view; 
     ?>
 </body>

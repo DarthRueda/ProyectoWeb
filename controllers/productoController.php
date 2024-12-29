@@ -2,6 +2,7 @@
 
 include_once("models/producto.php");
 include_once("models/pedidosDAO.php");
+include_once("models/productosDAO.php");
 
 class productoController{
     // Funciones de la clase
@@ -9,15 +10,41 @@ class productoController{
         $view = "views/home.php";
         include_once 'views/main.php';
     }
-    public function carta(){
+    public function carta() {
+        $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+        $productos = productosDAO::getProductsByFilter($filter);
+        $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+        $data = productosDAO::paginateProducts($productos, $paginaActual);
+
         $view = "views/carta.php";
         include_once 'views/main.php';
     }
-    public function carrito(){
+    public function carrito() {
+        session_start();
+        $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+        $data = ['cart' => $cart];
+
         $view = "views/carrito.php";
         include_once 'views/main.php';
     }
-    public function compra(){
+    public function compra() {
+        session_start();
+        $cart_data = isset($_SESSION['cart_data']) ? $_SESSION['cart_data'] : [];
+        $id_pedido = $_SESSION['id_pedido'] ?? null;
+        $pedido = $id_pedido ? pedidosDAO::getPedidoByPedidoId($id_pedido) : 0;
+        $iva = $id_pedido ? pedidosDAO::getIvaByPedidoId($id_pedido) : 0;
+        $total = $id_pedido ? pedidosDAO::getTotalByPedidoId($id_pedido) : 0;
+        $descuento = $id_pedido ? pedidosDAO::getDescuentoByPedidoId($id_pedido) : 0;
+
+        $data = [
+            'cart_data' => $cart_data,
+            'id_pedido' => $id_pedido,
+            'pedido' => $pedido,
+            'iva' => $iva,
+            'total' => $total,
+            'descuento' => $descuento
+        ];
+
         $view = "views/compra.php";
         include_once 'views/main.php';
     }
@@ -31,6 +58,17 @@ class productoController{
     }
 
     public function modificar() {
+        $menuId = $_GET['id'];
+        $menu = productosDAO::getMenuById($menuId);
+        $bebidas = productosDAO::getBebidas();
+        $complementos = productosDAO::getComplementos();
+
+        $data = [
+            'menu' => $menu,
+            'bebidas' => $bebidas,
+            'complementos' => $complementos
+        ];
+
         $view = "views/modificar.php";
         include_once 'views/main.php';
     }

@@ -1,19 +1,12 @@
-<?php
-include_once 'models/productosDAO.php';
-$menuId = $_GET['id'];
-$menu = productosDAO::getMenuById($menuId);
-$bebidas = productosDAO::getBebidas();
-$complementos = productosDAO::getComplementos();
-?>
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-6 text-center modificar-image">
-            <img src="<?= $menu['imagen'] ?>" alt="<?= $menu['nombre'] ?>" class="img-fluid">
+            <img src="<?= $data['menu']['imagen'] ?>" alt="<?= $data['menu']['nombre'] ?>" class="img-fluid">
         </div>
         <div class="col-6 text-center modificar-info">
             <h2>Selecciona tu bebida</h2>
             <div class="bebidas">
-                <?php foreach ($bebidas as $bebida): ?>
+                <?php foreach ($data['bebidas'] as $bebida): ?>
                     <div class="bebida-box" onclick="selectBebida(<?= $bebida->getId() ?>)">
                         <img src="<?= $bebida->getImagen() ?>" alt="<?= $bebida->getNombre() ?>">
                         <p><?= $bebida->getNombre() ?></p>
@@ -22,14 +15,14 @@ $complementos = productosDAO::getComplementos();
             </div>
             <h2>Selecciona tu complemento</h2>
             <div class="complementos">
-                <?php foreach ($complementos as $complemento): ?>
+                <?php foreach ($data['complementos'] as $complemento): ?>
                     <div class="complemento-box" onclick="selectComplemento(<?= $complemento->getId() ?>)">
                         <img src="<?= $complemento->getImagen() ?>" alt="<?= $complemento->getNombre() ?>">
                         <p><?= $complemento->getNombre() ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
-            <button class="btn-pedir" onclick="addToCart(<?= $menu['id'] ?>)">Añadir al carrito</button>
+            <button class="btn-pedir" onclick="addToCart(<?= $data['menu']['id'] ?>)">Añadir al carrito</button>
         </div>
     </div>
 </div>
@@ -55,10 +48,10 @@ function addToCart(menuId) {
         formData.append('menuId', menuId);
         formData.append('bebidaId', selectedBebida);
         formData.append('complementoId', selectedComplemento);
-        formData.append('nombre', '<?= $menu['nombre'] ?>');
-        formData.append('descripcion', '<?= $menu['descripcion'] ?>');
-        formData.append('precio', '<?= $menu['precio'] ?>');
-        formData.append('imagen', '<?= $menu['imagen'] ?>');
+        formData.append('nombre', '<?= $data['menu']['nombre'] ?>');
+        formData.append('descripcion', '<?= $data['menu']['descripcion'] ?>');
+        formData.append('precio', '<?= $data['menu']['precio'] ?>');
+        formData.append('imagen', '<?= $data['menu']['imagen'] ?>');
         formData.append('tipo', 'menu');
         fetch('?controller=producto&action=añadirCarrito', {
             method: 'POST',

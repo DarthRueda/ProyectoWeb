@@ -81,5 +81,45 @@ class productosDAO {
         $con->close();
         return $menu;
     }
+
+    public static function getProductsByFilter($filter) {
+        switch ($filter) {
+            case 'menus':
+                return self::getMenus();
+            case 'hamburguesa':
+                return self::getHamburguesas();
+            case 'bebida':
+                return self::getBebidas();
+            case 'complemento':
+                return self::getComplementos();
+            default:
+                return self::getAll();
+        }
+    }
+
+    public static function paginateProducts($productos, $paginaActual, $productosPorPagina = 9) {
+        $totalProductos = count($productos);
+        $totalPaginas = ceil($totalProductos / $productosPorPagina);
+        $inicio = ($paginaActual - 1) * $productosPorPagina;
+        $productosPagina = array_slice($productos, $inicio, $productosPorPagina);
+
+        $menuRussell = null;
+        foreach ($productosPagina as $key => $producto) {
+            if ($producto->getNombre() == 'Menu Russell') {
+                $menuRussell = $producto;
+                unset($productosPagina[$key]);
+                array_unshift($productosPagina, $menuRussell);
+                break;
+            }
+        }
+
+        return [
+            'productos' => $productos, // Add this line
+            'productosPagina' => $productosPagina,
+            'totalPaginas' => $totalPaginas,
+            'paginaActual' => $paginaActual,
+            'menuRussell' => $menuRussell
+        ];
+    }
 }
 ?>

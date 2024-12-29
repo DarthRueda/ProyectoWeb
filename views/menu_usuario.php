@@ -8,21 +8,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // Compro
 }
 
 $editing = isset($_GET['edit']) && $_GET['edit'] == 'true'; // Comprobar si el usuario está editando su información
-//Comprobar si el usuario es administrador
-$isAdmin = false;
-include_once("config/dataBase.php");
-$con = DataBase::connect();
-$id_usuario = $_SESSION['id_usuario'];
-$query = "SELECT administrador FROM usuarios WHERE id_usuario = ?";
-$stmt = $con->prepare($query);
-$stmt->bind_param('i', $id_usuario);
-$stmt->execute();
-$stmt->bind_result($administrador);
-if ($stmt->fetch() && $administrador == 1) {
-    $isAdmin = true;
-}
-$stmt->close();
-$con->close();
+$isAdmin = isset($isAdmin) ? $isAdmin : false; // Ensure $isAdmin is set
 ?>
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">

@@ -80,35 +80,31 @@ if (session_status() == PHP_SESSION_NONE) {
                         <input type="text" id="paypal-country" name="paypal_country" placeholder="País" required>
                         <input type="text" id="paypal-name" name="paypal_name" placeholder="Nombre" required>
                         <input type="text" id="paypal-apellido" name="paypal_apellido" placeholder="Apellido" required>
-                        <input type="text" id="paypal-amount" name="paypal_amount" placeholder="Cantidad a pagar" value="<?= number_format(pedidosDAO::getTotalByPedidoId($_SESSION['id_pedido'] ?? 0), 2) ?>" readonly required>
+                        <input type="text" id="paypal-amount" name="paypal_amount" placeholder="Cantidad a pagar" value="<?= number_format($data['total'], 2) ?>" readonly required>
                     </div>
                 </div>
                 
             </div>
             <div class="col-6" id="resumen" style="height: 50%;">
                 <h3>RESUMEN DE COMPRA</h3>
-                <?php if (isset($_SESSION['cart_data']) && !empty($_SESSION['cart_data'])): ?>
+                <?php if (!empty($data['cart_data'])): ?>
                     <ul>
-                        <?php foreach ($_SESSION['cart_data'] as $producto): ?>
+                        <?php foreach ($data['cart_data'] as $producto): ?>
                             <li><?= $producto['nombre'] ?> - <?= $producto['precio'] ?>€ x <?= $producto['cantidad'] ?></li>
                         <?php endforeach; ?>
                     </ul>
                     <?php
-                    if (isset($_SESSION['id_pedido'])) {
-                        $pedido = number_format(pedidosDAO::getPedidoByPedidoId($_SESSION['id_pedido']), 2);
-                        $iva = number_format(pedidosDAO::getIvaByPedidoId($_SESSION['id_pedido']), 2);
-                        $total = number_format(pedidosDAO::getTotalByPedidoId($_SESSION['id_pedido']), 2);
-                        $descuento = pedidosDAO::getDescuentoByPedidoId($_SESSION['id_pedido']);
-                        echo "<p>Pedido: $pedido €</p>";
-                        echo "<p class='iva'>IVA: $iva €</p>";
-                        if ($descuento > 0) {
-                            echo "<p>Código Promocional: -$descuento%</p>";
+                    if (isset($data['id_pedido'])) {
+                        echo "<p>Pedido: " . number_format($data['pedido'], 2) . " €</p>";
+                        echo "<p class='iva'>IVA: " . number_format($data['iva'], 2) . " €</p>";
+                        if ($data['descuento'] > 0) {
+                            echo "<p>Código Promocional: -" . $data['descuento'] . "%</p>";
                         }
                         echo "<div class='divider'></div>";
-                        echo "<p class='total'><strong>TOTAL:</strong> $total €</p>";
+                        echo "<p class='total'><strong>TOTAL:</strong> " . number_format($data['total'], 2) . " €</p>";
                         echo "<button class='btn-pagar' onclick='validarFormulario()'>PAGAR</button>";
                     } else {
-                        echo "<p>No se encontró el ID del pedido.</p>"; //Pruebas
+                        echo "<p>No se encontró el ID del pedido.</p>";
                     }
                     ?>
                 <?php else: ?>
