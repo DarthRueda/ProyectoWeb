@@ -1,10 +1,12 @@
 <?php
+include_once __DIR__ . '/logger.php'; // Incluimos el archivo logger.php
 
 class ApiController {
     public function admin() {
         include_once 'api/panel_admin.html';
     }
 
+    // Función para obtener los pedidos
     function obtenerPedidos($orderBy = null, $orderDirection = 'ASC', $excludeUnregistered = false) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
@@ -22,7 +24,7 @@ class ApiController {
         if ($excludeUnregistered) {
             $whereClause = " WHERE pedidos.id_usuario IS NOT NULL";
         }
-    
+        // Query para obtener los pedidos
         $sql = "SELECT pedidos.id_pedido, 
                        IFNULL(usuarios.nombre, 'Este pedido fue realizado por un usuario sin registrar') AS usuario, 
                        pedidos.fecha, 
@@ -43,7 +45,7 @@ class ApiController {
         header('Content-Type: application/json');
         echo json_encode($pedidos);
     }
-
+    // Función para eliminar un pedido
     function eliminarPedido($id_pedido) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
@@ -79,8 +81,11 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Pedido eliminado: ID $id_pedido"); // Log de la acción
     }
 
+    // Función para obtener los pedidos de un usuario
     function crearPedido() {
         include_once __DIR__ . '/../config/database.php';
         include_once __DIR__ . '/../models/pedidosDAO.php';
@@ -111,14 +116,22 @@ class ApiController {
         echo json_encode($productos);
     }
 
+    // Función para generar un pedido
     function generarPedido($productos, $codigo_promocional = null) {
         include_once __DIR__ . '/../models/pedidosDAO.php';
         $id_pedido = pedidosDAO::guardarPedido($productos, $codigo_promocional);
 
         header('Content-Type: application/json');
         echo json_encode(['id_pedido' => $id_pedido]);
+
+        // Log de la acción de generar un pedido
+        $productosInfo = array_map(function($producto) {
+            return "Nombre: " . ($producto['nombre'] ?? 'N/A') . ", Precio: " . ($producto['precio'] ?? 'N/A') . ", Cantidad: " . ($producto['cantidad'] ?? 'N/A') . ", Tipo: " . ($producto['tipo'] ?? 'N/A');
+        }, $productos);
+        Logger::log("Pedido generado: ID $id_pedido, Productos: " . implode("; ", $productosInfo) . ", Código promocional: $codigo_promocional");
     }
 
+    // Función para obtener los usuarios
     function obtenerUsuarios() {
         include_once __DIR__ . '/../models/usuariosDAO.php';
         $usuarios = UsuariosDAO::getAll();
@@ -198,6 +211,8 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Usuario creado: Usuario: " . ($input['usuario'] ?? 'N/A') . ", Nombre: " . ($input['nombre'] ?? 'N/A') . ", Apellido: " . ($input['apellido'] ?? 'N/A') . ", Email: " . ($input['email'] ?? 'N/A') . ", Teléfono: " . ($input['telefono'] ?? 'N/A'));
     }
 
     // Función para editar un usuario
@@ -245,6 +260,8 @@ class ApiController {
         $conn->close();
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Usuario editado: ID $id_usuario, Usuario: " . ($input['usuario'] ?? 'N/A') . ", Nombre: " . ($input['nombre'] ?? 'N/A') . ", Apellido: " . ($input['apellido'] ?? 'N/A') . ", Email: " . ($input['email'] ?? 'N/A') . ", Teléfono: " . ($input['telefono'] ?? 'N/A'));
     }
 
     // Función para eliminar un usuario
@@ -272,6 +289,8 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Usuario eliminado: ID $id_usuario");
     }
 
     // Función para crear un producto
@@ -337,6 +356,8 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Producto creado: Nombre: " . ($input['nombre'] ?? 'N/A') . ", Descripción: " . ($input['descripcion'] ?? 'N/A') . ", Precio: " . ($input['precio'] ?? 'N/A') . ", Imagen: " . ($input['imagen'] ?? 'N/A') . ", Tipo: " . ($input['tipo'] ?? 'N/A'));
     }
 
     // Función para editar un producto
@@ -398,6 +419,8 @@ class ApiController {
         $conn->close();
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Producto editado: ID $id_producto, Tipo $tipo, Nombre: " . ($input['nombre'] ?? 'N/A') . ", Descripción: " . ($input['descripcion'] ?? 'N/A') . ", Precio: " . ($input['precio'] ?? 'N/A') . ", Imagen: " . ($input['imagen'] ?? 'N/A'));
     }
 
     // Función para eliminar un producto
@@ -446,6 +469,8 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Producto eliminado: ID $id_producto, Tipo $tipo");
     }
 
     // Función para obtener un producto
@@ -527,7 +552,7 @@ class ApiController {
             $result = $stmt->get_result();
 
             while ($row = $result->fetch_assoc()) {
-                // Convert plural tipo to singular
+                
                 $row['tipo'] = rtrim($row['tipo'], 's');
                 $productos[] = $row;
             }
@@ -556,7 +581,7 @@ class ApiController {
             'menu' => 'pedido_menu'
         ];
 
-        // Delete existing products from the pedido
+        // Borrar productos del pedido en las tablas de relación
         foreach ($tables as $producto_table => $pedido_table) {
             $sql = "DELETE FROM $pedido_table WHERE id_pedido = ?";
             $stmt = $conn->prepare($sql);
@@ -565,7 +590,7 @@ class ApiController {
             $stmt->close();
         }
 
-        // Calculate the new total price
+        // Calcular el nuevo total del pedido
         $totalPedido = 0;
         foreach ($productos as $producto) {
             if (!isset($tables[$producto['tipo']])) {
@@ -576,7 +601,7 @@ class ApiController {
         }
 
         if (count($productos) === 0) {
-            // Delete the pedido if there are no products
+            // Borrar el pedido si no tiene productos
             $sql = "DELETE FROM pedidos WHERE id_pedido = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $id_pedido);
@@ -589,11 +614,11 @@ class ApiController {
             return;
         }
 
-        // Calculate IVA and total
+        // Calcular IVA y total
         $iva = round($totalPedido * 0.10, 2); // Assuming IVA is 10%
         $total = round($totalPedido + $iva, 2);
 
-        // Update the pedidos table
+        // Actualizar el pedido
         $sql = "UPDATE pedidos SET pedido = ?, iva = ?, total = ? WHERE id_pedido = ?";
         error_log("Updating pedidos table with SQL: $sql and values: $totalPedido, $iva, $total, $id_pedido");
         $stmt = $conn->prepare($sql);
@@ -601,7 +626,7 @@ class ApiController {
         $stmt->execute();
         $stmt->close();
 
-        // Insert new products into the pedido
+        // Insertar los nuevos productos en el pedido
         foreach ($productos as $producto) {
             if (!isset($tables[$producto['tipo']])) {
                 error_log("Unknown product type: " . $producto['tipo']);
@@ -623,8 +648,14 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode(['status' => 'success', 'message' => 'Pedido actualizado correctamente.']);
+
+        $productosInfo = array_map(function($producto) {
+            return "Nombre: " . ($producto['nombre'] ?? 'N/A') . ", Precio: " . ($producto['precio'] ?? 'N/A') . ", Cantidad: " . ($producto['cantidad'] ?? 'N/A') . ", Tipo: " . ($producto['tipo'] ?? 'N/A');
+        }, $productos);
+        Logger::log("Pedido actualizado: ID $id_pedido");
     }
 
+    // Función para agregar productos a un pedido
     function agregarProductos($id_pedido, $productos) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
@@ -640,7 +671,7 @@ class ApiController {
             'menu' => 'pedido_menu'
         ];
 
-        // Insert new products into the pedido
+        // Insertar los nuevos productos en el pedido
         foreach ($productos as $producto) {
             if (!isset($tables[$producto['tipo']])) {
                 error_log("Unknown product type: " . $producto['tipo']);
@@ -662,8 +693,14 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode(['status' => 'success', 'message' => 'Productos agregados correctamente.']);
+
+        $productosInfo = array_map(function($producto) {
+            return "Nombre: " . ($producto['nombre'] ?? 'N/A') . ", Precio: " . ($producto['precio'] ?? 'N/A') . ", Cantidad: " . ($producto['cantidad'] ?? 'N/A') . ", Tipo: " . ($producto['tipo'] ?? 'N/A');
+        }, $productos);
+        Logger::log("Productos agregados al pedido: ID $id_pedido, Productos: " . implode("; ", $productosInfo));
     }
 
+    // Función para eliminar un producto de un pedido
     function eliminarProductoDePedido($id_pedido, $id_producto, $tipo) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
@@ -701,7 +738,7 @@ class ApiController {
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {
-            // Check if there are any products left in the pedido
+            // Revisar si el pedido tiene productos
             $sql = "SELECT COUNT(*) as count FROM (
                         SELECT id_pedido FROM pedido_hamburguesa WHERE id_pedido = ?
                         UNION ALL
@@ -718,7 +755,7 @@ class ApiController {
             $row = $result->fetch_assoc();
 
             if ($row['count'] == 0) {
-                // Delete the pedido if there are no products left
+                // Eliminar el pedido si no tiene productos
                 $sql = "DELETE FROM pedidos WHERE id_pedido = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $id_pedido);
@@ -736,6 +773,21 @@ class ApiController {
 
         header('Content-Type: application/json');
         echo json_encode($response);
+
+        Logger::log("Producto eliminado del pedido: ID $id_pedido, Producto ID $id_producto, Tipo $tipo");
+    }
+
+    // Función para obtener los logs
+    function obtenerLogs() {
+        $logs = Logger::getLogs();
+        header('Content-Type: application/json');
+        echo json_encode($logs);
+    }
+    // Función para borrar los logs
+    function clearLogs() {
+        Logger::clearLogs();
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Logs borrados correctamente.']);
     }
 }
 
@@ -830,6 +882,12 @@ if (isset($_GET['action'])) {
             if (isset($_GET['id_pedido'], $_GET['id_producto'], $_GET['tipo'])) {
                 $controller->eliminarProductoDePedido($_GET['id_pedido'], $_GET['id_producto'], $_GET['tipo']);
             }
+            break;
+        case 'obtenerLogs':
+            $controller->obtenerLogs();
+            break;
+        case 'clearLogs':
+            $controller->clearLogs();
             break;
     }
 }

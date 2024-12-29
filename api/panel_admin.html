@@ -35,6 +35,17 @@
             <button id="obtenerUsuarios">Obtener Usuarios</button>
             <button id="crearUsuario">Crear Usuario</button>
         </div>
+        <!-- Botones de logs -->
+        <div class="button-group">
+            <h3>Logs</h3>
+            <button id="verLogs">Ver Logs</button>
+            <button id="clearLogs" style="display: none;">Borrar Logs</button>
+        </div>
+        <!-- Botón de navegación -->
+        <div class="button-group">
+            <h3>Navegación</h3>
+            <button id="volverMenuUsuario">Volver al Menú de Usuario</button>
+        </div>
     </div>
     <!-- Formulario de creación de pedidos -->
     <div id="formContainer" style="display: none;">
@@ -123,8 +134,26 @@
             </tbody>
         </table>
     </div>
+    <!-- Tabla de logs -->
+    <div id="logsContainer" class="table-container" style="display: none;">
+        <table id="logsTable" border="1">
+            <thead>
+                <tr>
+                    <th>Log</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
     <script src="api/pedidos.js"></script>
     <script src="api/usuarios.js"></script>
     <script src="api/productos.js"></script>
+    <script src="api/logs.js"></script>
+    <script>
+        document.getElementById('volverMenuUsuario').addEventListener('click', function() {
+            window.location.href = '?controller=usuario&action=menu_usuario';
+        });
+    </script>
 </body>
 </html>

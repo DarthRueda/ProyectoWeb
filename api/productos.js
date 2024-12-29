@@ -168,7 +168,7 @@ document.getElementById('crearProducto').addEventListener('click', function() {
                 fetchProductos();
             }
         })
-        .catch(error => console.error('Error:', error));
+        //.catch(error => console.error('Error:', error));
     });
 });
 

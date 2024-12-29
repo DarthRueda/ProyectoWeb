@@ -237,7 +237,7 @@ function actualizarPedido(id_pedido) {
         alert(data.message);
         fetchPedidos('obtenerPedidos');
     })
-    .catch(error => console.error('Error:', error));
+    //.catch(error => console.error('Error:', error));
 }
 
 //Funcion para eliminar producto de pedido
