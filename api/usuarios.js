@@ -14,9 +14,12 @@ function fetchUsuarios() { //Funcion para obtener los usuarios
                     <td>${usuario.apellido}</td>
                     <td>${usuario.email}</td>
                     <td>${usuario.telefono}</td>
+                    <td>${usuario.administrador}</td>
                     <td>
-                        <button class="edit">Editar</button>
-                        <button class="delete">Eliminar</button>
+                        <div class="action-buttons">
+                            <button class="edit btn-action">Editar</button>
+                            <button class="delete btn-action">Eliminar</button>
+                        </div>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -38,7 +41,7 @@ function eliminarUsuario(id_usuario) {
                 console.error('Error:', data.message);
             }
         })
-        .catch(error => console.error('Error:', error));
+        //.catch(error => console.error('Error:', error));
 }
 
 //Muestra la tabla de usuarios
@@ -55,7 +58,8 @@ document.querySelector('#usuariosTable tbody').addEventListener('click', functio
             nombre: row.querySelector('td:nth-child(3)').innerText,
             apellido: row.querySelector('td:nth-child(4)').innerText,
             email: row.querySelector('td:nth-child(5)').innerText,
-            telefono: row.querySelector('td:nth-child(6)').innerText
+            telefono: row.querySelector('td:nth-child(6)').innerText,
+            administrador: row.querySelector('td:nth-child(7)').innerText
         };
         showEditarUsuarioForm(usuario);
     }
@@ -69,13 +73,14 @@ function crearUsuario() {
     const email = document.getElementById('email').value;
     const contrasena = document.getElementById('contrasena').value;
     const telefono = document.getElementById('telefono').value;
+    const administrador = document.getElementById('administrador').value;
 
     fetch('controllers/apicontroller.php?action=crearUsuario', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ usuario, nombre, apellido, email, contrasena, telefono })
+        body: JSON.stringify({ usuario, nombre, apellido, email, contrasena, telefono, administrador })
     })
     .then(response => response.json())
     .then(data => {
@@ -94,14 +99,26 @@ function showCrearUsuarioForm() {
     });
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
+    formContainer.classList.add('form-registro'); // Add class for centered form
     formContainer.innerHTML = `
-        <input type="text" id="usuario" placeholder="Usuario">
-        <input type="text" id="nombre" placeholder="Nombre">
-        <input type="text" id="apellido" placeholder="Apellido">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="contrasena" placeholder="Contraseña">
-        <input type="text" id="telefono" placeholder="Teléfono">
-        <button id="submitCrearUsuario">Crear Usuario</button>
+        <label class="form-label" for="usuario">Usuario</label>
+        <input type="text" id="usuario" class="form-input" placeholder="Usuario">
+        <label class="form-label" for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-input" placeholder="Nombre">
+        <label class="form-label" for="apellido">Apellido</label>
+        <input type="text" id="apellido" class="form-input" placeholder="Apellido">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" id="email" class="form-input" placeholder="Email">
+        <label class="form-label" for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" class="form-input" placeholder="Contraseña">
+        <label class="form-label" for="telefono">Teléfono</label>
+        <input type="text" id="telefono" class="form-input" placeholder="Teléfono">
+        <label class="form-label" for="administrador">Administrador</label>
+        <select id="administrador" class="form-input">
+            <option value="0">No Admin</option>
+            <option value="1">Admin</option>
+        </select>
+        <button id="submitCrearUsuario" class="btn-admin">Crear Usuario</button>
     `;
     document.getElementById('submitCrearUsuario').addEventListener('click', function() {
         crearUsuario();
@@ -115,14 +132,24 @@ function showEditarUsuarioForm(usuario) {
     });
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
+    formContainer.classList.add('form-registro');
     formContainer.innerHTML = `
-        <input type="text" id="usuario" placeholder="Usuario" value="${usuario.usuario}">
-        <input type="text" id="nombre" placeholder="Nombre" value="${usuario.nombre}">
-        <input type="text" id="apellido" placeholder="Apellido" value="${usuario.apellido}">
-        <input type="email" id="email" placeholder="Email" value="${usuario.email}">
-        <input type="password" id="contrasena" placeholder="Contraseña">
-        <input type="text" id="telefono" placeholder="Teléfono" value="${usuario.telefono}">
-        <button id="submitEditarUsuario">Editar Usuario</button>
+        <label class="form-label" for="usuario">Usuario</label>
+        <input type="text" id="usuario" class="form-input" placeholder="Usuario" value="${usuario.usuario}">
+        <label class="form-label" for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-input" placeholder="Nombre" value="${usuario.nombre}">
+        <label class="form-label" for="apellido">Apellido</label>
+        <input type="text" id="apellido" class="form-input" placeholder="Apellido" value="${usuario.apellido}">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" id="email" class="form-input" placeholder="Email" value="${usuario.email}">
+        <label class="form-label" for="telefono">Teléfono</label>
+        <input type="text" id="telefono" class="form-input" placeholder="Teléfono" value="${usuario.telefono}">
+        <label class="form-label" for="administrador">Administrador</label>
+        <select id="administrador" class="form-input">
+            <option value="0" ${usuario.administrador === 'False' ? 'selected' : ''}>No Admin</option>
+            <option value="1" ${usuario.administrador === 'True' ? 'selected' : ''}>Admin</option>
+        </select>
+        <button id="submitEditarUsuario" class="btn-admin">Editar Usuario</button>
     `;
     document.getElementById('submitEditarUsuario').addEventListener('click', function() {
         editarUsuario(usuario.id_usuario);
@@ -135,15 +162,15 @@ function editarUsuario(id_usuario) {
     const nombre = document.getElementById('nombre').value;
     const apellido = document.getElementById('apellido').value;
     const email = document.getElementById('email').value;
-    const contrasena = document.getElementById('contrasena').value;
     const telefono = document.getElementById('telefono').value;
+    const administrador = document.getElementById('administrador').value;
 
     fetch(`controllers/apicontroller.php?action=editarUsuario&id_usuario=${id_usuario}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ usuario, nombre, apellido, email, contrasena, telefono })
+        body: JSON.stringify({ usuario, nombre, apellido, email, telefono, administrador })
     })
     .then(response => response.json())
     .then(data => {

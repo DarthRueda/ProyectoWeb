@@ -21,15 +21,16 @@ function fetchProductos(tipo = null) { // Fetch de productos
                     <td>${producto.id}</td>
                     <td>${producto.nombre}</td>
                     <td>${producto.descripcion}</td>
-                    <td>${producto.precio}</td>
+                    <td data-original-price="${producto.precio}">${producto.precio} €</td>
                     <td>${producto.tipo}</td>
                     <td><img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: 50px;"></td>
-                    <td><button class="edit">Editar</button><button class="delete">Eliminar</button></td>
+                    <td><button class="edit btn-action">Editar</button><button class="delete btn-action">Eliminar</button></td>
                 `;
                 tableBody.appendChild(row);
             });
 
             showTable('productosTable');
+            updatePrices(); // Update prices based on selected currency
         })
         .catch(error => console.error('Error:', error));
 }
@@ -55,6 +56,7 @@ function editarProducto(id_producto, tipo) {
 
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
+    formContainer.classList.add('form-registro'); // Add class for centered form
 
     // Fetch los datos del producto
     fetch(`controllers/apicontroller.php?action=obtenerProducto&id_producto=${id_producto}&tipo=${tipo}`)
@@ -63,11 +65,15 @@ function editarProducto(id_producto, tipo) {
             if (data.status === 'success') {
                 const producto = data.producto;
                 formContainer.innerHTML = `
-                    <input type="text" id="editNombre" placeholder="Nombre" value="${producto.nombre}">
-                    <input type="text" id="editDescripcion" placeholder="Descripción" value="${producto.descripcion}">
-                    <input type="text" id="editPrecio" placeholder="Precio" value="${producto.precio}">
-                    <input type="text" id="editImagen" placeholder="Imagen URL" value="${producto.imagen}">
-                    <button id="submitEditarProducto">Editar Producto</button>
+                    <label class="form-label" for="editNombre">Nombre</label>
+                    <input type="text" id="editNombre" class="form-input" placeholder="Nombre" value="${producto.nombre}">
+                    <label class="form-label" for="editDescripcion">Descripción</label>
+                    <input type="text" id="editDescripcion" class="form-input" placeholder="Descripción" value="${producto.descripcion}">
+                    <label class="form-label" for="editPrecio">Precio</label>
+                    <input type="text" id="editPrecio" class="form-input" placeholder="Precio" value="${producto.precio}">
+                    <label class="form-label" for="editImagen">Imagen URL</label>
+                    <input type="text" id="editImagen" class="form-input" placeholder="Imagen URL" value="${producto.imagen}">
+                    <button id="submitEditarProducto" class="btn-admin">Editar Producto</button>
                 `;
 
                 document.getElementById('submitEditarProducto').addEventListener('click', function() {
@@ -132,18 +138,24 @@ document.getElementById('crearProducto').addEventListener('click', function() {
 
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
+    formContainer.classList.add('form-registro');
     formContainer.innerHTML = `
-        <input type="text" id="nombre" placeholder="Nombre">
-        <input type="text" id="descripcion" placeholder="Descripción">
-        <input type="text" id="precio" placeholder="Precio">
-        <input type="text" id="imagen" placeholder="Imagen URL">
-        <select id="tipo">
+        <label class="form-label" for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-input" placeholder="Nombre">
+        <label class="form-label" for="descripcion">Descripción</label>
+        <input type="text" id="descripcion" class="form-input" placeholder="Descripción">
+        <label class="form-label" for="precio">Precio</label>
+        <input type="text" id="precio" class="form-input" placeholder="Precio">
+        <label class="form-label" for="imagen">Imagen URL</label>
+        <input type="text" id="imagen" class="form-input" placeholder="Imagen URL">
+        <label class="form-label" for="tipo">Tipo</label>
+        <select id="tipo" class="form-input">
             <option value="menu">Menú</option>
             <option value="hamburguesa">Hamburguesa</option>
             <option value="bebida">Bebida</option>
             <option value="complemento">Complemento</option>
         </select>
-        <button id="submitCrearProducto">Crear Producto</button>
+        <button id="submitCrearProducto" class="btn-admin">Crear Producto</button>
     `;
 
     //Funcion para crear un producto con los datos introducidos
@@ -186,3 +198,22 @@ document.querySelector('#productosTable tbody').addEventListener('click', functi
         editarProducto(id_producto, tipo);
     }
 });
+
+function showTable(tableId) {
+    document.querySelectorAll('.table-container').forEach(container => {
+        container.style.display = 'none';
+    });
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('filterButtons').style.display = 'none';
+    document.getElementById('currencyContainer').style.display = 'none';
+
+    document.getElementById(tableId).parentElement.style.display = 'block';
+
+    if (tableId === 'productosTable' || tableId === 'pedidosTable') {
+        document.getElementById('currencyContainer').style.display = 'block';
+    }
+
+    if (tableId === 'productosTable') {
+        document.getElementById('filterButtons').style.display = 'block';
+    }
+}

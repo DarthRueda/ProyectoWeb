@@ -12,3 +12,19 @@
 [2024-12-29 16:53:20] Pedido actualizado: ID 199
 [2024-12-29 16:53:34] Productos agregados al pedido: ID 199, Productos: Nombre: Webber, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Perez, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Hamilton, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa
 [2024-12-29 16:53:38] Pedido actualizado: ID 199
+[2024-12-30 13:13:56] Pedido eliminado: ID 202
+[2024-12-30 13:14:34] Pedido eliminado: ID 203
+[2024-12-30 13:18:17] Pedido eliminado: ID 204
+[2024-12-30 13:55:37] Usuario editado: ID 6, Usuario: julian222, Nombre: Julian, Apellido: Pastor, Email: julianpastor@yahoo.es, Teléfono: 32432432
+[2024-12-30 13:55:44] Usuario editado: ID 6, Usuario: julian222, Nombre: Julian, Apellido: Pastor, Email: julianpastor@yahoo.es, Teléfono: 32432432
+[2024-12-30 13:57:37] Usuario editado: ID 6, Usuario: julian222, Nombre: Julian, Apellido: Pastor, Email: julianpastor@yahoo.es, Teléfono: 32432432, Administrador: 1
+[2024-12-30 13:57:42] Usuario editado: ID 6, Usuario: julian222, Nombre: Julian, Apellido: Pastor, Email: julianpastor@yahoo.es, Teléfono: 32432432, Administrador: 0
+[2024-12-30 14:22:29] Producto eliminado del pedido: ID 127, Producto ID 3, Tipo hamburguesa
+[2024-12-30 14:22:32] Pedido actualizado: ID 127
+[2024-12-30 16:14:53] Productos agregados al pedido: ID 208, Productos: Nombre: Piastri, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa
+[2024-12-30 16:14:55] Pedido actualizado: ID 208
+[2024-12-30 16:15:24] Usuario editado: ID 25, Usuario: gitanorumano, Nombre: knekro, Apellido: sanchez, Email: vivaabascal@gmail.com, Teléfono: 666666666, Administrador: 1
+[2024-12-30 16:16:05] Producto creado: Nombre: asda, Descripción: asdsa, Precio: 3.99, Imagen: , Tipo: bebida
+[2024-12-30 16:16:10] Producto eliminado: ID 11, Tipo bebida
+[2024-12-30 16:16:20] Pedido eliminado: ID 208
+[2024-12-30 16:23:34] Usuario eliminado: ID 25

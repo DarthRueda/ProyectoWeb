@@ -11,16 +11,18 @@ function fetchPedidos(action) { // Funcion para obtener pedidos
                     <td>${pedido.id_pedido}</td>
                     <td>${pedido.usuario}</td>
                     <td>${pedido.fecha}</td>
-                    <td>${pedido.total}</td>
+                    <td data-original-price="${pedido.total}">${pedido.total} €</td>
+                    <td class="pagado ${pedido.pagado == 1 ? 'pagado-true' : 'pagado-false'}">${pedido.pagado == 1 ? 'Sí' : 'No'}</td>
                     <td>
-                        <button class="edit">Editar</button>
-                        <button class="delete">Eliminar</button>
+                        <button class="edit btn-action">Editar</button>
+                        <button class="delete btn-action">Eliminar</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
             });
 
             showTable('pedidosTable');
+            updatePrices(); // Actualizar precios basados en la moneda seleccionada
         })
         .catch(error => console.error('Error:', error));
 }
@@ -41,6 +43,7 @@ function eliminarPedido(id_pedido) {
 
 // Funcion para crear pedido
 function crearPedido() {
+    document.getElementById('currencyContainer').style.display = 'none'; // Ocultar el selector de moneda
     fetch('controllers/apicontroller.php?action=crearPedido')
         .then(response => response.json())
         .then(data => {
@@ -50,6 +53,7 @@ function crearPedido() {
 
             const formContainer = document.getElementById('formContainer');
             formContainer.style.display = 'block';
+            formContainer.classList.add('form-crear-pedido');
             formContainer.innerHTML = '';
 
             data.forEach(producto => {
@@ -59,13 +63,14 @@ function crearPedido() {
                         <input type="checkbox" class="producto" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-tipo="${producto.tipo}">
                         ${producto.nombre} - ${producto.precio}
                     </label>
-                    <input type="number" class="cantidad" min="1" value="1">
+                    <input type="number" class="cantidad form-input" min="1" value="1">
                 `;
                 formContainer.appendChild(div);
             });
 
             const generarButton = document.createElement('button');
             generarButton.innerText = 'Generar Pedido';
+            generarButton.classList.add('btn-admin');
             generarButton.addEventListener('click', generarPedido);
             formContainer.appendChild(generarButton);
         })
@@ -113,6 +118,7 @@ function editarPedido(id_pedido) {
 
             const formContainer = document.getElementById('formContainer');
             formContainer.style.display = 'block';
+            formContainer.classList.add('form-registro'); 
             formContainer.innerHTML = '';
 
             data.productos.forEach(producto => {
@@ -120,15 +126,16 @@ function editarPedido(id_pedido) {
                 div.innerHTML = `
                     <label>
                         ${producto.nombre} - ${producto.precio}
-                        <input type="number" class="cantidad" min="1" value="${producto.cantidad}" data-id="${producto.id}" data-tipo="${producto.tipo}">
+                        <input type="number" class="cantidad form-input" min="1" value="${producto.cantidad}" data-id="${producto.id}" data-tipo="${producto.tipo}">
                     </label>
-                    <button class="delete-producto">Eliminar</button>
+                    <button class="delete-producto btn-action">Eliminar</button>
                 `;
                 formContainer.appendChild(div);
             });
 
             const actualizarButton = document.createElement('button');
             actualizarButton.innerText = 'Actualizar Pedido';
+            actualizarButton.classList.add('btn-admin');
             actualizarButton.classList.add('actualizar-pedido');
             actualizarButton.dataset.idPedido = id_pedido;
             actualizarButton.addEventListener('click', () => actualizarPedido(data.id_pedido));
@@ -136,6 +143,7 @@ function editarPedido(id_pedido) {
 
             const agregarProductoButton = document.createElement('button');
             agregarProductoButton.innerText = 'Agregar Producto';
+            agregarProductoButton.classList.add('btn-admin');
             agregarProductoButton.addEventListener('click', () => mostrarProductosParaAgregar(data.id_pedido));
             formContainer.appendChild(agregarProductoButton);
         })
@@ -171,6 +179,7 @@ function mostrarProductosParaAgregar(id_pedido) {
 
                     const agregarButton = document.createElement('button');
                     agregarButton.innerText = 'Agregar al Pedido';
+                    agregarButton.classList.add('btn-admin');
                     agregarButton.addEventListener('click', () => agregarProductosAlPedido(id_pedido));
                     formContainer.appendChild(agregarButton);
                 })
@@ -261,8 +270,13 @@ function showTable(tableId) {
     });
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('filterButtons').style.display = 'none';
+    document.getElementById('currencyContainer').style.display = 'none';
 
     document.getElementById(tableId).parentElement.style.display = 'block';
+
+    if (tableId === 'productosTable' || tableId === 'pedidosTable') {
+        document.getElementById('currencyContainer').style.display = 'block';
+    }
 
     if (tableId === 'productosTable') {
         document.getElementById('filterButtons').style.display = 'block';

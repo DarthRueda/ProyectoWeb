@@ -28,7 +28,8 @@ class ApiController {
         $sql = "SELECT pedidos.id_pedido, 
                        IFNULL(usuarios.nombre, 'Este pedido fue realizado por un usuario sin registrar') AS usuario, 
                        pedidos.fecha, 
-                       pedidos.total 
+                       pedidos.total,
+                       pedidos.pagado
                 FROM pedidos 
                 LEFT JOIN usuarios ON pedidos.id_usuario = usuarios.id_usuario" . $whereClause . $orderClause;
         $result = $conn->query($sql);
@@ -135,6 +136,9 @@ class ApiController {
     function obtenerUsuarios() {
         include_once __DIR__ . '/../models/usuariosDAO.php';
         $usuarios = UsuariosDAO::getAll();
+        foreach ($usuarios as &$usuario) {
+            $usuario['administrador'] = $usuario['administrador'] == 1 ? 'True' : 'False';
+        }
         header('Content-Type: application/json');
         echo json_encode($usuarios);
     }
@@ -221,7 +225,7 @@ class ApiController {
         $conn = DataBase::connect();
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (isset($input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $input['telefono'])) {
+        if (isset($input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $input['telefono'], $input['administrador'])) {
             $telefono = filter_var($input['telefono'], FILTER_SANITIZE_NUMBER_INT);
             if (!is_numeric($telefono)) {
                 $response = array('status' => 'error', 'message' => 'El teléfono debe ser un número.');
@@ -230,20 +234,9 @@ class ApiController {
                 return;
             }
 
-            $contrasena = $input['contrasena'] ? password_hash($input['contrasena'], PASSWORD_BCRYPT) : null;
-
-            $sql = "UPDATE usuarios SET usuario = ?, nombre = ?, apellido = ?, email = ?, telefono = ?";
-            if ($contrasena) {
-                $sql .= ", contrasena = ?";
-            }
-            $sql .= " WHERE id_usuario = ?";
-
+            $sql = "UPDATE usuarios SET usuario = ?, nombre = ?, apellido = ?, email = ?, telefono = ?, administrador = ? WHERE id_usuario = ?";
             $stmt = $conn->prepare($sql);
-            if ($contrasena) {
-                $stmt->bind_param("ssssssi", $input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $telefono, $contrasena, $id_usuario);
-            } else {
-                $stmt->bind_param("sssssi", $input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $telefono, $id_usuario);
-            }
+            $stmt->bind_param("ssssisi", $input['usuario'], $input['nombre'], $input['apellido'], $input['email'], $telefono, $input['administrador'], $id_usuario);
             $stmt->execute();
 
             if ($stmt->affected_rows > 0) {
@@ -261,7 +254,7 @@ class ApiController {
         header('Content-Type: application/json');
         echo json_encode($response);
 
-        Logger::log("Usuario editado: ID $id_usuario, Usuario: " . ($input['usuario'] ?? 'N/A') . ", Nombre: " . ($input['nombre'] ?? 'N/A') . ", Apellido: " . ($input['apellido'] ?? 'N/A') . ", Email: " . ($input['email'] ?? 'N/A') . ", Teléfono: " . ($input['telefono'] ?? 'N/A'));
+        Logger::log("Usuario editado: ID $id_usuario, Usuario: " . ($input['usuario'] ?? 'N/A') . ", Nombre: " . ($input['nombre'] ?? 'N/A') . ", Apellido: " . ($input['apellido'] ?? 'N/A') . ", Email: " . ($input['email'] ?? 'N/A') . ", Teléfono: " . ($input['telefono'] ?? 'N/A') . ", Administrador: " . ($input['administrador'] ?? 'N/A'));
     }
 
     // Función para eliminar un usuario
@@ -273,6 +266,38 @@ class ApiController {
             die("Connection failed: " . $conn->connect_error);
         }
 
+        // Seleccionar los pedidos del usuario
+        $sql = "SELECT id_pedido FROM pedidos WHERE id_usuario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pedidos = [];
+        while ($row = $result->fetch_assoc()) {
+            $pedidos[] = $row['id_pedido'];
+        }
+        $stmt->close();
+
+        // Borrar productos del pedido en las tablas de relación
+        $tables = ['pedido_bebida', 'pedido_complemento', 'pedido_hamburguesa', 'pedido_menu'];
+        foreach ($pedidos as $id_pedido) {
+            foreach ($tables as $table) {
+                $sql = "DELETE FROM $table WHERE id_pedido = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $id_pedido);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+
+        // Borrar los pedidos del usuario de la tabla pedidos
+        $sql = "DELETE FROM pedidos WHERE id_usuario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_usuario);
+        $stmt->execute();
+        $stmt->close();
+
+        // Borrar el usuario
         $sql = "DELETE FROM usuarios WHERE id_usuario = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id_usuario);
