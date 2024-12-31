@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="info">
                                     <h3><?= $producto['nombre'] ?></h3>
-                                    <p><?= $producto['descripcion'] ?></p>
+                                    <p><?= $producto['descripcion'] ?? '' ?></p>
                                 </div>
                                 <div class="price-bin">
                                     <span class="price"><?= $producto['precio'] ?>€</span>

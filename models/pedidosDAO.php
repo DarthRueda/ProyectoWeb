@@ -186,17 +186,15 @@ class pedidosDAO {
         return $pedidos;
     }
 
-    //Con esto se obtienen los productos de un pedido (FASE DE PRUEBAS)
-    // NOTA: ESTA FUNCIÓN PODRIA SER SOLO EXCLUSIVA DE LOS USUARIOS CON RANGO DE ADMINISTRADOR
     public static function getProductosByPedidoId($id_pedido) {
         $con = DataBase::connect();
         $productos = [];
 
         $queries = [
-            "SELECT m.nombre, m.precio FROM pedido_menu pm JOIN menus m ON pm.id_menu = m.id_menu WHERE pm.id_pedido = ?",
-            "SELECT h.nombre, h.precio FROM pedido_hamburguesa ph JOIN hamburguesas h ON ph.id_hamburguesa = h.id_hamburguesa WHERE ph.id_pedido = ?",
-            "SELECT b.nombre, b.precio FROM pedido_bebida pb JOIN bebidas b ON pb.id_bebida = b.id_bebida WHERE pb.id_pedido = ?",
-            "SELECT c.nombre, c.precio FROM pedido_complemento pc JOIN complementos c ON pc.id_complemento = c.id_complemento WHERE pc.id_pedido = ?"
+            "SELECT m.nombre, m.precio, m.descripcion, COUNT(pm.id_menu) as cantidad FROM pedido_menu pm JOIN menus m ON pm.id_menu = m.id_menu WHERE pm.id_pedido = ? GROUP BY m.nombre, m.precio, m.descripcion",
+            "SELECT h.nombre, h.precio, h.descripcion, COUNT(ph.id_hamburguesa) as cantidad FROM pedido_hamburguesa ph JOIN hamburguesas h ON ph.id_hamburguesa = h.id_hamburguesa WHERE ph.id_pedido = ? GROUP BY h.nombre, h.precio, h.descripcion",
+            "SELECT b.nombre, b.precio, b.descripcion, COUNT(pb.id_bebida) as cantidad FROM pedido_bebida pb JOIN bebidas b ON pb.id_bebida = b.id_bebida WHERE pb.id_pedido = ? GROUP BY b.nombre, b.precio, b.descripcion",
+            "SELECT c.nombre, c.precio, c.descripcion, COUNT(pc.id_complemento) as cantidad FROM pedido_complemento pc JOIN complementos c ON pc.id_complemento = c.id_complemento WHERE pc.id_pedido = ? GROUP BY c.nombre, c.precio, c.descripcion"
         ];
 
         foreach ($queries as $query) {

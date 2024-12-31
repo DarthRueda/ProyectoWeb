@@ -185,7 +185,9 @@ class usuarioController{
             $id_usuario = $_SESSION['id_usuario'];
             $pedido = pedidosDAO::getLatestPedidoByUsuarioId($id_usuario);
             if ($pedido) {
-                $_SESSION['cart'] = pedidosDAO::getProductosByPedidoId($pedido['id_pedido']);
+                $productos = pedidosDAO::getProductosByPedidoId($pedido['id_pedido']);
+                $_SESSION['cart_data'] = $productos;
+                $_SESSION['id_pedido'] = pedidosDAO::guardarPedido($productos);
                 header("Location: index.php?controller=producto&action=compra");
                 exit;
             } else {
@@ -195,7 +197,6 @@ class usuarioController{
             echo "Usuario no autenticado.";
         }
     }
-
 
 }
 ?>
