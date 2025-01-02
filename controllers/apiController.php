@@ -111,16 +111,23 @@ class ApiController {
             }
         }
 
+        // Obtener usuarios
+        $usuarios = [];
+        $result = $conn->query("SELECT id_usuario, usuario FROM usuarios");
+        while ($row = $result->fetch_assoc()) {
+            $usuarios[] = $row;
+        }
+
         $conn->close();
 
         header('Content-Type: application/json');
-        echo json_encode($productos);
+        echo json_encode(['productos' => $productos, 'usuarios' => $usuarios]);
     }
 
     // Función para generar un pedido
-    function generarPedido($productos, $codigo_promocional = null) {
+    function generarPedido($productos, $codigo_promocional = null, $id_usuario = null) {
         include_once __DIR__ . '/../models/pedidosDAO.php';
-        $id_pedido = pedidosDAO::guardarPedido($productos, $codigo_promocional);
+        $id_pedido = pedidosDAO::guardarPedido($productos, $codigo_promocional, $id_usuario);
 
         header('Content-Type: application/json');
         echo json_encode(['id_pedido' => $id_pedido]);
@@ -129,7 +136,7 @@ class ApiController {
         $productosInfo = array_map(function($producto) {
             return "Nombre: " . ($producto['nombre'] ?? 'N/A') . ", Precio: " . ($producto['precio'] ?? 'N/A') . ", Cantidad: " . ($producto['cantidad'] ?? 'N/A') . ", Tipo: " . ($producto['tipo'] ?? 'N/A');
         }, $productos);
-        Logger::log("Pedido generado: ID $id_pedido, Productos: " . implode("; ", $productosInfo) . ", Código promocional: $codigo_promocional");
+        Logger::log("Pedido generado: ID $id_pedido, Productos: " . implode("; ", $productosInfo) . ", Código promocional: $codigo_promocional, Usuario ID: $id_usuario");
     }
 
     // Función para obtener los usuarios
@@ -585,13 +592,22 @@ class ApiController {
             $stmt->close();
         }
 
+        // Obtener el estado de pagado
+        $sql = "SELECT pagado FROM pedidos WHERE id_pedido = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_pedido);
+        $stmt->execute();
+        $stmt->bind_result($pagado);
+        $stmt->fetch();
+        $stmt->close();
+
         $conn->close();
 
         header('Content-Type: application/json');
-        echo json_encode(['id_pedido' => $id_pedido, 'productos' => $productos]);
+        echo json_encode(['id_pedido' => $id_pedido, 'productos' => $productos, 'pagado' => $pagado]);
     }
 
-    function actualizarPedido($id_pedido, $productos) {
+    function actualizarPedido($id_pedido, $productos, $pagado) {
         include_once __DIR__ . '/../config/database.php';
         $conn = DataBase::connect();
 
@@ -644,10 +660,10 @@ class ApiController {
         $total = round($totalPedido + $iva, 2);
 
         // Actualizar el pedido
-        $sql = "UPDATE pedidos SET pedido = ?, iva = ?, total = ? WHERE id_pedido = ?";
-        error_log("Updating pedidos table with SQL: $sql and values: $totalPedido, $iva, $total, $id_pedido");
+        $sql = "UPDATE pedidos SET pedido = ?, iva = ?, total = ?, pagado = ? WHERE id_pedido = ?";
+        error_log("Updating pedidos table with SQL: $sql and values: $totalPedido, $iva, $total, $pagado, $id_pedido");
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("dddi", $totalPedido, $iva, $total, $id_pedido);
+        $stmt->bind_param("dddii", $totalPedido, $iva, $total, $pagado, $id_pedido);
         $stmt->execute();
         $stmt->close();
 
@@ -814,6 +830,34 @@ class ApiController {
         header('Content-Type: application/json');
         echo json_encode(['status' => 'success', 'message' => 'Logs borrados correctamente.']);
     }
+
+    function actualizarEstadoPagado($id_pedido, $pagado) {
+        include_once __DIR__ . '/../config/database.php';
+        $conn = DataBase::connect();
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "UPDATE pedidos SET pagado = ? WHERE id_pedido = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $pagado, $id_pedido);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            $response = array('status' => 'success', 'message' => 'Estado de pagado actualizado correctamente.');
+        } else {
+            $response = array('status' => 'error', 'message' => 'No se pudo actualizar el estado de pagado.');
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+
+        Logger::log("Estado de pagado actualizado: ID $id_pedido, Pagado: $pagado");
+    }
 }
 
 
@@ -846,7 +890,8 @@ if (isset($_GET['action'])) {
             if (isset($input['productos'])) {
                 $productos = $input['productos'];
                 $codigo_promocional = isset($input['codigo_promocional']) ? $input['codigo_promocional'] : null;
-                $controller->generarPedido($productos, $codigo_promocional);
+                $id_usuario = isset($input['id_usuario']) ? $input['id_usuario'] : null;
+                $controller->generarPedido($productos, $codigo_promocional, $id_usuario);
             }
             break;
         case 'obtenerUsuarios':
@@ -893,8 +938,8 @@ if (isset($_GET['action'])) {
             break;
         case 'actualizarPedido':
             $input = json_decode(file_get_contents('php://input'), true);
-            if (isset($input['id_pedido'], $input['productos'])) {
-                $controller->actualizarPedido($input['id_pedido'], $input['productos']);
+            if (isset($input['id_pedido'], $input['productos'], $input['pagado'])) {
+                $controller->actualizarPedido($input['id_pedido'], $input['productos'], $input['pagado']);
             }
             break;
         case 'agregarProductos':
@@ -913,6 +958,12 @@ if (isset($_GET['action'])) {
             break;
         case 'clearLogs':
             $controller->clearLogs();
+            break;
+        case 'actualizarEstadoPagado':
+            $input = json_decode(file_get_contents('php://input'), true);
+            if (isset($input['id_pedido'], $input['pagado'])) {
+                $controller->actualizarEstadoPagado($input['id_pedido'], $input['pagado']);
+            }
             break;
     }
 }

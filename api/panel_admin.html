@@ -51,7 +51,10 @@
         </div>
     </div>
     <!-- Formulario de creación de pedidos -->
-    <div id="formContainer" style="display: none;">
+    <div id="formContainer" class="form-center" style="display: none;">
+        <select id="usuarioSelect">
+            <option value="">Pedido sin Usuario</option>
+        </select>
         <input type="text" id="usuario" placeholder="Usuario">
         <input type="text" id="nombre" placeholder="Nombre">
         <input type="text" id="apellido" placeholder="Apellido">
@@ -81,9 +84,9 @@
             </tbody>
         </table>
         <!-- Moneda menu -->
-        <div id="currencyContainer" style="display: none;">
+        <div id="currencyContainerPedidos" class="currency-container" style="display: none;">
             <h3>Moneda</h3>
-            <select id="currencySelector">
+            <select id="currencySelectorPedidos">
                 <option value="EUR">Euro</option>
                 <!-- Las otras monedas aparecerán aqui automáticamente -->
             </select>
@@ -149,9 +152,9 @@
             </tbody>
         </table>
         <!-- Moneda menu -->
-        <div id="currencyContainer" style="display: none;">
+        <div id="currencyContainerProductos" class="currency-container" style="display: none;">
             <h3>Moneda</h3>
-            <select id="currencySelector">
+            <select id="currencySelectorProductos">
                 <option value="EUR">Euro</option>
                 <!-- Las otras monedas aparecerán aqui automáticamente -->
             </select>
@@ -179,5 +182,11 @@
             window.location.href = '?controller=usuario&action=menu_usuario';
         });
     </script>
+    <style>
+        .currency-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </body>
 </html>

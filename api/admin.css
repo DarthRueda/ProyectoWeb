@@ -218,7 +218,7 @@ tr:hover {
     text-align: center;
 }
 
-/* Centrar el contenido de los formularios */
+/* Estilo de los formularios */
 .form-registro,
 .form-login {
     background-color: rgba(255, 255, 255, 0.8);
@@ -228,6 +228,69 @@ tr:hover {
     max-width: 500px;
     margin: 0 auto;
     margin-top: 20px;
+}
+
+/* Centrar el contenido de los formularios */
+.form-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Formulario de creación de pedidos */
+.form-crear-pedido {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 20px);
+}
+
+.form-crear-pedido label {
+    display: inline-block;
+    width: 300px;
+    margin-right: 10px;
+}
+
+.form-crear-pedido input {
+    display: inline-block;
+    width: calc(100% - 320px);
+    margin-bottom: 10px;
+}
+
+.form-crear-pedido input.producto {
+    width: auto;
+    margin-right: 10px;
+}
+
+/* Formulario de edición de pedidos */
+.form-editar-pedido input {
+    display: inline-block;
+    width: calc(100% - 320px);
+    margin-bottom: 10px;
 }
 
 /* Estilos para los formularios */

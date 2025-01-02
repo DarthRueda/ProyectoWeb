@@ -53,10 +53,22 @@ function crearPedido() {
 
             const formContainer = document.getElementById('formContainer');
             formContainer.style.display = 'block';
-            formContainer.classList.add('form-crear-pedido');
+            formContainer.className = ''; // Eliminar todas las clases
+            formContainer.classList.add('form-crear-pedido', 'form-center');
             formContainer.innerHTML = '';
 
-            data.forEach(producto => {
+            const usuarioSelect = document.createElement('select');
+            usuarioSelect.id = 'usuarioSelect';
+            usuarioSelect.innerHTML = '<option value="">Pedido sin Usuario</option>';
+            data.usuarios.forEach(usuario => {
+                const option = document.createElement('option');
+                option.value = usuario.id_usuario;
+                option.textContent = usuario.usuario;
+                usuarioSelect.appendChild(option);
+            });
+            formContainer.appendChild(usuarioSelect);
+
+            data.productos.forEach(producto => {
                 const div = document.createElement('div');
                 div.innerHTML = `
                     <label>
@@ -91,19 +103,21 @@ function generarPedido() {
         });
     });
 
+    const id_usuario = document.getElementById('usuarioSelect').value;
+
     fetch('controllers/apicontroller.php?action=generarPedido', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ productos: productos })
+        body: JSON.stringify({ productos: productos, id_usuario: id_usuario })
     })
     .then(response => response.json())
     .then(data => {
         alert('Pedido generado: ' + JSON.stringify(data));
         fetchPedidos('obtenerPedidos');
     })
-    //.catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));
 }
 
 //Funcion para editar pedido
@@ -118,7 +132,8 @@ function editarPedido(id_pedido) {
 
             const formContainer = document.getElementById('formContainer');
             formContainer.style.display = 'block';
-            formContainer.classList.add('form-registro'); 
+            formContainer.className = ''; // Remove all classes
+            formContainer.classList.add('form-editar-pedido', 'form-center');
             formContainer.innerHTML = '';
 
             data.productos.forEach(producto => {
@@ -132,6 +147,14 @@ function editarPedido(id_pedido) {
                 `;
                 formContainer.appendChild(div);
             });
+
+            const pagadoSelect = document.createElement('select');
+            pagadoSelect.id = 'pagadoSelect';
+            pagadoSelect.innerHTML = `
+                <option value="0" ${data.pagado == 0 ? 'selected' : ''}>No Pagado</option>
+                <option value="1" ${data.pagado == 1 ? 'selected' : ''}>Pagado</option>
+            `;
+            formContainer.appendChild(pagadoSelect);
 
             const actualizarButton = document.createElement('button');
             actualizarButton.innerText = 'Actualizar Pedido';
@@ -150,6 +173,25 @@ function editarPedido(id_pedido) {
         .catch(error => console.error('Error:', error));
 }
 
+//Funcion para actualizar estado de pagado
+function actualizarEstadoPagado(id_pedido) {
+    const pagado = document.getElementById('pagadoSelect').value;
+
+    fetch('controllers/apicontroller.php?action=actualizarEstadoPagado', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id_pedido: id_pedido, pagado: pagado })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        fetchPedidos('obtenerPedidos');
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 // Funcion para mostrar productos para agregar
 function mostrarProductosParaAgregar(id_pedido) {
     fetch(`controllers/apicontroller.php?action=editarPedido&id_pedido=${id_pedido}`)
@@ -160,10 +202,17 @@ function mostrarProductosParaAgregar(id_pedido) {
             fetch('controllers/apicontroller.php?action=crearPedido')
                 .then(response => response.json())
                 .then(data => {
+                    if (!Array.isArray(data.productos)) {
+                        console.error('Error: Expected an array of productos');
+                        return;
+                    }
+
                     const formContainer = document.getElementById('formContainer');
                     formContainer.innerHTML = '';
+                    formContainer.className = ''; // Remove all classes
+                    formContainer.classList.add('form-crear-pedido', 'form-center'); // Apply styles
 
-                    data.forEach(producto => {
+                    data.productos.forEach(producto => {
                         if (!existingProductos.includes(producto.id)) {
                             const div = document.createElement('div');
                             div.innerHTML = `
@@ -171,7 +220,7 @@ function mostrarProductosParaAgregar(id_pedido) {
                                     <input type="checkbox" class="producto" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-tipo="${producto.tipo}">
                                     ${producto.nombre} - ${producto.precio}
                                 </label>
-                                <input type="number" class="cantidad" min="1" value="1">
+                                <input type="number" class="cantidad form-input" min="1" value="1">
                             `;
                             formContainer.appendChild(div);
                         }
@@ -234,19 +283,21 @@ function actualizarPedido(id_pedido) {
         });
     });
 
+    const pagado = document.getElementById('pagadoSelect').value;
+
     fetch('controllers/apicontroller.php?action=actualizarPedido', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id_pedido: id_pedido, productos: productos })
+        body: JSON.stringify({ id_pedido: id_pedido, productos: productos, pagado: pagado })
     })
     .then(response => response.json())
     .then(data => {
         alert(data.message);
         fetchPedidos('obtenerPedidos');
     })
-    //.catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));
 }
 
 //Funcion para eliminar producto de pedido

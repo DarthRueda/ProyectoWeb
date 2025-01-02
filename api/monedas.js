@@ -21,19 +21,22 @@ function fetchCurrencyRates() {
         .then(data => {
             currencyRates = data.data;
             populateCurrencySelector();
+            updatePrices(); // Actualizar precios al cargar las tasas de cambio
         })
-        .catch(error => console.error('Error fetching currency rates:', error));
+        .catch(error => console.error('Error de fetch:', error));
 }
 
 // Funcion para llenar el selector de monedas
 function populateCurrencySelector() {
-    const currencySelector = document.getElementById('currencySelector');
-    for (const currency in currencyRates) {
-        const option = document.createElement('option');
-        option.value = currency;
-        option.text = currency;
-        currencySelector.appendChild(option);
-    }
+    const currencySelectors = document.querySelectorAll('#currencySelectorPedidos, #currencySelectorProductos');
+    currencySelectors.forEach(currencySelector => {
+        for (const currency in currencyRates) {
+            const option = document.createElement('option');
+            option.value = currency;
+            option.text = currency;
+            currencySelector.appendChild(option);
+        }
+    });
 }
 
 // Funcion para convertir el precio a la moneda seleccionada
@@ -44,9 +47,12 @@ function convertPrice(price, currency) {
     return `${(price * rate).toFixed(2)} ${symbol}`;
 }
 
-document.getElementById('currencySelector').addEventListener('change', function() {
-    selectedCurrency = this.value;
-    updatePrices();
+// Evento para cambiar la moneda seleccionada en pedido y productos
+document.querySelectorAll('#currencySelectorPedidos, #currencySelectorProductos').forEach(selector => {
+    selector.addEventListener('change', function() {
+        selectedCurrency = this.value;
+        updatePrices();
+    });
 });
 
 // Funcion para actualizar los precios
@@ -66,4 +72,4 @@ function updatePrices() {
     });
 }
 
-fetchCurrencyRates();
+fetchCurrencyRates(); // Iniciar la aplicacion al cargar la pagina

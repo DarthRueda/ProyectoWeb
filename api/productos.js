@@ -23,14 +23,14 @@ function fetchProductos(tipo = null) { // Fetch de productos
                     <td>${producto.descripcion}</td>
                     <td data-original-price="${producto.precio}">${producto.precio} €</td>
                     <td>${producto.tipo}</td>
-                    <td><img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: 50px;"></td>
+                    <td><img src="${producto.imagen}" alt="${producto.nombre}" style="width: 120px; height: 120px;"></td>
                     <td><button class="edit btn-action">Editar</button><button class="delete btn-action">Eliminar</button></td>
                 `;
                 tableBody.appendChild(row);
             });
 
             showTable('productosTable');
-            updatePrices(); // Update prices based on selected currency
+            updatePrices(); // Actualizar precios
         })
         .catch(error => console.error('Error:', error));
 }
@@ -56,7 +56,8 @@ function editarProducto(id_producto, tipo) {
 
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
-    formContainer.classList.add('form-registro'); // Add class for centered form
+    formContainer.classList.add('form-registro'); 
+    formContainer.classList.add('form-center');  
 
     // Fetch los datos del producto
     fetch(`controllers/apicontroller.php?action=obtenerProducto&id_producto=${id_producto}&tipo=${tipo}`)
@@ -139,6 +140,7 @@ document.getElementById('crearProducto').addEventListener('click', function() {
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
     formContainer.classList.add('form-registro');
+    formContainer.classList.add('form-center');
     formContainer.innerHTML = `
         <label class="form-label" for="nombre">Nombre</label>
         <input type="text" id="nombre" class="form-input" placeholder="Nombre">
@@ -184,7 +186,7 @@ document.getElementById('crearProducto').addEventListener('click', function() {
     });
 });
 
-//Funcion para
+//Funcion para mostrar la tabla de pedidos
 document.querySelector('#productosTable tbody').addEventListener('click', function(event) {
     if (event.target.classList.contains('delete')) {
         const row = event.target.closest('tr');
@@ -199,21 +201,22 @@ document.querySelector('#productosTable tbody').addEventListener('click', functi
     }
 });
 
+//Gestionar visibilidad de las tablas
 function showTable(tableId) {
     document.querySelectorAll('.table-container').forEach(container => {
         container.style.display = 'none';
     });
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('filterButtons').style.display = 'none';
-    document.getElementById('currencyContainer').style.display = 'none';
+    document.getElementById('currencyContainerPedidos').style.display = 'none';
+    document.getElementById('currencyContainerProductos').style.display = 'none';
 
     document.getElementById(tableId).parentElement.style.display = 'block';
 
-    if (tableId === 'productosTable' || tableId === 'pedidosTable') {
-        document.getElementById('currencyContainer').style.display = 'block';
-    }
-
     if (tableId === 'productosTable') {
+        document.getElementById('currencyContainerProductos').style.display = 'block';
         document.getElementById('filterButtons').style.display = 'block';
+    } else if (tableId === 'pedidosTable') {
+        document.getElementById('currencyContainerPedidos').style.display = 'block';
     }
 }

@@ -32,3 +32,43 @@
 [2024-12-31 12:06:51] Pedido eliminado: ID 225
 [2024-12-31 12:06:52] Pedido eliminado: ID 226
 [2024-12-31 12:06:53] Pedido eliminado: ID 227
+[2024-12-31 12:42:19] Pedido generado: ID 230, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Sainz, Precio: 11.99, Cantidad: 1, Tipo: menu, Código promocional: 
+[2024-12-31 12:42:31] Producto eliminado del pedido: ID 230, Producto ID 1, Tipo menu
+[2024-12-31 12:42:33] Pedido actualizado: ID 230
+[2024-12-31 12:42:37] Pedido eliminado: ID 230
+[2024-12-31 12:45:33] Pedido generado: ID 231, Productos: Nombre: Menu Russell, Precio: 9.99, Cantidad: 1, Tipo: menu; Nombre: Tsunoda, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Webber, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Agua Mineral, Precio: 1.99, Cantidad: 4, Tipo: bebida, Código promocional: 
+[2024-12-31 12:59:18] Pedido generado: ID 233, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Perez, Precio: 11.99, Cantidad: 3, Tipo: menu; Nombre: Menu Sainz, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Hamilton, Precio: 11.99, Cantidad: 1, Tipo: menu, Código promocional: 
+[2024-12-31 12:59:40] Producto eliminado del pedido: ID 233, Producto ID 2, Tipo menu
+[2024-12-31 12:59:43] Pedido actualizado: ID 233
+[2024-12-31 12:59:53] Productos agregados al pedido: ID 233, Productos: Nombre: Fanta Naranja, Precio: 1.99, Cantidad: 1, Tipo: bebida
+[2024-12-31 12:59:58] Producto eliminado del pedido: ID 233, Producto ID 5, Tipo menu
+[2024-12-31 12:59:58] Producto eliminado del pedido: ID 233, Producto ID 4, Tipo menu
+[2024-12-31 13:00:00] Pedido actualizado: ID 233
+[2024-12-31 13:00:04] Pedido eliminado: ID 233
+[2025-01-02 11:43:29] Productos agregados al pedido: ID 232, Productos: Nombre: Alitas de Pollo, Precio: 5, Cantidad: 3, Tipo: complemento; Nombre: Aros Pirelli, Precio: 3.99, Cantidad: 1, Tipo: complemento
+[2025-01-02 11:43:34] Pedido actualizado: ID 232
+[2025-01-02 11:50:48] Pedido generado: ID 234, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu, Código promocional: , Usuario ID: 4
+[2025-01-02 11:54:27] Pedido generado: ID 235, Productos: Nombre: Alonso, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Perez, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa, Código promocional: , Usuario ID: 4
+[2025-01-02 11:55:45] Pedido generado: ID 236, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu, Código promocional: , Usuario ID: 4
+[2025-01-02 11:58:24] Pedido generado: ID 237, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu, Código promocional: , Usuario ID: 4
+[2025-01-02 11:58:37] Pedido generado: ID 238, Productos: Nombre: Lauda, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Fanta Naranja, Precio: 1.99, Cantidad: 1, Tipo: bebida, Código promocional: , Usuario ID: 6
+[2025-01-02 12:10:54] Estado de pagado actualizado: ID 240, Pagado: 0
+[2025-01-02 12:14:04] Pedido actualizado: ID 240
+[2025-01-02 12:14:35] Pedido actualizado: ID 238
+[2025-01-02 12:36:12] Productos agregados al pedido: ID 206, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu
+[2025-01-02 12:36:16] Pedido actualizado: ID 206
+[2025-01-02 12:36:29] Productos agregados al pedido: ID 240, Productos: Nombre: Alitas de Pollo, Precio: 5, Cantidad: 1, Tipo: complemento
+[2025-01-02 12:36:37] Productos agregados al pedido: ID 240, Productos: Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu
+[2025-01-02 12:36:40] Pedido actualizado: ID 240
+[2025-01-02 12:39:20] Productos agregados al pedido: ID 240, Productos: Nombre: Menu Alonso, Precio: 11.99, Cantidad: 1, Tipo: menu; Nombre: Menu Verstappen, Precio: 11.99, Cantidad: 1, Tipo: menu
+[2025-01-02 12:39:25] Pedido actualizado: ID 240
+[2025-01-02 12:39:31] Producto eliminado del pedido: ID 240, Producto ID 2, Tipo menu
+[2025-01-02 12:39:32] Producto eliminado del pedido: ID 240, Producto ID 3, Tipo complemento
+[2025-01-02 12:39:34] Pedido actualizado: ID 240
+[2025-01-02 12:39:38] Producto eliminado del pedido: ID 240, Producto ID 3, Tipo hamburguesa
+[2025-01-02 12:39:39] Producto eliminado del pedido: ID 240, Producto ID 2, Tipo hamburguesa
+[2025-01-02 12:39:41] Pedido actualizado: ID 240
+[2025-01-02 12:48:03] Pedido generado: ID 241, Productos: Nombre: Perez, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Cerveza, Precio: 1.99, Cantidad: 1, Tipo: bebida, Código promocional: , Usuario ID: 4
+[2025-01-02 12:48:15] Productos agregados al pedido: ID 241, Productos: Nombre: Senna, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa; Nombre: Hamilton, Precio: 7.99, Cantidad: 1, Tipo: hamburguesa
+[2025-01-02 12:48:24] Pedido actualizado: ID 241
+[2025-01-02 12:48:27] Pedido eliminado: ID 241

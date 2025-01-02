@@ -2,7 +2,7 @@
 include_once __DIR__ . '/../config/dataBase.php';
 
 class pedidosDAO {
-    public static function guardarPedido($productos, $codigo_promocional = null) {
+    public static function guardarPedido($productos, $codigo_promocional = null, $id_usuario = null) {
         $con = DataBase::connect();
         $fecha = date('Y-m-d H:i:s'); // Fecha actual
         
@@ -10,7 +10,7 @@ class pedidosDAO {
         $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta, id_usuario, fecha) VALUES (0, 0, 0, ?, ?, ?)";
         $stmt = $con->prepare($query);
         $id_oferta = null; // No hay ofertas implementadas por defecto
-        $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : null; // Obtener id_usuario si está logueado
+        $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : $id_usuario; // Obtener id_usuario si está logueado
         $stmt->bind_param('iis', $id_oferta, $id_usuario, $fecha);
         $stmt->execute();
         $id_pedido = $stmt->insert_id;
