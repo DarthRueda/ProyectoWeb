@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) { // Compro
 }
 
 $editing = isset($_GET['edit']) && $_GET['edit'] == 'true'; // Comprobar si el usuario está editando su información
-$isAdmin = isset($isAdmin) ? $isAdmin : false; // Ensure $isAdmin is set
+$isAdmin = isset($isAdmin) ? $isAdmin : false;
 ?>
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">

@@ -103,9 +103,10 @@ class productosDAO {
         $inicio = ($paginaActual - 1) * $productosPorPagina;
         $productosPagina = array_slice($productos, $inicio, $productosPorPagina);
 
+        // Mneu Russell siempre en primer lugar
         $menuRussell = null;
         foreach ($productosPagina as $key => $producto) {
-            if ($producto->getNombre() == 'Menu Russell') {
+            if ($producto->getNombre() == 'Menú Russell') {
                 $menuRussell = $producto;
                 unset($productosPagina[$key]);
                 array_unshift($productosPagina, $menuRussell);
@@ -114,7 +115,7 @@ class productosDAO {
         }
 
         return [
-            'productos' => $productos, // Add this line
+            'productos' => $productos,
             'productosPagina' => $productosPagina,
             'totalPaginas' => $totalPaginas,
             'paginaActual' => $paginaActual,

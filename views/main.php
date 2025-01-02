@@ -8,7 +8,6 @@ if (session_status() == PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAST FORMULA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="views/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
@@ -46,7 +45,6 @@ if (session_status() == PHP_SESSION_NONE) {
 </header>
 <body>
     <?php 
-    // Ensure that the $data array is available in the view
     include_once $view; 
     ?>
 </body>
@@ -75,20 +73,20 @@ if (session_status() == PHP_SESSION_NONE) {
             <div class="col-12 text-left">
                 <p class="footer-left"><b>Trabaja con nosotros</b></p>
                 <div class="col-12 d-flex justify-content-end footer-right">
-                    <img src="views/img/facebook.svg" alt="facebook">
-                    <img src="views/img/twitter.svg" alt="twitter">
-                    <img src="views/img/youtube.svg" alt="youtube">
-                    <img src="views/img/instagram.svg" alt="instagram">
-                    <img src="views/img/flikr.svg" alt="flikr">
-                    <img src="views/img/linkedin.svg" alt="linkedin">
-                    <img src="views/img/whatsapp.svg" alt="whatsapp">
+                    <a href="https://www.facebook.com" target="_blank"><img src="views/img/facebook.svg" alt="facebook"></a>
+                    <a href="https://www.twitter.com" target="_blank"><img src="views/img/twitter.svg" alt="twitter"></a>
+                    <a href="https://www.youtube.com" target="_blank"><img src="views/img/youtube.svg" alt="youtube"></a>
+                    <a href="https://www.instagram.com" target="_blank"><img src="views/img/instagram.svg" alt="instagram"></a>
+                    <a href="https://www.flickr.com" target="_blank"><img src="views/img/flikr.svg" alt="flikr"></a>
+                    <a href="https://www.linkedin.com" target="_blank"><img src="views/img/linkedin.svg" alt="linkedin"></a>
+                    <a href="https://www.whatsapp.com" target="_blank"><img src="views/img/whatsapp.svg" alt="whatsapp"></a>
                 </div>
             </div>
         </div>
         <div class="row align-items-center">
 
             <div class="col-12 d-flex justify-content-center">
-                <p class="footer-center"><b>© 2021 Fast Formula</b></p>
+                <p class="footer-center"><b>© 2025 Fast Formula</b></p>
             </div>
         </div>
     </div>

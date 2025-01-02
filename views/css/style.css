@@ -376,7 +376,7 @@ header .col-4 a {
 .flecha-roja {
     width: 33px;
     vertical-align: middle;
-    margin-left: 5px; /* Adjust this value to move it closer */
+    margin-left: 5px;
 }
 
 /*Seccion Formulario*/
@@ -768,7 +768,7 @@ hr {
 }
 
 #banner-compra .img-local {
-    width: 80%;
+    width: 40%;
     margin-left: 35px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -928,7 +928,7 @@ hr {
 }
 
 #resumen-compra h1::before {
-    content: url('../img/flecha_seccion.png');
+    content: url('../img/flecha_seccion.svg');
     position: absolute;
     left: 0;
     transform: translateY(3%);
@@ -945,7 +945,7 @@ hr {
     }
 
     #resumen-compra h1::before {
-        content: url('../img/flecha_seccion.png');
+        content: url('../img/flecha_seccion.svg');
         position: absolute;
         left: 0;
         transform: translateY(3%);

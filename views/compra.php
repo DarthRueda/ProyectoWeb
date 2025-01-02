@@ -3,6 +3,13 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAST FORMULA | Compra</title>
+</head>
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -166,3 +173,4 @@ if (session_status() == PHP_SESSION_NONE) {
         }
     </script>
 </body>
+</html>

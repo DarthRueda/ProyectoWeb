@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAST FORMULA | Home</title>
     <link href="https://fonts.cdnfonts.com/css/ds-digital" rel="stylesheet"> <!-- Añadimos la fuente DS-Digital -->
 </head>
 <body>
@@ -33,7 +36,7 @@
     <div class="row">
         <div class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
             <h2>Disfruta de las <b style="color: #E61414">hamburguesas</b> inspiradas en el mundo de la <b style="color: #E61414">F1</b></h2>
-            <p>Nos dedicamos a la parilla desde 1983</p>
+            <p>Nos dedicamos a la parrilla desde 1983</p>
         </div>
         <div class="col-12 text-center flex-fill d-flex flex-column justify-content-center">
             <img class="img-fluid w-100" src="views/img/parrilla.webp" alt="parrilla">
@@ -62,7 +65,9 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"><?php echo $menu->getNombre(); ?></h5>
-                            <p class="card-text"><?php echo $menu->getDescripcion(); ?></p>
+                            <p class="card-text">
+                                <?= strlen($menu->getDescripcion()) > 50 ? substr($menu->getDescripcion(), 0, 50) . '...' : $menu->getDescripcion() ?>
+                            </p>
                             <div class="d-flex align-items-center">
                                 <form method="post" action="?controller=producto&action=modificar&id=<?php echo $menu->getId(); ?>">
                                     <input type="hidden" name="id" value="<?php echo $menu->getId(); ?>">
@@ -88,7 +93,7 @@
     <!-- Form -->
     <section id="form">
         <div class="form-container text-center">
-            <h2><b>UNETE A NOSOTROS Y DISFRUTA DE TODAS NUESTRAS VENTAJAS</b></h2>
+            <h2><b>ÚNETE A NOSOTROS Y DISFRUTA DE TODAS NUESTRAS VENTAJAS</b></h2>
             <form class="container-fluid d-flex align-items-center" method="POST" action="?controller=usuario&action=rediriguirRegistro">
                 <input type="text" name="nombre" placeholder="Nombre">
                 <input type="text" name="apellido" placeholder="Apellido">

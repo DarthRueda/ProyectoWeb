@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAST FORMULA | Carrito</title>
+</head>
 <body>
     <!-- Breadcrumbs Navigation -->
     <nav aria-label="breadcrumb" class="breadcrumb-container">
@@ -14,7 +21,7 @@
                 <div class="col-12 text-left">
                     <h1>CARRITO</h1>
                     <p>
-                    Desde esta pagina podras ver todos los productos que tienes actualmente en tu carrito.
+                    Desde esta pagina podras ver todos los productos que tienes actualmente en tu carrito
                     </p>
                 </div>
             </div>
@@ -38,7 +45,9 @@
                                 </div>
                                 <div class="info">
                                     <h3><?= $producto['nombre'] ?></h3>
-                                    <p><?= $producto['descripcion'] ?? '' ?></p>
+                                    <p>
+                                        <?= isset($producto['descripcion']) && strlen($producto['descripcion']) > 50 ? substr($producto['descripcion'], 0, 50) . '...' : $producto['descripcion'] ?? '' ?>
+                                    </p>
                                 </div>
                                 <div class="price-bin">
                                     <span class="price"><?= $producto['precio'] ?>€</span>
