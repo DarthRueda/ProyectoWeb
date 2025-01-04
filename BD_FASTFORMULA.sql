@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versió del servidor:          9.0.1 - MySQL Community Server - GPL
+-- Versión del servidor:         9.1.0 - MySQL Community Server - GPL
 -- SO del servidor:              Linux
--- HeidiSQL Versió:              12.8.0.6908
+-- HeidiSQL Versión:             12.8.0.6908
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -15,79 +15,79 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for BD_FASTFORMULA
+-- Volcando estructura de base de datos para BD_FASTFORMULA
 CREATE DATABASE IF NOT EXISTS `BD_FASTFORMULA` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `BD_FASTFORMULA`;
 
--- Dumping structure for table BD_FASTFORMULA.bebidas
+-- Volcando estructura para tabla BD_FASTFORMULA.bebidas
 CREATE TABLE IF NOT EXISTS `bebidas` (
   `id_bebida` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(50) NOT NULL,
+  `descripcion` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `precio` float NOT NULL,
   `imagen` varchar(100) NOT NULL,
   PRIMARY KEY (`id_bebida`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.bebidas: ~9 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.bebidas: ~9 rows (aproximadamente)
 INSERT INTO `bebidas` (`id_bebida`, `nombre`, `descripcion`, `precio`, `imagen`) VALUES
-	(1, 'Fanta Naranja', 'Fanta de Naranja', 1.99, 'views/img/bebidas/fanta_naranja.png'),
-	(2, 'Fanta Limon', 'Fanta de Limon', 1.99, 'views/img/bebidas/fanta_limon.png'),
-	(3, 'Coca-Cola', 'Coca-Cola', 1.99, 'views/img/bebidas/coca-cola.png'),
-	(4, 'Sprite', 'Sprite', 1.99, 'views/img/bebidas/sprite.png'),
-	(5, 'Agua Mineral', 'Agua', 1.99, 'views/img/bebidas/agua-mineral.png'),
-	(6, 'Cerveza', 'Cerveza', 1.99, 'views/img/bebidas/cerveza.png'),
-	(7, 'Acuarius', 'Acuarius', 1.99, 'views/img/bebidas/acuarius.png'),
-	(8, 'Monster', 'Monster', 1.99, 'views/img/bebidas/monster.png'),
-	(9, 'Trina Naranja', 'Trina de Naranja', 1.99, 'views/img/bebidas/trina-naranja.png');
+	(1, 'Fanta Naranja', 'Refréscate con el gran sabor a Naranja de Fanta. Sin azúcares añadidos y sin calorías. Sola o combinada, tómala bien fría, con hielo y una rodaja de naranja para disfrutar al máximo del momento.', 1.99, 'views/img/bebidas/fanta_naranja.svg'),
+	(2, 'Fanta Limon', 'Refréscate con el gran sabor a Limón de Fanta. Sin azúcares añadidos y sin calorías. Sola o combinada, tómala bien fría, con hielo y una rodaja de limón para disfrutar al máximo del momento.', 1.99, 'views/img/bebidas/fanta_limon.svg'),
+	(3, 'Coca-Cola', 'Nada como el sabor auténtico de una Coca-Cola bien fría para hacer el momento todavía más especial. Tómala muy fría con hielo', 1.99, 'views/img/bebidas/coca-cola.svg'),
+	(4, 'Sprite', 'Gracias a su poder refrescante e hidratante Aquarius Zero siempre sienta bien. Sin azúcar y sin calorías. Tómalo bien frío, con hielo', 1.99, 'views/img/bebidas/sprite.svg'),
+	(5, 'Agua Mineral', 'Refrescante agua mineral para reponer la hidratación y disfrutar del placer del agua fria', 1.99, 'views/img/bebidas/agua-mineral.svg'),
+	(6, 'Cerveza', 'Disfruta de la mejor cerveza para acompañar tu menu y relajarte', 1.99, 'views/img/bebidas/cerveza.svg'),
+	(7, 'Aquarius', 'Gracias a su poder refrescante e hidratante Aquarius Zero siempre sienta bien. Sin azúcar y sin calorías. Tómalo bien frío, con hielo', 1.99, 'views/img/bebidas/acuarius.svg'),
+	(8, 'Monster', 'Bebida energética refrescante que contiene vitaminas y minerales', 1.99, 'views/img/bebidas/monster.svg'),
+	(9, 'Trina Naranja', 'Deliciosa bebida de naranja sin gas para aquellos que prefieren una bebida mas ligera', 1.99, 'views/img/bebidas/trina-naranja.svg');
 
--- Dumping structure for table BD_FASTFORMULA.complementos
+-- Volcando estructura para tabla BD_FASTFORMULA.complementos
 CREATE TABLE IF NOT EXISTS `complementos` (
   `id_complemento` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(50) NOT NULL,
+  `descripcion` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `precio` float NOT NULL,
   `imagen` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id_complemento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.complementos: ~5 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.complementos: ~5 rows (aproximadamente)
 INSERT INTO `complementos` (`id_complemento`, `nombre`, `descripcion`, `precio`, `imagen`) VALUES
-	(1, 'Patatas', 'Patatas Fritas', 3.99, 'views/img/complementos/patatas.png'),
-	(2, 'Patatas F1', 'Patatas Deluxe', 4.99, 'views/img/complementos/patatas_f1.png'),
-	(3, 'Alitas de Pollo', 'Alitas de Polllo', 5, 'views/img/complementos/alitas.png'),
-	(4, 'Aros Pirelli', 'Aros de cebolla Pirelli', 3.99, 'views/img/complementos/pirelli.png'),
-	(5, 'Pitstop', 'Explosion Pitstop', 3.99, 'views/img/complementos/pitstop.png');
+	(1, 'Patatas', 'Las famosas patatas fritas de las que tanto has oido hablar, si estás son, las mejores, las más crujientes, las que tienen más sabor, si las pruebas entenderás el porqué de su fama.', 3.99, 'views/img/complementos/patatas.svg'),
+	(2, 'Patatas F1', 'Ahora puedes acompañar tus menús con las deliciosas Patatas F1', 4.99, 'views/img/complementos/patatas_f1.svg'),
+	(3, 'Alitas de Pollo', 'Prueba nuestras nuevas alitas, más grandes y sabrosas, perfectas para los hambrientos amantes del buen pollo', 5, 'views/img/complementos/alitas.svg'),
+	(4, 'Aros Pirelli', ' Los aros de cebolla Pirelli se pueden solicitar como entrada o acompañamiento, para compartir o solo para ti, son perfectos para todos', 3.99, 'views/img/complementos/pirelli.svg'),
+	(5, 'Pitstop', 'Explosion de con salsa cheddar y jalapeños perfecta para los mas valientes', 3.99, 'views/img/complementos/pitstop.svg');
 
--- Dumping structure for table BD_FASTFORMULA.hamburguesas
+-- Volcando estructura para tabla BD_FASTFORMULA.hamburguesas
 CREATE TABLE IF NOT EXISTS `hamburguesas` (
   `id_hamburguesa` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(50) NOT NULL,
+  `descripcion` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `precio` float NOT NULL,
   `imagen` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_hamburguesa`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.hamburguesas: ~11 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.hamburguesas: ~11 rows (aproximadamente)
 INSERT INTO `hamburguesas` (`id_hamburguesa`, `nombre`, `descripcion`, `precio`, `imagen`) VALUES
-	(1, 'Tsunoda', 'Hamburguesa de Verdura', 7.99, 'views/img/hamburguesas/tsunoda.png'),
-	(2, 'Piastri', 'Hamburguesa de Pollo', 7.99, 'views/img/hamburguesas/piastri.png'),
-	(3, 'Webber', 'Hamburguesa con huevo', 7.99, 'views/img/hamburguesas/webber.png'),
-	(4, 'Alonso', 'Hamburguesa de tus muertos', 7.99, 'views/img/hamburguesas/alonso.png'),
-	(6, 'Perez', 'Hamburguesa picante con verduras', 7.99, 'views/img/hamburguesas/perez.png'),
-	(7, 'Verstappen', 'Hamburguesa para campeones', 7.99, 'views/img/hamburguesas/verstappen.png'),
-	(8, 'Sainz', 'Hamburguesa Bacon', 7.99, 'views/img/hamburguesas/sainz.png'),
-	(9, 'Ocon', 'Ocon', 7.99, 'views/img/hamburguesas/ocon.png'),
-	(10, 'Senna', 'Senna', 7.99, 'views/img/hamburguesas/senna.png'),
-	(11, 'Hamilton', 'Hamilton', 7.99, 'views/img/hamburguesas/hamilton.png'),
-	(12, 'Lauda', 'Lauda', 7.99, 'views/img/hamburguesas/nikilauda.png');
+	(1, 'Tsunoda', 'Pequeña hamburguesa para quitar el hambre con rapidez', 7.99, 'views/img/hamburguesas/tsunoda.svg'),
+	(2, 'Piastri', 'Deliciosa hamburguesa de Pollo con su pan de semilla', 7.99, 'views/img/hamburguesas/piastri.svg'),
+	(3, 'Webber', 'Riquisima hamburguesa con huevo y ternera que mezcla lo mejor de los 2 sabores', 7.99, 'views/img/hamburguesas/webber.svg'),
+	(4, 'Alonso', 'Hamburguesa doble de tenera digna de un campeon', 7.99, 'views/img/hamburguesas/alonso.svg'),
+	(6, 'Perez', 'Hamburguesa picante con verduras al mas puro estilo Méxicano', 7.99, 'views/img/hamburguesas/perez.svg'),
+	(7, 'Verstappen', 'La hamburguesa del campeon del mundo con ternera y queso fundido', 7.99, 'views/img/hamburguesas/verstappen.svg'),
+	(8, 'Sainz', 'Deliciosa Hamburguesa con Bacon y Ternera acompañada de queso y pepinillos', 7.99, 'views/img/hamburguesas/sainz.svg'),
+	(9, 'Ocon', 'Hamburguesa con ternera y pepinillos para todos aquelos que quieren un pequeño aperitivo', 7.99, 'views/img/hamburguesas/ocon.svg'),
+	(10, 'Senna', 'Hamburguesa de ternera y lechuga con delicioso tomate', 7.99, 'views/img/hamburguesas/senna.svg'),
+	(11, 'Hamilton', 'Hamburguesa vegana riquisima para aquellos que no quieren carne', 7.99, 'views/img/hamburguesas/hamilton.svg'),
+	(12, 'Lauda', 'Doble ternera y bacon con explosion de sabores y perfecta lechuga', 7.99, 'views/img/hamburguesas/nikilauda.svg');
 
--- Dumping structure for table BD_FASTFORMULA.menus
+-- Volcando estructura para tabla BD_FASTFORMULA.menus
 CREATE TABLE IF NOT EXISTS `menus` (
   `id_menu` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(50) NOT NULL DEFAULT '',
+  `descripcion` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `precio` float NOT NULL,
   `imagen` varchar(100) NOT NULL,
   `id_hamburguesa` int NOT NULL,
@@ -102,16 +102,16 @@ CREATE TABLE IF NOT EXISTS `menus` (
   CONSTRAINT `id_hamburguesa` FOREIGN KEY (`id_hamburguesa`) REFERENCES `hamburguesas` (`id_hamburguesa`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.menus: ~6 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.menus: ~6 rows (aproximadamente)
 INSERT INTO `menus` (`id_menu`, `nombre`, `descripcion`, `precio`, `imagen`, `id_hamburguesa`, `id_bebida`, `id_complemento`) VALUES
-	(1, 'Menu Alonso', 'Menu Alonso', 11.99, 'views/img/menus/menu_alonso.png', 4, NULL, NULL),
-	(2, 'Menu Verstappen', 'Menu Verstappen', 11.99, 'views/img/menus/menu_verstappen.png', 7, NULL, NULL),
-	(3, 'Menu Perez', 'Menu Perez', 11.99, 'views/img/menus/menu_perez.png', 6, NULL, NULL),
-	(4, 'Menu Sainz', 'Menu Sainz', 11.99, 'views/img/menus/menu_sainz.png', 8, NULL, NULL),
-	(5, 'Menu Hamilton', 'Menu Hamilton', 11.99, 'views/img/menus/menu_hamilton.png', 11, NULL, NULL),
-	(7, 'Menu Russell', 'Menu Russell', 9.99, 'views/img/menus/menu_russell.png', 2, NULL, NULL);
+	(1, 'Menú Alonso', 'La mezcla perfecta. Guarde espacio para la hamburguesa Doble Cheeseburger, dos carnes a la parrilla con queso', 11.99, 'views/img/menus/menu_alonso.svg', 4, NULL, NULL),
+	(2, 'Menú Verstappen', 'Doble contraste y doble sabor, queso fundido sobre doble de carne jugosa a la parrilla, lechuga, pepinillos y cebolla', 11.99, 'views/img/menus/menu_verstappen.svg', 7, NULL, NULL),
+	(3, 'Menú Pérez', 'Crujiente por fuera, tierno por dentro. El mejor pollo con un empanado crujiente y ligeramente picante, tomates recién cortados, lechuga fresca y mayonesa en un pan de semillas recién tostado. Una auténtica obra maestra.', 11.99, 'views/img/menus/menu_perez.svg', 6, NULL, NULL),
+	(4, 'Menú Sainz', 'Haz doble tu hamburguesa de queso, añádele bacon y ahora aumenta su tamaño… lo sabemos, impresiona', 11.99, 'views/img/menus/menu_sainz.svg', 8, NULL, NULL),
+	(5, 'Menú Hamilton', 'Vegetariano. Si eres cero de carne y mucho de plantas, te va a flipar el Hamilton Vegetariano', 11.99, 'views/img/menus/menu_hamilton.svg', 11, NULL, NULL),
+	(7, 'Menú Russell', 'Menú elegido por Russell que selecciona los mejores componentes para un menu', 9.99, 'views/img/menus/menu_russell.svg', 2, NULL, NULL);
 
--- Dumping structure for table BD_FASTFORMULA.ofertas
+-- Volcando estructura para tabla BD_FASTFORMULA.ofertas
 CREATE TABLE IF NOT EXISTS `ofertas` (
   `id_oferta` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
@@ -122,12 +122,12 @@ CREATE TABLE IF NOT EXISTS `ofertas` (
   PRIMARY KEY (`id_oferta`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.ofertas: ~2 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.ofertas: ~2 rows (aproximadamente)
 INSERT INTO `ofertas` (`id_oferta`, `nombre`, `descripcion`, `descuento`, `fecha_inicio`, `fecha_fin`) VALUES
 	(1, 'alonso33', 'Codigo alonso', 33, '2024-11-25', '2024-11-28'),
 	(2, 'mclaren2024', 'Campeones del mundo 2024', 24, '2024-12-09', '2024-12-31');
 
--- Dumping structure for table BD_FASTFORMULA.pedidos
+-- Volcando estructura para tabla BD_FASTFORMULA.pedidos
 CREATE TABLE IF NOT EXISTS `pedidos` (
   `id_pedido` int NOT NULL AUTO_INCREMENT,
   `pedido` float NOT NULL,
@@ -142,42 +142,67 @@ CREATE TABLE IF NOT EXISTS `pedidos` (
   KEY `id_oferta_idx` (`id_oferta`),
   CONSTRAINT `id_oferta` FOREIGN KEY (`id_oferta`) REFERENCES `ofertas` (`id_oferta`),
   CONSTRAINT `id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.pedidos: ~28 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.pedidos: ~55 rows (aproximadamente)
 INSERT INTO `pedidos` (`id_pedido`, `pedido`, `iva`, `total`, `pagado`, `id_usuario`, `id_oferta`, `fecha`) VALUES
-	(78, 15.98, 1.6, 17.58, 1, 4, NULL, '2024-12-10 18:56:24'),
-	(79, 27.97, 2.8, 23.39, 1, 4, 2, '2024-12-10 19:02:35'),
-	(80, 36.94, 3.69, 40.63, 1, 4, NULL, '2024-12-11 18:34:59'),
-	(81, 7.99, 0.8, 8.79, 0, 4, NULL, '2024-12-11 18:35:47'),
-	(82, 3.98, 0.4, 4.38, 1, 6, NULL, '2024-12-11 18:37:23'),
-	(83, 34.96, 3.5, 38.46, 1, NULL, NULL, '2024-12-11 18:38:17'),
-	(84, 39.95, 4, 43.95, 0, NULL, NULL, '2024-12-11 19:03:28'),
-	(85, 1.99, 0.2, 2.19, 1, NULL, NULL, '2024-12-11 19:03:41'),
-	(86, 77.9, 7.79, 85.69, 1, 6, NULL, '2024-12-11 19:04:52'),
-	(87, 19.98, 2, 21.98, 1, 6, NULL, '2024-12-11 19:05:10'),
-	(88, 27.95, 2.8, 23.37, 1, 6, 2, '2024-12-11 19:05:39'),
-	(89, 53.93, 5.39, 59.32, 0, 4, NULL, '2024-12-11 19:06:28'),
-	(90, 11.99, 1.2, 13.19, 0, NULL, NULL, '2024-12-11 19:06:51'),
-	(91, 31.96, 3.2, 35.16, 1, 4, NULL, '2024-12-12 16:19:19'),
-	(92, 23.98, 2.4, 26.38, 1, NULL, NULL, '2024-12-12 16:19:42'),
-	(93, 25.97, 2.6, 21.71, 1, NULL, 2, '2024-12-13 19:19:57'),
-	(94, 23.97, 2.4, 26.37, 1, 6, NULL, '2024-12-13 19:37:03'),
-	(95, 9.99, 1, 10.99, 1, 4, NULL, '2024-12-13 19:38:01'),
-	(97, 19.96, 2, 21.96, 1, NULL, NULL, '2024-12-17 15:29:52'),
-	(98, 7.99, 0.8, 8.79, 1, NULL, NULL, '2024-12-17 15:30:26'),
-	(99, 23.96, 2.4, 26.36, 1, 6, NULL, '2024-12-17 15:31:37'),
-	(102, 7.99, 0.8, 8.79, 0, NULL, NULL, '2024-12-17 17:30:27'),
-	(103, 27.97, 2.8, 30.77, 0, NULL, NULL, '2024-12-17 17:30:39'),
-	(104, 15.98, 1.6, 17.58, 0, NULL, NULL, '2024-12-17 17:54:35'),
-	(105, 41.94, 4.19, 46.13, 0, NULL, NULL, '2024-12-17 17:54:52'),
-	(106, 11.98, 1.2, 13.18, 0, NULL, NULL, '2024-12-17 17:57:09'),
-	(107, 15.98, 1.6, 17.58, 1, 4, NULL, '2024-12-17 18:34:06'),
-	(108, 15.98, 1.6, 17.58, 0, NULL, NULL, '2024-12-17 19:14:35'),
-	(109, 89.91, 8.99, 98.9, 0, NULL, NULL, '2024-12-17 19:15:00'),
-	(110, 27.97, 2.8, 30.77, 0, NULL, NULL, '2024-12-18 18:43:16');
+	(127, 47.94, 4.79, 52.73, 0, NULL, NULL, '2024-12-27 12:16:35'),
+	(128, 27.96, 2.8, 30.76, 0, NULL, NULL, '2024-12-27 12:16:52'),
+	(129, 37.95, 3.8, 41.75, 1, 4, NULL, '2024-12-27 12:19:26'),
+	(130, 11.99, 1.2, 13.19, 0, 4, NULL, '2024-12-27 12:20:28'),
+	(141, 26.97, 2.7, 29.67, 0, 4, NULL, '2024-12-27 12:49:19'),
+	(142, 25.96, 2.6, 28.56, 0, NULL, NULL, '2024-12-27 12:51:03'),
+	(143, 31.95, 3.2, 35.15, 0, 4, NULL, '2024-12-27 12:52:07'),
+	(145, 21.94, 2.19, 24.13, 1, 6, NULL, '2024-12-27 12:55:23'),
+	(146, 29.96, 3, 32.96, 0, 6, NULL, '2024-12-27 13:03:38'),
+	(147, 19.96, 2, 21.96, 0, 6, NULL, '2024-12-27 13:07:32'),
+	(148, 27.96, 2.8, 30.76, 0, NULL, NULL, '2024-12-27 13:07:57'),
+	(184, 32.97, 3.3, 36.27, 1, NULL, NULL, '2024-12-29 12:27:58'),
+	(185, 33.97, 3.4, 37.37, 0, NULL, NULL, '2024-12-29 12:50:21'),
+	(186, 23.98, 2.4, 26.38, 0, NULL, NULL, '2024-12-29 12:55:11'),
+	(187, 23.98, 2.4, 26.38, 0, NULL, NULL, '2024-12-29 13:03:02'),
+	(188, 47.96, 4.8, 52.76, 0, NULL, NULL, '2024-12-29 13:12:37'),
+	(189, 47.95, 4.8, 52.75, 0, NULL, NULL, '2024-12-29 13:14:44'),
+	(190, 27.97, 2.8, 30.77, 1, 4, NULL, '2024-12-29 14:10:04'),
+	(191, 37.96, 3.8, 41.76, 0, 4, NULL, '2024-12-29 14:15:00'),
+	(192, 59.93, 5.99, 50.1, 1, 4, 2, '2024-12-29 14:20:54'),
+	(193, 23.98, 2.4, 26.38, 0, NULL, NULL, '2024-12-29 14:53:45'),
+	(194, 51.95, 5.2, 57.15, 0, NULL, NULL, '2024-12-29 14:59:55'),
+	(195, 23.98, 2.4, 26.38, 0, NULL, NULL, '2024-12-29 16:27:30'),
+	(196, 15.95, 1.6, 17.55, 0, NULL, NULL, '2024-12-29 16:37:57'),
+	(197, 36.93, 3.69, 40.62, 1, NULL, NULL, '2024-12-29 16:40:39'),
+	(198, 23.98, 2.4, 26.38, 1, NULL, NULL, '2024-12-29 16:43:43'),
+	(199, 39.95, 4, 43.95, 1, NULL, 2, '2024-12-29 16:51:19'),
+	(200, 51.91, 5.19, 57.1, 1, 4, NULL, '2024-12-29 16:52:11'),
+	(201, 32.96, 3.3, 36.26, 1, 6, NULL, '2024-12-30 13:12:28'),
+	(205, 23.98, 2.4, 26.38, 1, 4, NULL, '2024-12-30 13:18:33'),
+	(206, 33.96, 3.4, 37.36, 1, NULL, NULL, '2024-12-30 16:05:08'),
+	(209, 23.96, 2.4, 26.36, 1, 6, NULL, '2024-12-31 11:36:07'),
+	(211, 15.98, 1.6, 17.58, 1, 6, NULL, '2024-12-31 11:42:41'),
+	(212, 15.98, 1.6, 17.58, 0, 6, NULL, '2024-12-31 11:45:16'),
+	(213, 24.96, 2.5, 27.46, 1, 6, NULL, '2024-12-31 11:45:42'),
+	(214, 24.96, 2.5, 27.46, 0, 6, NULL, '2024-12-31 11:49:19'),
+	(215, 11.99, 1.2, 13.19, 0, 6, NULL, '2024-12-31 11:49:37'),
+	(216, 11.99, 1.2, 13.19, 1, 6, NULL, '2024-12-31 11:52:04'),
+	(217, 29.95, 3, 32.95, 1, 4, NULL, '2024-12-31 11:54:33'),
+	(218, 29.95, 3, 32.95, 1, 4, NULL, '2024-12-31 11:57:12'),
+	(221, 11.99, 1.2, 13.19, 0, 4, NULL, '2024-12-31 11:58:54'),
+	(222, 11.99, 1.2, 13.19, 0, 4, NULL, '2024-12-31 11:58:58'),
+	(228, 11.99, 1.2, 13.19, 1, 4, NULL, '2024-12-31 12:06:23'),
+	(229, 11.99, 1.2, 13.19, 1, 4, NULL, '2024-12-31 12:06:29'),
+	(231, 33.93, 3.39, 37.32, 0, NULL, NULL, '2024-12-31 12:45:32'),
+	(232, 28.98, 2.9, 31.88, 1, 4, NULL, '2024-12-31 12:57:49'),
+	(234, 23.98, 2.4, 26.38, 0, NULL, NULL, '2025-01-02 11:50:48'),
+	(235, 15.98, 1.6, 17.58, 0, NULL, NULL, '2025-01-02 11:54:27'),
+	(236, 23.98, 2.4, 26.38, 0, NULL, NULL, '2025-01-02 11:55:45'),
+	(237, 23.98, 2.4, 26.38, 0, 4, NULL, '2025-01-02 11:58:23'),
+	(238, 9.98, 1, 10.98, 1, 6, NULL, '2025-01-02 11:58:36'),
+	(239, 11.99, 1.2, 13.19, 1, 4, NULL, '2025-01-02 11:58:48'),
+	(240, 11.99, 1.2, 13.19, 1, NULL, NULL, '2025-01-02 11:59:04'),
+	(242, 11.99, 1.2, 13.19, 1, 4, NULL, '2025-01-02 13:52:36'),
+	(243, 13.98, 1.4, 15.38, 1, 4, NULL, '2025-01-02 13:54:35');
 
--- Dumping structure for table BD_FASTFORMULA.pedido_bebida
+-- Volcando estructura para tabla BD_FASTFORMULA.pedido_bebida
 CREATE TABLE IF NOT EXISTS `pedido_bebida` (
   `id_pedido` int NOT NULL,
   `id_bebida` int NOT NULL,
@@ -187,9 +212,46 @@ CREATE TABLE IF NOT EXISTS `pedido_bebida` (
   CONSTRAINT `id_pedido_bebida` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.pedido_bebida: ~0 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.pedido_bebida: ~36 rows (aproximadamente)
+INSERT INTO `pedido_bebida` (`id_pedido`, `id_bebida`) VALUES
+	(129, 1),
+	(141, 2),
+	(142, 6),
+	(143, 3),
+	(145, 3),
+	(145, 5),
+	(145, 4),
+	(146, 2),
+	(147, 2),
+	(147, 3),
+	(148, 2),
+	(148, 1),
+	(192, 4),
+	(192, 8),
+	(192, 9),
+	(196, 2),
+	(196, 2),
+	(196, 2),
+	(196, 5),
+	(197, 4),
+	(197, 4),
+	(200, 1),
+	(200, 1),
+	(200, 1),
+	(127, 5),
+	(127, 5),
+	(209, 2),
+	(209, 5),
+	(217, 3),
+	(231, 5),
+	(231, 5),
+	(231, 5),
+	(231, 5),
+	(238, 1),
+	(206, 9),
+	(240, 3);
 
--- Dumping structure for table BD_FASTFORMULA.pedido_complemento
+-- Volcando estructura para tabla BD_FASTFORMULA.pedido_complemento
 CREATE TABLE IF NOT EXISTS `pedido_complemento` (
   `id_pedido` int NOT NULL,
   `id_complemento` int NOT NULL,
@@ -199,9 +261,40 @@ CREATE TABLE IF NOT EXISTS `pedido_complemento` (
   CONSTRAINT `id_pedido_complemento` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.pedido_complemento: ~0 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.pedido_complemento: ~27 rows (aproximadamente)
+INSERT INTO `pedido_complemento` (`id_pedido`, `id_complemento`) VALUES
+	(128, 4),
+	(128, 1),
+	(141, 3),
+	(142, 4),
+	(143, 2),
+	(143, 2),
+	(145, 5),
+	(145, 4),
+	(184, 3),
+	(191, 3),
+	(191, 2),
+	(192, 3),
+	(192, 3),
+	(197, 2),
+	(197, 1),
+	(200, 2),
+	(200, 2),
+	(201, 1),
+	(201, 2),
+	(213, 2),
+	(213, 1),
+	(217, 1),
+	(217, 1),
+	(232, 3),
+	(232, 3),
+	(232, 3),
+	(232, 4),
+	(243, 2),
+	(243, 3),
+	(243, 1);
 
--- Dumping structure for table BD_FASTFORMULA.pedido_hamburguesa
+-- Volcando estructura para tabla BD_FASTFORMULA.pedido_hamburguesa
 CREATE TABLE IF NOT EXISTS `pedido_hamburguesa` (
   `id_pedido` int NOT NULL,
   `id_hamburguesa` int NOT NULL,
@@ -211,9 +304,59 @@ CREATE TABLE IF NOT EXISTS `pedido_hamburguesa` (
   CONSTRAINT `id_pedido_hamburguesa` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.pedido_hamburguesa: ~0 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.pedido_hamburguesa: ~49 rows (aproximadamente)
+INSERT INTO `pedido_hamburguesa` (`id_pedido`, `id_hamburguesa`) VALUES
+	(128, 3),
+	(129, 2),
+	(129, 3),
+	(129, 12),
+	(141, 3),
+	(142, 11),
+	(143, 2),
+	(145, 2),
+	(146, 2),
+	(146, 3),
+	(147, 2),
+	(147, 2),
+	(184, 2),
+	(184, 9),
+	(189, 7),
+	(189, 7),
+	(189, 7),
+	(190, 2),
+	(190, 3),
+	(191, 6),
+	(191, 4),
+	(192, 2),
+	(194, 2),
+	(194, 3),
+	(196, 3),
+	(197, 2),
+	(197, 2),
+	(197, 2),
+	(200, 2),
+	(200, 2),
+	(200, 3),
+	(199, 2),
+	(199, 2),
+	(199, 3),
+	(199, 6),
+	(199, 11),
+	(127, 2),
+	(209, 3),
+	(211, 3),
+	(211, 2),
+	(213, 2),
+	(213, 1),
+	(217, 2),
+	(231, 1),
+	(231, 3),
+	(235, 4),
+	(235, 6),
+	(238, 12),
+	(206, 2);
 
--- Dumping structure for table BD_FASTFORMULA.pedido_menu
+-- Volcando estructura para tabla BD_FASTFORMULA.pedido_menu
 CREATE TABLE IF NOT EXISTS `pedido_menu` (
   `id_pedido` int NOT NULL,
   `id_menu` int NOT NULL,
@@ -223,9 +366,74 @@ CREATE TABLE IF NOT EXISTS `pedido_menu` (
   CONSTRAINT `id_pedido_menu` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.pedido_menu: ~0 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.pedido_menu: ~63 rows (aproximadamente)
+INSERT INTO `pedido_menu` (`id_pedido`, `id_menu`) VALUES
+	(128, 5),
+	(129, 4),
+	(130, 3),
+	(141, 1),
+	(142, 4),
+	(143, 4),
+	(146, 1),
+	(148, 1),
+	(148, 5),
+	(184, 2),
+	(185, 5),
+	(185, 5),
+	(185, 7),
+	(186, 3),
+	(186, 4),
+	(187, 2),
+	(187, 5),
+	(188, 1),
+	(188, 1),
+	(188, 1),
+	(188, 2),
+	(189, 1),
+	(189, 2),
+	(190, 1),
+	(191, 1),
+	(192, 1),
+	(192, 1),
+	(192, 1),
+	(193, 4),
+	(193, 4),
+	(194, 1),
+	(194, 1),
+	(194, 5),
+	(195, 1),
+	(195, 4),
+	(198, 4),
+	(198, 3),
+	(200, 4),
+	(201, 1),
+	(201, 1),
+	(205, 1),
+	(205, 1),
+	(127, 3),
+	(127, 3),
+	(127, 3),
+	(209, 4),
+	(215, 2),
+	(216, 1),
+	(217, 1),
+	(221, 1),
+	(228, 4),
+	(231, 7),
+	(232, 7),
+	(234, 1),
+	(234, 2),
+	(236, 1),
+	(236, 2),
+	(237, 1),
+	(237, 2),
+	(239, 1),
+	(206, 1),
+	(206, 2),
+	(240, 1),
+	(242, 2);
 
--- Dumping structure for table BD_FASTFORMULA.usuarios
+-- Volcando estructura para tabla BD_FASTFORMULA.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id_usuario` int NOT NULL AUTO_INCREMENT,
   `usuario` varchar(50) NOT NULL,
@@ -237,9 +445,9 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `direccion` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `administrador` tinyint DEFAULT '0',
   PRIMARY KEY (`id_usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table BD_FASTFORMULA.usuarios: ~3 rows (approximately)
+-- Volcando datos para la tabla BD_FASTFORMULA.usuarios: ~3 rows (aproximadamente)
 INSERT INTO `usuarios` (`id_usuario`, `usuario`, `nombre`, `apellido`, `contrasena`, `email`, `telefono`, `direccion`, `administrador`) VALUES
 	(4, 'arnau04', 'Arnau', 'Rueda', '$2y$10$juHIRMB6R.7wnvh3/eK2..2WXLsOjwEf8tpa5gEAICLQmvBlMmHIm', 'ruedaar04@gmail.com', 675412345, 'C/ Ave del Paraiso Num 7', 1),
 	(6, 'julian222', 'Julian', 'Pastor', '$2y$10$6t6bygHqaKxnm0eVyn8SrO2dSsATwVfJc6CY3de4zKTVEiH57UHIW', 'julianpastor@yahoo.es', 32432432, '', 0),
