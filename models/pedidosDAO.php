@@ -10,6 +10,7 @@ class pedidosDAO {
         $query = "INSERT INTO pedidos (pedido, iva, total, id_oferta, id_usuario, fecha) VALUES (0, 0, 0, ?, ?, ?)";
         $stmt = $con->prepare($query);
         $id_oferta = null; // No hay ofertas implementadas por defecto
+        $id_usuario = isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : $id_usuario; // Obtener id_usuario si está logueado
         $id_usuario = empty($id_usuario) ? null : $id_usuario; // Si no hay usuario, se inserta NULL
         $stmt->bind_param('iis', $id_oferta, $id_usuario, $fecha);
         $stmt->execute();

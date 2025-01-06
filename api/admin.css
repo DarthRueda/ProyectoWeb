@@ -44,6 +44,10 @@ button {
     cursor: pointer;
 }
 
+button:hover {
+    background-color: black;
+}
+
 .table-container {
     flex-grow: 1;
     display: flex;
@@ -141,6 +145,10 @@ tr:hover {
     margin-bottom: 20px;
 }
 
+.btn-admin:hover {
+    background-color: black;
+}
+
 .btn-admin::before,
 .btn-admin::after {
     content: '';
@@ -161,6 +169,11 @@ tr:hover {
     clip-path: polygon(0 0, 100% 0%, 0 100%);
 }
 
+.btn-admin:hover::before,
+.btn-admin:hover::after {
+    background-color: black;
+}
+
 /* Botones de acción */
 .btn-action {
     background-color: #E61414;
@@ -173,6 +186,10 @@ tr:hover {
     display: inline-block;
     margin: 0 5px;
     position: relative;
+}
+
+.btn-action:hover {
+    background-color: black;
 }
 
 .btn-action::before,
@@ -193,6 +210,11 @@ tr:hover {
 .btn-action::after {
     right: -7px;
     clip-path: polygon(0 0, 100% 0%, 0 100%);
+}
+
+.btn-action:hover::before,
+.btn-action:hover::after {
+    background-color: black;
 }
 
 /* Asegurar que los botones de acción estén juntos */
