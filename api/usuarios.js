@@ -1,5 +1,5 @@
 function fetchUsuarios() { //Funcion para obtener los usuarios
-    fetch('controllers/apicontroller.php?action=obtenerUsuarios')
+    fetch('/controllers/apiController.php?action=obtenerUsuarios')
         .then(response => response.json())
         .then(data => {
             const tableBody = document.querySelector('#usuariosTable tbody');
@@ -32,16 +32,19 @@ function fetchUsuarios() { //Funcion para obtener los usuarios
 
 //Funcion para eliminar un usuario
 function eliminarUsuario(id_usuario) {
-    fetch(`controllers/apicontroller.php?action=eliminarUsuario&id_usuario=${id_usuario}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                fetchUsuarios();
-            } else {
-                console.error('Error:', data.message);
-            }
-        })
-        //.catch(error => console.error('Error:', error));
+    fetch(`/controllers/apiController.php?action=eliminarUsuario&id_usuario=${id_usuario}`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data); // Log de la respuesta
+        if (data.status === 'success') {
+            fetchUsuarios();
+        } else {
+            console.error('Error:', data.message);
+        }
+    })
+    //.catch(error => console.error('Error:', error));
 }
 
 //Muestra la tabla de usuarios
@@ -75,7 +78,7 @@ function crearUsuario() {
     const telefono = document.getElementById('telefono').value;
     const administrador = document.getElementById('administrador').value;
 
-    fetch('controllers/apicontroller.php?action=crearUsuario', {
+    fetch('/controllers/apiController.php?action=crearUsuario', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -99,7 +102,7 @@ function showCrearUsuarioForm() {
     });
     const formContainer = document.getElementById('formContainer');
     formContainer.style.display = 'block';
-    formContainer.classList.add('form-registro'); // Add class for centered form
+    formContainer.classList.add('form-registro'); // Añadir clase para centrar el formulario
     formContainer.innerHTML = `
         <label class="form-label" for="usuario">Usuario</label>
         <input type="text" id="usuario" class="form-input" placeholder="Usuario">
@@ -165,7 +168,7 @@ function editarUsuario(id_usuario) {
     const telefono = document.getElementById('telefono').value;
     const administrador = document.getElementById('administrador').value;
 
-    fetch(`controllers/apicontroller.php?action=editarUsuario&id_usuario=${id_usuario}`, {
+    fetch(`/controllers/apiController.php?action=editarUsuario&id_usuario=${id_usuario}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -179,7 +182,7 @@ function editarUsuario(id_usuario) {
             fetchUsuarios();
         }
     })
-    //.catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));
 }
 
 //Obtener usuarios al cargar la pagina

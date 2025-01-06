@@ -1,14 +1,18 @@
 <?php
+// Mostrar errores en el servidor
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include_once __DIR__ . '/logger.php'; // Incluimos el archivo logger.php
 
 class ApiController {
     public function admin() {
-        include_once 'api/panel_admin.html';
+        include_once 'api/panel_admin.php';
     }
 
     // Función para obtener los pedidos
     function obtenerPedidos($orderBy = null, $orderDirection = 'ASC', $excludeUnregistered = false) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
     
         if ($conn->connect_error) {
@@ -48,7 +52,7 @@ class ApiController {
     }
     // Función para eliminar un pedido
     function eliminarPedido($id_pedido) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -88,7 +92,7 @@ class ApiController {
 
     // Función para obtener los pedidos de un usuario
     function crearPedido() {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         include_once __DIR__ . '/../models/pedidosDAO.php';
         $conn = DataBase::connect();
 
@@ -151,7 +155,7 @@ class ApiController {
     }
 
     function obtenerProductos() {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -228,7 +232,7 @@ class ApiController {
 
     // Función para editar un usuario
     function editarUsuario($id_usuario) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
         $input = json_decode(file_get_contents('php://input'), true);
 
@@ -266,16 +270,27 @@ class ApiController {
 
     // Función para eliminar un usuario
     function eliminarUsuario($id_usuario) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            $response = array('status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error);
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            error_log('Connection failed: ' . $conn->connect_error);
+            return;
         }
 
         // Seleccionar los pedidos del usuario
         $sql = "SELECT id_pedido FROM pedidos WHERE id_usuario = ?";
         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            $response = array('status' => 'error', 'message' => 'Prepare failed: ' . $conn->error);
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            error_log('Prepare failed: ' . $conn->error);
+            return;
+        }
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -291,6 +306,13 @@ class ApiController {
             foreach ($tables as $table) {
                 $sql = "DELETE FROM $table WHERE id_pedido = ?";
                 $stmt = $conn->prepare($sql);
+                if (!$stmt) {
+                    $response = array('status' => 'error', 'message' => 'Prepare failed: ' . $conn->error);
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+                    error_log('Prepare failed: ' . $conn->error);
+                    return;
+                }
                 $stmt->bind_param("i", $id_pedido);
                 $stmt->execute();
                 $stmt->close();
@@ -300,6 +322,13 @@ class ApiController {
         // Borrar los pedidos del usuario de la tabla pedidos
         $sql = "DELETE FROM pedidos WHERE id_usuario = ?";
         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            $response = array('status' => 'error', 'message' => 'Prepare failed: ' . $conn->error);
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            error_log('Prepare failed: ' . $conn->error);
+            return;
+        }
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
         $stmt->close();
@@ -307,6 +336,13 @@ class ApiController {
         // Borrar el usuario
         $sql = "DELETE FROM usuarios WHERE id_usuario = ?";
         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            $response = array('status' => 'error', 'message' => 'Prepare failed: ' . $conn->error);
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            error_log('Prepare failed: ' . $conn->error);
+            return;
+        }
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
 
@@ -327,7 +363,7 @@ class ApiController {
 
     // Función para crear un producto
     function crearProducto() {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (isset($input['nombre'], $input['descripcion'], $input['precio'], $input['imagen'], $input['tipo'])) {
@@ -336,6 +372,7 @@ class ApiController {
             $precio = filter_var($input['precio'], FILTER_VALIDATE_FLOAT);
             $imagen = $input['imagen'];
             $tipo = $input['tipo'];
+            $id_hamburguesa = isset($input['id_hamburguesa']) ? $input['id_hamburguesa'] : null;
 
             if ($precio === false) {
                 $response = array('status' => 'error', 'message' => 'El precio debe ser un número decimal.');
@@ -370,8 +407,14 @@ class ApiController {
                     return;
             }
 
-            $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssds", $nombre, $descripcion, $precio, $imagen);
+            if ($tipo === 'menu' && $id_hamburguesa) {
+                $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen, id_hamburguesa) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssdsi", $nombre, $descripcion, $precio, $imagen, $id_hamburguesa);
+            } else {
+                $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("ssds", $nombre, $descripcion, $precio, $imagen);
+            }
+
             $stmt->execute();
 
             if ($stmt->affected_rows > 0) {
@@ -394,7 +437,7 @@ class ApiController {
 
     // Función para editar un producto
     function editarProducto($id_producto, $tipo) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
         $input = json_decode(file_get_contents('php://input'), true);
 
@@ -457,7 +500,7 @@ class ApiController {
 
     // Función para eliminar un producto
     function eliminarProducto($id_producto, $tipo) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -507,7 +550,7 @@ class ApiController {
 
     // Función para obtener un producto
     function obtenerProducto($id_producto, $tipo) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -556,7 +599,7 @@ class ApiController {
     }
 
     function editarPedido($id_pedido) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -608,7 +651,7 @@ class ApiController {
     }
 
     function actualizarPedido($id_pedido, $productos, $pagado) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -698,7 +741,7 @@ class ApiController {
 
     // Función para agregar productos a un pedido
     function agregarProductos($id_pedido, $productos) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -743,7 +786,7 @@ class ApiController {
 
     // Función para eliminar un producto de un pedido
     function eliminarProductoDePedido($id_pedido, $id_producto, $tipo) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {
@@ -832,7 +875,7 @@ class ApiController {
     }
 
     function actualizarEstadoPagado($id_pedido, $pagado) {
-        include_once __DIR__ . '/../config/database.php';
+        include_once __DIR__ . '/../config/dataBase.php';
         $conn = DataBase::connect();
 
         if ($conn->connect_error) {

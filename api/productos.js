@@ -1,5 +1,5 @@
 function fetchProductos(tipo = null) { // Fetch de productos
-    let url = 'controllers/apicontroller.php?action=obtenerProductos';
+    let url = 'controllers/apiController.php?action=obtenerProductos';
     if (tipo) {
         url += `&tipo=${tipo}`;
     }
@@ -37,7 +37,7 @@ function fetchProductos(tipo = null) { // Fetch de productos
 
 //Funcion para eliminar un producto
 function eliminarProducto(id_producto, tipo) {
-    fetch(`controllers/apicontroller.php?action=eliminarProducto&id_producto=${id_producto}&tipo=${tipo}`)
+    fetch(`controllers/apiController.php?action=eliminarProducto&id_producto=${id_producto}&tipo=${tipo}`)
         .then(response => response.json())
         .then(data => {
             alert(data.message);
@@ -60,7 +60,7 @@ function editarProducto(id_producto, tipo) {
     formContainer.classList.add('form-center');  
 
     // Fetch los datos del producto
-    fetch(`controllers/apicontroller.php?action=obtenerProducto&id_producto=${id_producto}&tipo=${tipo}`)
+    fetch(`controllers/apiController.php?action=obtenerProducto&id_producto=${id_producto}&tipo=${tipo}`)
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
@@ -83,7 +83,7 @@ function editarProducto(id_producto, tipo) {
                     const precio = document.getElementById('editPrecio').value;
                     const imagen = document.getElementById('editImagen').value;
 
-                    fetch(`controllers/apicontroller.php?action=editarProducto&id_producto=${id_producto}&tipo=${tipo}`, {
+                    fetch(`controllers/apiController.php?action=editarProducto&id_producto=${id_producto}&tipo=${tipo}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -152,28 +152,56 @@ document.getElementById('crearProducto').addEventListener('click', function() {
         <input type="text" id="imagen" class="form-input" placeholder="Imagen URL">
         <label class="form-label" for="tipo">Tipo</label>
         <select id="tipo" class="form-input">
-            <option value="menu">Menú</option>
             <option value="hamburguesa">Hamburguesa</option>
             <option value="bebida">Bebida</option>
             <option value="complemento">Complemento</option>
+            <option value="menu">Menú</option>
         </select>
+        <div id="hamburguesaSelectContainer" style="display: none;">
+            <label class="form-label" for="id_hamburguesa">Hamburguesa</label>
+            <select id="id_hamburguesa" class="form-input"></select>
+        </div>
         <button id="submitCrearProducto" class="btn-admin">Crear Producto</button>
     `;
 
-    //Funcion para crear un producto con los datos introducidos
+    // Cargar hamburguesas en caso de seleccionar menu
+    document.getElementById('tipo').addEventListener('change', function() {
+        const hamburguesaSelectContainer = document.getElementById('hamburguesaSelectContainer');
+        if (this.value === 'menu') {
+            fetch('controllers/apiController.php?action=obtenerProductos&tipo=hamburguesa')
+                .then(response => response.json())
+                .then(data => {
+                    const hamburguesaSelect = document.getElementById('id_hamburguesa');
+                    hamburguesaSelect.innerHTML = '';
+                    data.forEach(hamburguesa => {
+                        const option = document.createElement('option');
+                        option.value = hamburguesa.id;
+                        option.textContent = hamburguesa.nombre;
+                        hamburguesaSelect.appendChild(option);
+                    });
+                    hamburguesaSelectContainer.style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            hamburguesaSelectContainer.style.display = 'none';
+        }
+    });
+
+    // Crear producto al hacer click en el boton
     document.getElementById('submitCrearProducto').addEventListener('click', function() {
         const nombre = document.getElementById('nombre').value;
         const descripcion = document.getElementById('descripcion').value;
         const precio = document.getElementById('precio').value;
         const imagen = document.getElementById('imagen').value;
         const tipo = document.getElementById('tipo').value;
+        const id_hamburguesa = tipo === 'menu' ? document.getElementById('id_hamburguesa').value : null; // Solo en caso de ser menu
 
-        fetch('controllers/apicontroller.php?action=crearProducto', {
+        fetch('controllers/apiController.php?action=crearProducto', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nombre, descripcion, precio, imagen, tipo })
+            body: JSON.stringify({ nombre, descripcion, precio, imagen, tipo, id_hamburguesa })
         })
         .then(response => response.json())
         .then(data => {
@@ -182,7 +210,7 @@ document.getElementById('crearProducto').addEventListener('click', function() {
                 fetchProductos();
             }
         })
-        //.catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error));
     });
 });
 

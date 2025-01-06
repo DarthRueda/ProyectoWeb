@@ -1,5 +1,5 @@
 function fetchPedidos(action) { // Funcion para obtener pedidos
-    fetch(`controllers/apicontroller.php?action=${action}`)
+    fetch(`controllers/apiController.php?action=${action}`) // Fetch a la API
         .then(response => response.json())
         .then(data => {
             const tableBody = document.querySelector('#pedidosTable tbody');
@@ -24,12 +24,12 @@ function fetchPedidos(action) { // Funcion para obtener pedidos
             showTable('pedidosTable');
             updatePrices(); // Actualizar precios basados en la moneda seleccionada
         })
-        .catch(error => console.error('Error:', error));
+        //.catch(error => console.error('Error:', error));
 }
 
 // Funcion para eliminar pedido
 function eliminarPedido(id_pedido) {
-    fetch(`controllers/apicontroller.php?action=eliminarPedido&id_pedido=${id_pedido}`)
+    fetch(`controllers/apiController.php?action=eliminarPedido&id_pedido=${id_pedido}`)
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
@@ -43,8 +43,11 @@ function eliminarPedido(id_pedido) {
 
 // Funcion para crear pedido
 function crearPedido() {
-    document.getElementById('currencyContainer').style.display = 'none'; // Ocultar el selector de moneda
-    fetch('controllers/apicontroller.php?action=crearPedido')
+    const currencyContainer = document.getElementById('currencyContainer');
+    if (currencyContainer) {
+        currencyContainer.style.display = 'none'; // Ocultar el selector de moneda
+    }
+    fetch('controllers/apiController.php?action=crearPedido')
         .then(response => response.json())
         .then(data => {
             document.querySelectorAll('.table-container').forEach(container => {
@@ -105,7 +108,7 @@ function generarPedido() {
 
     const id_usuario = document.getElementById('usuarioSelect').value;
 
-    fetch('controllers/apicontroller.php?action=generarPedido', {
+    fetch('controllers/apiController.php?action=generarPedido', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -117,12 +120,12 @@ function generarPedido() {
         alert('Pedido generado: ' + JSON.stringify(data));
         fetchPedidos('obtenerPedidos');
     })
-    .catch(error => console.error('Error:', error));
+    //.catch(error => console.error('Error:', error));
 }
 
 //Funcion para editar pedido
 function editarPedido(id_pedido) {
-    fetch(`controllers/apicontroller.php?action=editarPedido&id_pedido=${id_pedido}`)
+    fetch(`controllers/apiController.php?action=editarPedido&id_pedido=${id_pedido}`)
         .then(response => response.json())
         .then(data => {
             document.querySelectorAll('.table-container').forEach(container => {
@@ -177,7 +180,7 @@ function editarPedido(id_pedido) {
 function actualizarEstadoPagado(id_pedido) {
     const pagado = document.getElementById('pagadoSelect').value;
 
-    fetch('controllers/apicontroller.php?action=actualizarEstadoPagado', {
+    fetch('controllers/apiController.php?action=actualizarEstadoPagado', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -194,12 +197,12 @@ function actualizarEstadoPagado(id_pedido) {
 
 // Funcion para mostrar productos para agregar
 function mostrarProductosParaAgregar(id_pedido) {
-    fetch(`controllers/apicontroller.php?action=editarPedido&id_pedido=${id_pedido}`)
+    fetch(`controllers/apiController.php?action=editarPedido&id_pedido=${id_pedido}`)
         .then(response => response.json())
         .then(data => {
             const existingProductos = data.productos.map(producto => producto.id);
 
-            fetch('controllers/apicontroller.php?action=crearPedido')
+            fetch('controllers/apiController.php?action=crearPedido')
                 .then(response => response.json())
                 .then(data => {
                     if (!Array.isArray(data.productos)) {
@@ -209,8 +212,8 @@ function mostrarProductosParaAgregar(id_pedido) {
 
                     const formContainer = document.getElementById('formContainer');
                     formContainer.innerHTML = '';
-                    formContainer.className = ''; // Remove all classes
-                    formContainer.classList.add('form-crear-pedido', 'form-center'); // Apply styles
+                    formContainer.className = ''; // Eliminar todas las clases
+                    formContainer.classList.add('form-crear-pedido', 'form-center'); // Aplique las clases necesarias
 
                     data.productos.forEach(producto => {
                         if (!existingProductos.includes(producto.id)) {
@@ -252,7 +255,7 @@ function agregarProductosAlPedido(id_pedido) {
     });
 
     if (productos.length > 0) {
-        fetch('controllers/apicontroller.php?action=agregarProductos', {
+        fetch('controllers/apiController.php?action=agregarProductos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -285,7 +288,7 @@ function actualizarPedido(id_pedido) {
 
     const pagado = document.getElementById('pagadoSelect').value;
 
-    fetch('controllers/apicontroller.php?action=actualizarPedido', {
+    fetch('controllers/apiController.php?action=actualizarPedido', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -302,7 +305,7 @@ function actualizarPedido(id_pedido) {
 
 //Funcion para eliminar producto de pedido
 function eliminarProductoDePedido(id_pedido, id_producto, tipo) {
-    fetch(`controllers/apicontroller.php?action=eliminarProductoDePedido&id_pedido=${id_pedido}&id_producto=${id_producto}&tipo=${tipo}`)
+    fetch(`controllers/apiController.php?action=eliminarProductoDePedido&id_pedido=${id_pedido}&id_producto=${id_producto}&tipo=${tipo}`)
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
