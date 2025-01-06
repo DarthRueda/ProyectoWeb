@@ -13,8 +13,8 @@ if (session_status() == PHP_SESSION_NONE) {
 <body>
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Iniciar Sesión</li>
+        <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+        <li class="breadcrumb-item active" aria-current="page">INICIAR SESIÓN</li>
     </ol>
 </nav>
 <form method="POST" action="?controller=usuario&action=login" class="form-login">

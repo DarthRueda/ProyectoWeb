@@ -9,8 +9,8 @@
     <!-- Migas de pan -->
     <nav aria-label="breadcrumb" class="breadcrumb-container">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Carta</li>
+            <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+            <li class="breadcrumb-item active" aria-current="page">CARTA</li>
         </ol>
     </nav>
     <!-- Bloque 1 -->
@@ -94,7 +94,7 @@
                         <ul class="pagination">
                             <?php for ($i = 1; $i <= $data['totalPaginas']; $i++): ?>
                                 <li class="page-item <?= $i == $data['paginaActual'] ? 'active' : '' ?>">
-                                    <a class="page-link" href="?controller=producto&action=carta&pagina=<?= $i ?>"><?= $i ?></a>
+                                    <a class="page-link" href="?controller=producto&action=carta&pagina=<?= $i ?>&filter=<?= $data['filter'] ?>"><?= $i ?></a>
                                 </li>
                             <?php endfor; ?>
                         </ul>

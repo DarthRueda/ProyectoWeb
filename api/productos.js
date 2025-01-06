@@ -72,10 +72,27 @@ function editarProducto(id_producto, tipo) {
                     <input type="text" id="editDescripcion" class="form-input" placeholder="Descripción" value="${producto.descripcion}">
                     <label class="form-label" for="editPrecio">Precio</label>
                     <input type="text" id="editPrecio" class="form-input" placeholder="Precio" value="${producto.precio}">
-                    <label class="form-label" for="editImagen">Imagen URL</label>
-                    <input type="text" id="editImagen" class="form-input" placeholder="Imagen URL" value="${producto.imagen}">
+                    <label class="form-label" for="editImagen">Imagen</label>
+                    <select id="editImagen" class="form-input"></select>
                     <button id="submitEditarProducto" class="btn-admin">Editar Producto</button>
                 `;
+
+                // Fetch the list of images
+                fetch(`controllers/apiController.php?action=obtenerImagenes&tipo=${tipo}`)
+                    .then(response => response.json())
+                    .then(images => {
+                        const imagenSelect = document.getElementById('editImagen');
+                        images.forEach(image => {
+                            const option = document.createElement('option');
+                            option.value = `views/img/${tipo}s/${image}`;
+                            option.textContent = image;
+                            if (producto.imagen === `views/img/${tipo}s/${image}`) {
+                                option.selected = true;
+                            }
+                            imagenSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
 
                 document.getElementById('submitEditarProducto').addEventListener('click', function() {
                     const nombre = document.getElementById('editNombre').value;
@@ -148,8 +165,6 @@ document.getElementById('crearProducto').addEventListener('click', function() {
         <input type="text" id="descripcion" class="form-input" placeholder="Descripción">
         <label class="form-label" for="precio">Precio</label>
         <input type="text" id="precio" class="form-input" placeholder="Precio">
-        <label class="form-label" for="imagen">Imagen URL</label>
-        <input type="text" id="imagen" class="form-input" placeholder="Imagen URL">
         <label class="form-label" for="tipo">Tipo</label>
         <select id="tipo" class="form-input">
             <option value="hamburguesa">Hamburguesa</option>
@@ -161,7 +176,10 @@ document.getElementById('crearProducto').addEventListener('click', function() {
             <label class="form-label" for="id_hamburguesa">Hamburguesa</label>
             <select id="id_hamburguesa" class="form-input"></select>
         </div>
+        <label class="form-label" for="imagen">Imagen</label>
+        <input type="file" id="imagen" class="form-input">
         <button id="submitCrearProducto" class="btn-admin">Crear Producto</button>
+        <div id="loading" class="loading" style="display: none;"></div>
     `;
 
     // Cargar hamburguesas en caso de seleccionar menu
@@ -192,29 +210,42 @@ document.getElementById('crearProducto').addEventListener('click', function() {
         const nombre = document.getElementById('nombre').value;
         const descripcion = document.getElementById('descripcion').value;
         const precio = document.getElementById('precio').value;
-        const imagen = document.getElementById('imagen').value;
         const tipo = document.getElementById('tipo').value;
         const id_hamburguesa = tipo === 'menu' ? document.getElementById('id_hamburguesa').value : null; // Solo en caso de ser menu
+        const imagen = document.getElementById('imagen').files[0];
+
+        const formData = new FormData();
+        formData.append('nombre', nombre);
+        formData.append('descripcion', descripcion);
+        formData.append('precio', precio);
+        formData.append('tipo', tipo);
+        formData.append('imagen', imagen);
+        if (id_hamburguesa) {
+            formData.append('id_hamburguesa', id_hamburguesa);
+        }
+
+        document.getElementById('loading').style.display = 'block'; // Mostrar el símbolo de carga
 
         fetch('controllers/apiController.php?action=crearProducto', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nombre, descripcion, precio, imagen, tipo, id_hamburguesa })
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
+            document.getElementById('loading').style.display = 'none'; // Ocultar el símbolo de carga
             alert(data.message);
             if (data.status === 'success') {
                 fetchProductos();
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            document.getElementById('loading').style.display = 'none'; // Ocultar el símbolo de carga
+            console.error('Error:', error);
+        });
     });
 });
 
-//Funcion para mostrar la tabla de pedidos
+//Funcion para mostrar la tabla de productos
 document.querySelector('#productosTable tbody').addEventListener('click', function(event) {
     if (event.target.classList.contains('delete')) {
         const row = event.target.closest('tr');

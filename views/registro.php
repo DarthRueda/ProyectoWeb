@@ -11,8 +11,8 @@ $email = isset($_GET['email']) ? $_GET['email'] : '';
 
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Registro</li>
+        <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+        <li class="breadcrumb-item active" aria-current="page">REGISTRO</li>
     </ol>
 </nav>
 

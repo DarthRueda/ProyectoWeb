@@ -364,75 +364,81 @@ class ApiController {
     // Función para crear un producto
     function crearProducto() {
         include_once __DIR__ . '/../config/dataBase.php';
-        $input = json_decode(file_get_contents('php://input'), true);
+        $nombre = $_POST['nombre'];
+        $descripcion = $_POST['descripcion'];
+        $precio = filter_var($_POST['precio'], FILTER_VALIDATE_FLOAT);
+        $tipo = $_POST['tipo'];
+        $id_hamburguesa = isset($_POST['id_hamburguesa']) ? $_POST['id_hamburguesa'] : null;
 
-        if (isset($input['nombre'], $input['descripcion'], $input['precio'], $input['imagen'], $input['tipo'])) {
-            $nombre = $input['nombre'];
-            $descripcion = $input['descripcion'];
-            $precio = filter_var($input['precio'], FILTER_VALIDATE_FLOAT);
-            $imagen = $input['imagen'];
-            $tipo = $input['tipo'];
-            $id_hamburguesa = isset($input['id_hamburguesa']) ? $input['id_hamburguesa'] : null;
+        if ($precio === false) {
+            $response = array('status' => 'error', 'message' => 'El precio debe ser un número decimal.');
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            return;
+        }
 
-            if ($precio === false) {
-                $response = array('status' => 'error', 'message' => 'El precio debe ser un número decimal.');
+        $imagen = $_FILES['imagen'];
+        $imagenNombre = $imagen['name'];
+        $imagenTmpNombre = $imagen['tmp_name'];
+        $imagenDestino = __DIR__ . "/../views/img/{$tipo}s/$imagenNombre";
+        $imagenPath = "views/img/{$tipo}s/$imagenNombre";
+
+        if (!move_uploaded_file($imagenTmpNombre, $imagenDestino)) {
+            $response = array('status' => 'error', 'message' => 'No se pudo subir la imagen.');
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            return;
+        }
+
+        $con = DataBase::connect();
+        if ($con->connect_error) {
+            die("Connection failed: " . $con->connect_error);
+        }
+
+        $table = '';
+        switch ($tipo) {
+            case 'menu':
+                $table = 'menus';
+                break;
+            case 'hamburguesa':
+                $table = 'hamburguesas';
+                break;
+            case 'bebida':
+                $table = 'bebidas';
+                break;
+            case 'complemento':
+                $table = 'complementos';
+                break;
+            default:
+                $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
                 header('Content-Type: application/json');
                 echo json_encode($response);
                 return;
-            }
-
-            $con = DataBase::connect();
-            if ($con->connect_error) {
-                die("Connection failed: " . $con->connect_error);
-            }
-
-            $table = '';
-            switch ($tipo) {
-                case 'menu':
-                    $table = 'menus';
-                    break;
-                case 'hamburguesa':
-                    $table = 'hamburguesas';
-                    break;
-                case 'bebida':
-                    $table = 'bebidas';
-                    break;
-                case 'complemento':
-                    $table = 'complementos';
-                    break;
-                default:
-                    $response = array('status' => 'error', 'message' => 'Tipo de producto no válido.');
-                    header('Content-Type: application/json');
-                    echo json_encode($response);
-                    return;
-            }
-
-            if ($tipo === 'menu' && $id_hamburguesa) {
-                $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen, id_hamburguesa) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssdsi", $nombre, $descripcion, $precio, $imagen, $id_hamburguesa);
-            } else {
-                $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param("ssds", $nombre, $descripcion, $precio, $imagen);
-            }
-
-            $stmt->execute();
-
-            if ($stmt->affected_rows > 0) {
-                $response = array('status' => 'success', 'message' => 'Producto creado correctamente.');
-            } else {
-                $response = array('status' => 'error', 'message' => 'No se pudo crear el producto.');
-            }
-
-            $stmt->close();
-            $con->close();
-        } else {
-            $response = array('status' => 'error', 'message' => 'Datos incompletos.');
         }
+
+        if ($tipo === 'menu' && $id_hamburguesa) {
+            $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen, id_hamburguesa) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssdsi", $nombre, $descripcion, $precio, $imagenPath, $id_hamburguesa);
+        } else {
+            $stmt = $con->prepare("INSERT INTO $table (nombre, descripcion, precio, imagen) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssds", $nombre, $descripcion, $precio, $imagenPath);
+        }
+
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            $response = array('status' => 'success', 'message' => 'Producto creado correctamente.');
+        } else {
+            $response = array('status' => 'error', 'message' => 'No se pudo crear el producto.');
+        }
+
+        $stmt->close();
+        $con->close();
 
         header('Content-Type: application/json');
         echo json_encode($response);
 
-        Logger::log("Producto creado: Nombre: " . ($input['nombre'] ?? 'N/A') . ", Descripción: " . ($input['descripcion'] ?? 'N/A') . ", Precio: " . ($input['precio'] ?? 'N/A') . ", Imagen: " . ($input['imagen'] ?? 'N/A') . ", Tipo: " . ($input['tipo'] ?? 'N/A'));
+        Logger::log("Producto creado: Nombre: " . ($nombre ?? 'N/A') . ", Descripción: " . ($descripcion ?? 'N/A') . ", Precio: " . ($precio ?? 'N/A') . ", Imagen: " . ($imagenPath ?? 'N/A') . ", Tipo: " . ($tipo ?? 'N/A'));
     }
 
     // Función para editar un producto
@@ -901,6 +907,14 @@ class ApiController {
 
         Logger::log("Estado de pagado actualizado: ID $id_pedido, Pagado: $pagado");
     }
+
+    // Función para obtener las imágenes de un tipo de producto
+    function obtenerImagenes($tipo) {
+        $directory = __DIR__ . "/../views/img/{$tipo}s/";
+        $images = array_diff(scandir($directory), array('..', '.'));
+        header('Content-Type: application/json');
+        echo json_encode(array_values($images));
+    }
 }
 
 
@@ -1006,6 +1020,11 @@ if (isset($_GET['action'])) {
             $input = json_decode(file_get_contents('php://input'), true);
             if (isset($input['id_pedido'], $input['pagado'])) {
                 $controller->actualizarEstadoPagado($input['id_pedido'], $input['pagado']);
+            }
+            break;
+        case 'obtenerImagenes':
+            if (isset($_GET['tipo'])) {
+                $controller->obtenerImagenes($_GET['tipo']);
             }
             break;
     }

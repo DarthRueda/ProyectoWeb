@@ -12,9 +12,9 @@ if (session_status() == PHP_SESSION_NONE) {
 </head>
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-        <li class="breadcrumb-item"><a href="carrito.php">Carrito</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Compra</li>
+        <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+        <li class="breadcrumb-item"><a href="carrito.php">CARRITO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">COMPRA</li>
     </ol>
 </nav>
 <body>

@@ -12,8 +12,8 @@ $isAdmin = isset($isAdmin) ? $isAdmin : false;
 ?>
 <nav aria-label="breadcrumb" class="breadcrumb-container">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Menú Usuario</li>
+        <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+        <li class="breadcrumb-item active" aria-current="page">MENÚ USUARIO</li>
     </ol>
 </nav>
 <!--  Este formulario muestra la información del usuario y permite editarla si el usuario está en modo edición -->
