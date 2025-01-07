@@ -15,7 +15,7 @@ class productoController{
         $productos = productosDAO::getProductsByFilter($filter);
         $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
         $data = productosDAO::paginateProducts($productos, $paginaActual);
-        $data['filter'] = $filter; // Add this line to include the filter in the data array
+        $data['filter'] = $filter; // Con esta linea me aseguro de que el filtro se siga aplicando al cambiar de pagina
 
         $view = "views/carta.php";
         include_once 'views/main.php';

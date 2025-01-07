@@ -77,7 +77,7 @@ function editarProducto(id_producto, tipo) {
                     <button id="submitEditarProducto" class="btn-admin">Editar Producto</button>
                 `;
 
-                // Fetch the list of images
+                // Fetch de las imagenes
                 fetch(`controllers/apiController.php?action=obtenerImagenes&tipo=${tipo}`)
                     .then(response => response.json())
                     .then(images => {

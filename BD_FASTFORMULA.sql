@@ -32,7 +32,7 @@ INSERT INTO `bebidas` (`id_bebida`, `nombre`, `descripcion`, `precio`, `imagen`)
 	(1, 'Fanta Naranja', 'Refréscate con el gran sabor a Naranja de Fanta. Sin azúcares añadidos y sin calorías. Sola o combinada, tómala bien fría, con hielo y una rodaja de naranja para disfrutar al máximo del momento.', 1.99, 'views/img/bebidas/fanta_naranja.svg'),
 	(2, 'Fanta Limon', 'Refréscate con el gran sabor a Limón de Fanta. Sin azúcares añadidos y sin calorías. Sola o combinada, tómala bien fría, con hielo y una rodaja de limón para disfrutar al máximo del momento.', 1.99, 'views/img/bebidas/fanta_limon.svg'),
 	(3, 'Coca-Cola', 'Nada como el sabor auténtico de una Coca-Cola bien fría para hacer el momento todavía más especial. Tómala muy fría con hielo', 1.99, 'views/img/bebidas/coca-cola.svg'),
-	(4, 'Sprite', 'Gracias a su poder refrescante e hidratante Aquarius Zero siempre sienta bien. Sin azúcar y sin calorías. Tómalo bien frío, con hielo', 1.99, 'views/img/bebidas/sprite.svg'),
+	(4, 'Sprite', 'Gracias a su poder refrescante e hidratante Sprite siempre sienta bien. Sin azúcar y sin calorías. Tómalo bien frío, con hielo', 1.99, 'views/img/bebidas/sprite.svg'),
 	(5, 'Agua Mineral', 'Refrescante agua mineral para reponer la hidratación y disfrutar del placer del agua fria', 1.99, 'views/img/bebidas/agua-mineral.svg'),
 	(6, 'Cerveza', 'Disfruta de la mejor cerveza para acompañar tu menu y relajarte', 1.99, 'views/img/bebidas/cerveza.svg'),
 	(7, 'Aquarius', 'Gracias a su poder refrescante e hidratante Aquarius Zero siempre sienta bien. Sin azúcar y sin calorías. Tómalo bien frío, con hielo', 1.99, 'views/img/bebidas/acuarius.svg'),
@@ -53,7 +53,7 @@ INSERT INTO `complementos` (`id_complemento`, `nombre`, `descripcion`, `precio`,
 	(2, 'Patatas F1', 'Ahora puedes acompañar tus menús con las deliciosas Patatas F1', 4.99, 'views/img/complementos/patatas_f1.svg'),
 	(3, 'Alitas de Pollo', 'Prueba nuestras nuevas alitas, más grandes y sabrosas, perfectas para los hambrientos amantes del buen pollo', 5, 'views/img/complementos/alitas.svg'),
 	(4, 'Aros Pirelli', ' Los aros de cebolla Pirelli se pueden solicitar como entrada o acompañamiento, para compartir o solo para ti, son perfectos para todos', 3.99, 'views/img/complementos/pirelli.svg'),
-	(5, 'Pitstop', 'Explosion de con salsa cheddar y jalapeños perfecta para los mas valientes', 3.99, 'views/img/complementos/pitstop.svg');
+	(5, 'Pitstop', 'Explosion picante de salsa cheddar y jalapeños perfecta para los mas valientes', 3.99, 'views/img/complementos/pitstop.svg');
 
 CREATE TABLE IF NOT EXISTS `hamburguesas` (
   `id_hamburguesa` int NOT NULL AUTO_INCREMENT,
